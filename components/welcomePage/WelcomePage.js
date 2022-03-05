@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Pressable, ActivityIndicator } from 'react-native';
 import { Button, Text, Image, useTheme } from 'react-native-elements';
-import SignIn from '../SignIn/SignIn'
-import SignUp from '../SignUp/SignUp'
-
-
 
 
 export default function WelcomePage({navigation} ) {
@@ -65,7 +61,7 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         alignItems: 'center',
-        // justifyContent: 'space-between',
+        marginTop:'10%',
         height: '100%',
         width: '100%',
 

@@ -15,7 +15,7 @@ export default function SignIn() {
 
 
     return (
-        <View style={{ alignItems: 'center', marginBottom: 16 }}>
+        <View style={{ alignItems: 'center', marginTop:'10%' }}>
             <Text
                 h1
                 h1Style={{ color: theme?.colors?.primary }}
@@ -23,7 +23,7 @@ export default function SignIn() {
                 Your Account
             </Text>
             <Input
-                containerStyle={{ width: 250 }}
+                containerStyle={{ width: 250,marginTop:'10%' }}
                 placeholder='email@address.com'
                 leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                 errorMessage={ValidateEmail() ? "" : "Email is invalid"}
@@ -40,7 +40,7 @@ export default function SignIn() {
                 containerStyle={{
                     width: 200,
                     marginHorizontal: 50,
-                    marginVertical: 10,
+                    marginVertical: 20,
                 }}
             />
         </View>

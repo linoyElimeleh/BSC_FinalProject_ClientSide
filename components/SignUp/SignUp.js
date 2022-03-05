@@ -43,7 +43,7 @@ export default function SignUp() {
 
 
     return (
-        <View style={{alignItems:"center",display:"flex"}}>
+        <View style={{alignItems:"center",display:"flex", marginTop:'10%'}}>
             <Text
                 // style={styles.text}
                 h1
@@ -51,7 +51,7 @@ export default function SignUp() {
             >
                 Create Account
             </Text>
-            <View style={{ display: "flex", alignItems: "center", margin: "5" }}>
+            <View style={{ display: "flex", alignItems: "center", margin: '5%' }}>
                 <Avatar
                     size={64}
                     rounded

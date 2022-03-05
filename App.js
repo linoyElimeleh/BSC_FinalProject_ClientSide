@@ -32,12 +32,6 @@ export default function App() {
           component={SignUp}
         />
       </Stack.Navigator>
-      {/* <View style={styles.container}>
-        <SignIn></SignIn>
-        <WelcomePage navigation={Stack}></WelcomePage>
-        <SignUp></SignUp>
-        <StatusBar style="auto" />
-      </View> */}
     </NavigationContainer>
   );
 }
