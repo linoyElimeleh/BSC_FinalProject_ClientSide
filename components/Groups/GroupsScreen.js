@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { FAB, Icon } from 'react-native-elements';
 import GroupsList from "./GroupsList";
 
-export default function GroupsScreen(){
+export default function GroupsScreen({navigation}){
     return(
         <View style={styles.container}>
             <GroupsList/>
@@ -11,6 +11,7 @@ export default function GroupsScreen(){
                 <FAB
                     icon={{ name: 'add', color: 'white' }}
                     color="#4366b6" style={styles.floatingButtonPlus}
+                    onPress={() => { navigation.navigate("Create Group")}}
                 />,
                 <FAB
                     icon={{ name: 'link', color: 'white' }}

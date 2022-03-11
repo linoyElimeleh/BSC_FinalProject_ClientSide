@@ -4,7 +4,7 @@ const getUserGroups = async () => {
             {
                 method: 'GET',
                 headers: {
-                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ1c2VyQGVtYWlsLmNvbSIsImlhdCI6MTY0NjUwMzA2OSwiZXhwIjoxNjQ2NTA2NjY5fQ.le6N-QmCMb0CGBvMSE7gzV_ZhLf_8oEvo0oNKqgX5c8'
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGVtYWlsLmNvbSIsImlhdCI6MTY0NzAyNTkyOCwiZXhwIjoxNjQ3MDI5NTI4fQ.qZvNiyMEQZOlyPGYdCQPZE4LSzQiyDptF6yD8WPreZ4'
                 }
             }
         );
