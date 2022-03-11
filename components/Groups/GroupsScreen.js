@@ -28,12 +28,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     floatingButtonPlus: {
-        position: 'absolute',
+        position: 'fixed',
+        zIndex: 200,
         bottom: 10,
         right: 10
     },
     floatingButtonLink: {
-        position: 'absolute',
+        position: 'fixed',
+        zIndex: 200,
         bottom: 10,
         right: 80
     },

@@ -13,7 +13,7 @@ const getUserGroups = async () => {
         return groups;
 
     } catch (error) {
-    console.error(error);
+        console.error(error);
     }
 };
 

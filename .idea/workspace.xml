@@ -26,8 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ef0f8cc7-9f98-42f0-b2a5-759ab63624a8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Groups/GroupsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/GroupsList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Groups/GroupsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/GroupsScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/userService.js" beforeDir="false" afterPath="$PROJECT_DIR$/services/userService.js" afterDir="false" />
     </list>
