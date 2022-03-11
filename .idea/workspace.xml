@@ -28,14 +28,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Groups/AddGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/AddGroup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Groups/GroupsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/GroupsList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Groups/GroupsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/GroupsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Groups/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/groupsService.js" beforeDir="false" afterPath="$PROJECT_DIR$/services/groupsService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/userService.js" beforeDir="false" afterPath="$PROJECT_DIR$/services/userService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

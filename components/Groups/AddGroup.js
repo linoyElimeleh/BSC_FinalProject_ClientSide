@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
-import { Image, Text, Input, Button } from 'react-native-elements';
+import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 
 export default function AddGroup() {
+    const { theme } = useTheme();
+    const LineWidth = 290
     const [groupName, setGroupName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -13,35 +15,31 @@ export default function AddGroup() {
     }
 
     return (
-        <View style={styles.container}>
-            <KeyboardAwareScrollView
-                style={{ flex: 1, width: '100%' }}
-                keyboardShouldPersistTaps="always">
+        <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
+                                 style={{ flex: 1 }}
+                                 showsVerticalScrollIndicator={false}>
+        <View style={{alignItems:"center",display:"flex", marginTop:'10%'}}>
+            <Text
+                h1
+                h1Style={{ color: theme?.colors?.primary }}
+            >
+                Create Group
+            </Text>
+            <View style={{ display: "flex", alignItems: "center", margin: '5%' }}>
+                <Avatar
+                    size={64}
+                    rounded
+                    icon={{ name: 'adb', type: 'material' }}
+                    containerStyle={{ backgroundColor: 'orange' }}
+                >
+                    <Avatar.Accessory size={24} />
+                </Avatar>
+            </View>
                 <Input
                     containerStyle={{ width: LineWidth }}
                     placeholder='Name'
-                    leftIcon={{ type: 'font-awesome', name: 'groupName' }}
+                    leftIcon={{ type: 'font-awesome', name: 'user' }}
                     onChangeText={value => setGroupName(value)}
-                />
-                <Input
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='Password'
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <Input
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='Confirm Password'
-                    onChangeText={(text) => setConfirmPassword(text)}
-                    value={confirmPassword}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
                 />
                 <Input
                     containerStyle={{ width: LineWidth }}
@@ -54,10 +52,10 @@ export default function AddGroup() {
                     containerStyle={{ width: LineWidth }}
                     placeholder='Confirm Password'
                     leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                    errorMessage={password === confPassword || !confPassword.length? "" : "Passwords are not equals"}
-                    onChangeText={value => setConfPassword(value)}
+                    errorMessage={password === confirmPassword || !confirmPassword.length? "" : "Passwords are not equals"}
+                    onChangeText={value => setConfirmPassword(value)}
                 />
-            </KeyboardAwareScrollView>
         </View>
+        </KeyboardAwareScrollView>
     )
-}
+};
