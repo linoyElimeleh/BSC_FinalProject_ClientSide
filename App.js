@@ -4,6 +4,7 @@ import WelcomePage from './components/welcomePage/WelcomePage';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
 import AddGroup from './components/Groups/AddGroup'
+import GroupCreated from './components/Groups/GroupCreated'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import GroupsList from "./components/Groups/GroupsList";
@@ -24,7 +25,11 @@ export default function App() {
       <Stack.Navigator>
       <Stack.Screen
           name="Groups"
-          component={GroupsScreen}
+          component={AddGroup}
+        />
+        <Stack.Screen
+            name="GroupCreated"
+            component={GroupCreated}
         />
         <Stack.Screen
           name="Sign In"
