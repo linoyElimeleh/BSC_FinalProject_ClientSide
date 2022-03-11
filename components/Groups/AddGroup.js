@@ -17,7 +17,7 @@ export default function AddGroup({navigation}) {
         const group = {groupName, description, image};
         const promiseGroup = groupService.createGroup(group);
         promiseGroup.then(result =>{
-            navigation.navigate('GroupCreated', result);
+            navigation.navigate('Group Created', result);
         })
     }
 
@@ -36,7 +36,7 @@ export default function AddGroup({navigation}) {
                     <Avatar
                         size={64}
                         rounded
-                        icon={{type: 'font-awesome', name: 'user'}}
+                        icon={{type: 'font-awesome', name: 'users'}}
                         containerStyle={{backgroundColor: 'orange'}}
                     >
                         <Avatar.Accessory size={24}/>

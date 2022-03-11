@@ -28,7 +28,7 @@ export default function App() {
           component={AddGroup}
         />
         <Stack.Screen
-            name="GroupCreated"
+            name="Group Created"
             component={GroupCreated}
         />
         <Stack.Screen

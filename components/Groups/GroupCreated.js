@@ -2,15 +2,13 @@ import React, {useState} from 'react'
 import {View} from 'react-native'
 import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import groupService from '../../services/groupsService';
-import styles from './styles';
 import {IconButton} from "@material-ui/core";
+import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome"
+import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
 
 export default function GroupCreated({route}) {
     const {name, description, image, id} = route.params;
     const {theme} = useTheme();
-    const LineWidth = 290
-    const [IsDisable, setIsDisable] = useState("");
 
     return (
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
@@ -21,13 +19,13 @@ export default function GroupCreated({route}) {
                     h1
                     h1Style={{color: theme?.colors?.primary}}
                 >
-                    The Group was created Successfully
+                    Your group was created successfully!
                 </Text>
                 <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
                     <Avatar
                         size={64}
                         rounded
-                        icon={{type: 'font-awesome', name: 'user'}}
+                        icon={{type: 'font-awesome', name: 'users'}}
                         containerStyle={{backgroundColor: 'orange'}}
                     >
                         <Avatar.Accessory size={24}/>
@@ -38,16 +36,7 @@ export default function GroupCreated({route}) {
                 >{name}</Text>
                 <Text
                     h5
-                >invite code: {id}</Text>
-                <IconButton
-                    icon="camera"
-                    containerStyle={{
-                        width: 200,
-                        marginHorizontal: 50,
-                        marginVertical: 10,
-                    }}
-                    disabled={IsDisable}
-                />
+                >invite code: {id} </Text>
             </View>
         </KeyboardAwareScrollView>
     )
