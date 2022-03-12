@@ -23,6 +23,18 @@ export default function App() {
         <NavigationContainer theme={MyTheme}>
             <Stack.Navigator>
                 <Stack.Screen
+                    name="Welcome Page"
+                    component={WelcomePage}
+                />
+                <Stack.Screen
+                    name="Sign In"
+                    component={SignIn}
+                />
+                <Stack.Screen
+                    name="Sign Up"
+                    component={SignUp}
+                />
+                <Stack.Screen
                     name="Groups"
                     component={GroupsScreen}
                 />
@@ -44,14 +56,6 @@ export default function App() {
                             }
                         )
                     }
-                />
-                <Stack.Screen
-                    name="Sign In"
-                    component={SignIn}
-                />
-                <Stack.Screen
-                    name="Sign Up"
-                    component={SignUp}
                 />
             </Stack.Navigator>
         </NavigationContainer>

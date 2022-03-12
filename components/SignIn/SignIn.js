@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Pressable, ActivityIndicator, TextInput } from 'react-native';
 import { Button, Text, Image, useTheme, Input } from 'react-native-elements';
 import { Login } from '../../services/AuthServices'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignIn({ navigation }) {
     const { theme } = useTheme();
@@ -21,6 +22,14 @@ export default function SignIn({ navigation }) {
         return validCheck
     }
 
+    const storeData = async (key, value) => {
+        try {
+            await AsyncStorage.setItem(key, value)
+        } catch (e) {
+            console.log('AsyncStorage set error: ' + error.message);
+        }
+    }
+
     const HandleSubmit = async () => {
         setIsLoading(true)
         const loginRequest = {
@@ -34,9 +43,9 @@ export default function SignIn({ navigation }) {
         }
         else {
             setErrorMessage("")
-            storeData("Access Token", response.accessToken);
-            storeData("Refresh Access Token", response.refreshToken);
-            // navigation.navigate('Groups Page')  after marge with yana
+            await storeData("Access Token", response.accessToken);
+            await storeData("Refresh Access Token", response.refreshToken);
+            navigation.navigate('Groups');
         }
     }
 

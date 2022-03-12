@@ -35,10 +35,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ef0f8cc7-9f98-42f0-b2a5-759ab63624a8" name="Default Changelist" comment="">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/utils/asyncStorageUtils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Groups/GroupsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/GroupsList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/SignIn/SignIn.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/SignIn/SignIn.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/SignUp/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/SignUp/SignUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/userService.js" beforeDir="false" afterPath="$PROJECT_DIR$/services/userService.js" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View} from 'react-native';
-import { Button, Text, useTheme, Input, Avatar } from 'react-native-elements';
-import { RegisterUser } from '../../services/AuthServices';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
+import {Button, Text, useTheme, Input, Avatar} from 'react-native-elements';
+import {RegisterUser} from '../../services/AuthServices';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function SignUp() {
-    const { theme } = useTheme();
+    const {theme} = useTheme();
     const LineWidth = 290
     const [image, setImage] = useState("");
     const [name, setName] = useState("");
@@ -58,12 +58,11 @@ export default function SignUp() {
         setIsLoading(false)
         if (response.error) {
             setErrorMessage(response.error)
-        }
-        else {
+        } else {
             setErrorMessage("")
-            storeData("Access Token", response.accessToken);
-            storeData("Refresh Access Token", response.refreshToken);
-           // navigation.navigate('Groups Page')  after marge with yana
+            await storeData("Access Token", response.accessToken);
+            await storeData("Refresh Access Token", response.refreshToken);
+            navigation.navigate('Groups');
         }
     }
 
@@ -97,64 +96,64 @@ export default function SignUp() {
 
     return (
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
-            style={{ flex: 1 }}
-            showsVerticalScrollIndicator={false}>
-            <View style={{ alignItems: "center", display: "flex", marginTop: '10%' }}>
+                                 style={{flex: 1}}
+                                 showsVerticalScrollIndicator={false}>
+            <View style={{alignItems: "center", display: "flex", marginTop: '10%'}}>
                 <Text
                     h1
-                    h1Style={{ color: theme?.colors?.primary }}
+                    h1Style={{color: theme?.colors?.primary}}
                 >
                     Create Account
                 </Text>
-                <View style={{ display: "flex", alignItems: "center", margin: '5%' }}>
+                <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
                     <Avatar
                         size={64}
                         rounded
-                        icon={{ name: 'adb', type: 'material' }}
-                        containerStyle={{ backgroundColor: 'orange' }}
+                        icon={{name: 'adb', type: 'material'}}
+                        containerStyle={{backgroundColor: 'orange'}}
                     >
-                        <Avatar.Accessory size={24} />
+                        <Avatar.Accessory size={24}/>
                     </Avatar>
                 </View>
                 <Input
-                    containerStyle={{ width: LineWidth }}
+                    containerStyle={{width: LineWidth}}
                     placeholder='Name'
-                    leftIcon={{ type: 'font-awesome', name: 'user' }}
+                    leftIcon={{type: 'font-awesome', name: 'user'}}
                     onChangeText={value => setName(value)}
                 />
                 <Input
-                    containerStyle={{ width: LineWidth }}
+                    containerStyle={{width: LineWidth}}
                     placeholder='mm/dd/yyy'
-                    leftIcon={{ type: 'font-awesome', name: 'calendar' }}
+                    leftIcon={{type: 'font-awesome', name: 'calendar'}}
                     errorMessage={ValidateDate() ? "" : "date is invalid"}
                     onChangeText={value => setDate(value)}
                 />
                 <Input
-                    containerStyle={{ width: LineWidth }}
+                    containerStyle={{width: LineWidth}}
                     placeholder='Email@address.com'
-                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                    leftIcon={{type: 'font-awesome', name: 'envelope'}}
                     errorMessage={ValidateEmail() ? "" : "Email is invalid"}
                     onChangeText={value => setEmail(value)}
                 />
                 <Input
-                    containerStyle={{ width: LineWidth }}
+                    containerStyle={{width: LineWidth}}
                     placeholder='Password(min 7 chars)'
-                    leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                    leftIcon={{type: 'font-awesome', name: 'lock'}}
                     errorMessage={password.length > 6 || !password.length ? "" : "Password is under 7 chars"}
                     onChangeText={value => setPassword(value)}
                     secureTextEntry={true}
                 />
                 <Input
-                    containerStyle={{ width: LineWidth }}
+                    containerStyle={{width: LineWidth}}
                     placeholder='Confirm Password'
-                    leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                    leftIcon={{type: 'font-awesome', name: 'lock'}}
                     errorMessage={password == confPassword || !confPassword.length ? "" : "Passwords are not equals"}
                     onChangeText={value => setConfPassword(value)}
                     secureTextEntry={true}
                 />
                 <Text
                     h4
-                    h4Style={{ color: theme?.colors?.warning }}
+                    h4Style={{color: theme?.colors?.warning}}
                 >{errorMessage}</Text>
                 <Button
                     title={'Sign Up'}
@@ -169,9 +168,6 @@ export default function SignUp() {
                 />
             </View>
         </KeyboardAwareScrollView>
-
-
-
 
 
     )

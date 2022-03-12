@@ -1,12 +1,12 @@
 import {configData} from '../settings'
 
-const getUserGroups = async () => {
+const getUserGroups = async (token) => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/users/me/groups`,
             {
                 method: 'GET',
                 headers: {
-                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYxLCJlbWFpbCI6InlhbmFAZW1haWwuY29tIiwiaWF0IjoxNjQ3MTE5MjE3LCJleHAiOjE2NDcxMjI4MTd9.XbYXNunv-6XGLZU5F78mJEgqgfBOvAHJkaw1i7P-ZaA'
+                    Authorization: `Bearer ${token}`
                 }
             }
         );
