@@ -1,10 +1,12 @@
+import {configData} from '../settings'
+
 const getUserGroups = async () => {
     try {
-        const response = await fetch('http://todobom.herokuapp.com/api/users/me/groups',
+        const response = await fetch(`${configData.SERVER_URL}/users/me/groups`,
             {
                 method: 'GET',
                 headers: {
-                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGVtYWlsLmNvbSIsImlhdCI6MTY0NzAyNTkyOCwiZXhwIjoxNjQ3MDI5NTI4fQ.qZvNiyMEQZOlyPGYdCQPZE4LSzQiyDptF6yD8WPreZ4'
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGVtYWlsLmNvbSIsImlhdCI6MTY0NzA3MzgwMiwiZXhwIjoxNjQ3MDc3NDAyfQ.j43D0diEOF2TF2Q0EzsZirv9c5s5xceLumU734ENaIs'
                 }
             }
         );
