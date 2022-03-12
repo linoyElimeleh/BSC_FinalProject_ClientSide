@@ -15,7 +15,7 @@ export default function GroupsList() {
             setGroups(groups);
             setIsLoading(false)
         })
-    }, []);
+    }, [groups]);
 
     return (
         <View style={styles.list}>
