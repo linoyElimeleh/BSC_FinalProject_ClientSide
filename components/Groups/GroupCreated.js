@@ -1,11 +1,18 @@
 import React, {useState} from 'react'
 import {View} from 'react-native'
+import Clipboard from '@react-native-clipboard/clipboard';
 import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 export default function GroupCreated({route}) {
     const {name, description, image, id, invite_code} = route.params;
     const {theme} = useTheme();
+
+    const handleCopyClick = () =>{
+        Clipboard.setString(invite_code);
+    }
 
     return (
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
@@ -34,7 +41,11 @@ export default function GroupCreated({route}) {
                 <Text
                     h20
                 >invite code: {invite_code} </Text>
-                <Button icon='content-copy'/>
+                <Icon.Button
+                    name="copy"
+                    backgroundColor={theme?.colors?.primary}
+                    onPress={handleCopyClick}
+                >Copy code</Icon.Button>
             </View>
         </KeyboardAwareScrollView>
     )
