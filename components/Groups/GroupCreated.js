@@ -4,7 +4,7 @@ import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-element
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function GroupCreated({route}) {
-    const {name, description, image, id} = route.params;
+    const {name, description, image, id, invite_code} = route.params;
     const {theme} = useTheme();
 
     return (
@@ -33,7 +33,7 @@ export default function GroupCreated({route}) {
                 >{name}</Text>
                 <Text
                     h20
-                >invite code: {id} </Text>
+                >invite code: {invite_code} </Text>
                 <Button icon='content-copy'/>
             </View>
         </KeyboardAwareScrollView>
