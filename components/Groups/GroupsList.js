@@ -12,11 +12,14 @@ export default function GroupsList() {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const userGroups = userService.getUserGroups(getData("Access Token"));
-        userGroups.then(groups => {
-            setGroups(groups);
-            setIsLoading(false)
-        })
+        getData("Access Token").then((accessToken)=>{
+            const userGroups = userService.getUserGroups(accessToken);
+            userGroups.then(groups => {
+                setGroups(groups);
+                setIsLoading(false)
+            })
+        });
+
     }, [groups]);
 
     return (
