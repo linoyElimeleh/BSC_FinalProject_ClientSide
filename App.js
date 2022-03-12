@@ -3,6 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import WelcomePage from './components/welcomePage/WelcomePage';
+import { HeaderBackButton } from '@react-navigation/elements';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
 
@@ -36,8 +37,12 @@ export default function App() {
                 <Stack.Screen
                     name="Group Created"
                     component={GroupCreated}
-                    options={
-                        {headerLeft: () => null}
+                    options={({navigation}) =>
+                        (
+                            {
+                                headerLeft: () => (<HeaderBackButton onPress={()=> navigation.navigate('Groups')}/>)
+                            }
+                        )
                     }
                 />
                 <Stack.Screen
