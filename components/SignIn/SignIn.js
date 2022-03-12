@@ -3,34 +3,41 @@ import { StyleSheet, View, Pressable, ActivityIndicator, TextInput } from 'react
 import { Button, Text, Image, useTheme, Input } from 'react-native-elements';
 import { Login } from '../Services/AuthServices'
 
-export default function SignIn() {
+export default function SignIn({ navigation }) {
     const { theme } = useTheme();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isDisable, setIsDisable] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        console.log(ValidateEmail())
-        console.log(email.length)
-        console.log(password.length)
         ValidateEmail() && email.length && password.length ? setIsDisable(false) : setIsDisable(true)
-    }, [email,password])
+    }, [email, password])
 
     const ValidateEmail = () => {
         if (!email.length) return true
         const validCheck = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(email)
         return validCheck
     }
+
     const HandleSubmit = async () => {
+        setIsLoading(true)
         const loginRequest = {
             "email": email,
             "password": password,
         }
-        let a = await Login(loginRequest)
-        console.log("@")
-        console.log("1" + a)
-        console.log("2" + a.status)
-        console.log("3" + a.message)
+        let response = await Login(loginRequest)
+        setIsLoading(false)
+        if (response.error) {
+            setErrorMessage(response.error)
+        }
+        else {
+            setErrorMessage("")
+            storeData("Access Token", response.accessToken);
+            storeData("Refresh Access Token", response.refreshToken);
+            // navigation.navigate('Groups Page')  after marge with yana
+        }
     }
 
     return (
@@ -55,6 +62,11 @@ export default function SignIn() {
                 onChangeText={value => setPassword(value)}
                 secureTextEntry={true}
             />
+            <Text
+                h4
+                h4Style={{ color: theme?.colors?.warning }}>
+                {errorMessage}
+            </Text>
             <Button
                 title={'Sign In'}
                 containerStyle={{
@@ -64,6 +76,7 @@ export default function SignIn() {
                 }}
                 onPress={HandleSubmit}
                 disabled={isDisable}
+                loading={isLoading}
             />
         </View>
     )

@@ -31,6 +31,10 @@ export default function App() {
           name="Sign Up"
           component={SignUp}
         />
+        {/* <Stack.Screen
+          name="Groups Page"
+          component={Groups}
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,9 +1,10 @@
-import { LineWeight } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Pressable, ActivityIndicator } from 'react-native';
-import { Button, Text, Image, useTheme, Input, Avatar } from 'react-native-elements';
+import { View} from 'react-native';
+import { Button, Text, useTheme, Input, Avatar } from 'react-native-elements';
 import { RegisterUser } from '../Services/AuthServices';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function SignUp() {
     const { theme } = useTheme();
@@ -14,14 +15,38 @@ export default function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confPassword, setConfPassword] = useState("");
-    const [IsDisable, setIsDisable] = useState("");
+    const [isDisable, setIsDisable] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         ValidateDate() && ValidateEmail() && password.length > 6 && password.length && password == confPassword ?
             setIsDisable(false) : setIsDisable(true)
     }, [name, date, email, password, confPassword])
 
+    const storeData = async (key, value) => {
+        try {
+            await AsyncStorage.setItem(key, value)
+        } catch (e) {
+            console.log('AsyncStorage set error: ' + error.message);
+        }
+    }
+
+    //get example
+    // const getData = async (key) => {
+    //     try {
+    //         const value = await AsyncStorage.getItem(key)
+    //         if (value !== null) {
+    //             return(value)
+    //         }
+    //     } catch (e) {
+    //         console.log('AsyncStorage get error: ' + error.message);
+    //     }
+    // }
+    //getData("Access Token");
+
     const HandleSubmit = async () => {
+        setIsLoading(true)
         const regisretRequest = {
             "email": email,
             "password": password,
@@ -29,11 +54,17 @@ export default function SignUp() {
             "birth_date": date,
             "image": "https://some-image.com"
         }
-        let a = await RegisterUser(regisretRequest)
-        console.log("@")
-        console.log("1" + a)
-        console.log("2" + a.status)
-        console.log("3" + a.message)
+        let response = await RegisterUser(regisretRequest)
+        setIsLoading(false)
+        if (response.error) {
+            setErrorMessage(response.error)
+        }
+        else {
+            setErrorMessage("")
+            storeData("Access Token", response.accessToken);
+            storeData("Refresh Access Token", response.refreshToken);
+           // navigation.navigate('Groups Page')  after marge with yana
+        }
     }
 
     const ValidateEmail = () => {
@@ -121,6 +152,10 @@ export default function SignUp() {
                     onChangeText={value => setConfPassword(value)}
                     secureTextEntry={true}
                 />
+                <Text
+                    h4
+                    h4Style={{ color: theme?.colors?.warning }}
+                >{errorMessage}</Text>
                 <Button
                     title={'Sign Up'}
                     containerStyle={{
@@ -128,8 +163,9 @@ export default function SignUp() {
                         marginHorizontal: 50,
                         marginVertical: 10,
                     }}
-                    disabled={IsDisable}
+                    disabled={isDisable}
                     onPress={HandleSubmit}
+                    loading={isLoading}
                 />
             </View>
         </KeyboardAwareScrollView>
@@ -140,5 +176,3 @@ export default function SignUp() {
 
     )
 }
-
-
