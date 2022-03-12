@@ -13,10 +13,8 @@ export default function JoinGroup({navigation}) {
 
     const handleSubmit = () => {
         setIsLoading(true);
-        const group = {groupName, description, image};
-        const promiseGroup = groupService.createGroup(group);
+        const promiseGroup = groupService.joinGroup(inviteCode);
         promiseGroup.then(result =>{
-            navigation.navigate('Group Created', result);
             setIsLoading(false);
         })
     }
@@ -55,7 +53,6 @@ export default function JoinGroup({navigation}) {
                         marginHorizontal: 50,
                         marginVertical: 10,
                     }}
-                    disabled={IsDisable}
                     onPress={handleSubmit}
                     loading={isLoading}
                 />

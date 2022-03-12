@@ -16,12 +16,26 @@ const createGroup = async (group, token) => {
             image: image
         })
     });
+
     const groupDetails = await response.json();
     return groupDetails;
 };
 
-const joinGroup = async () => {
+const joinGroup = async (inviteCode, token) => {
+    const response = await fetch(`${configData.SERVER_URL}/join`, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYxLCJlbWFpbCI6InlhbmFAZW1haWwuY29tIiwiaWF0IjoxNjQ3MDk5NTk5LCJleHAiOjE2NDcxMDMxOTl9.JdC9ARJq1iyBSgSLlAv77fICwhLHl0R7XX7MnIVdJis',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            invite_code: inviteCode
+        })
+    });
 
+    const groupDetails = await response.json();
+    return groupDetails;
 };
 
 export default {
