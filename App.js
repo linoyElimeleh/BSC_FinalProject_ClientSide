@@ -6,7 +6,7 @@ import WelcomePage from './components/welcomePage/WelcomePage';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
 
-import {GroupsScreen, AddGroup, GroupCreated} from './components/Groups'
+import {GroupsScreen, AddGroup, GroupCreated, JoinGroup} from './components/Groups'
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
@@ -28,6 +28,10 @@ export default function App() {
                 <Stack.Screen
                     name="Create Group"
                     component={AddGroup}
+                />
+                <Stack.Screen
+                    name="Join Group"
+                    component={JoinGroup}
                 />
                 <Stack.Screen
                     name="Group Created"
