@@ -48,13 +48,13 @@ export default function AddGroup({navigation}) {
                 <Input
                     containerStyle={{width: LineWidth}}
                     placeholder='Name'
-                    leftIcon={{type: 'font-awesome', name: 'user'}}
+                    leftIcon={{type: 'font-awesome', name: 'users'}}
                     onChangeText={value => setGroupName(value)}
                 />
                 <Input
                     containerStyle={{width: LineWidth}}
                     placeholder='Description'
-                    leftIcon={{type: 'font-awesome', name: 'user'}}
+                    leftIcon={{type: 'font-awesome', name: 'comments-o'}}
                     onChangeText={value => setDescription(value)}
                 />
                 <Button

@@ -43,7 +43,7 @@ export default function JoinGroup({navigation}) {
                 <Input
                     containerStyle={{width: LineWidth}}
                     placeholder='Invite Code'
-                    leftIcon={{type: 'font-awesome', name: 'user'}}
+                    leftIcon={{type: 'font-awesome', name: 'link'}}
                     onChangeText={value => setInviteCode(value)}
                 />
                 <Button
