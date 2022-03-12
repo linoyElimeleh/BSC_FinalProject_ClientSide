@@ -33,8 +33,10 @@ export default function App() {
                 <Stack.Screen
                     name="Group Created"
                     component={GroupCreated}
+                    options={
+                        {headerLeft: () => null}
+                    }
                 />
-
                 <Stack.Screen
                     name="Sign In"
                     component={SignIn}

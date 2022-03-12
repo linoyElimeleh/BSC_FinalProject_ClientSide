@@ -2,9 +2,6 @@ import React, {useState} from 'react'
 import {View} from 'react-native'
 import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {IconButton} from "@material-ui/core";
-import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome"
-import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
 
 export default function GroupCreated({route}) {
     const {name, description, image, id} = route.params;
@@ -17,7 +14,7 @@ export default function GroupCreated({route}) {
             <View style={{alignItems: "center", display: "flex", marginTop: '10%'}}>
                 <Text
                     h1
-                    h1Style={{color: theme?.colors?.primary}}
+                    h1Style={{color: theme?.colors?.primary, textAlign: "center"}}
                 >
                     Your group was created successfully!
                 </Text>
@@ -32,11 +29,12 @@ export default function GroupCreated({route}) {
                     </Avatar>
                 </View>
                 <Text
-                    h5
+                    h20
                 >{name}</Text>
                 <Text
-                    h5
+                    h20
                 >invite code: {id} </Text>
+                <Button icon='content-copy'/>
             </View>
         </KeyboardAwareScrollView>
     )
