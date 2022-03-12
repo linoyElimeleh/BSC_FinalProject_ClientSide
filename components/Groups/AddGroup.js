@@ -12,12 +12,15 @@ export default function AddGroup({navigation}) {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
     const [IsDisable, setIsDisable] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = () => {
+        setIsLoading(true);
         const group = {groupName, description, image};
         const promiseGroup = groupService.createGroup(group);
         promiseGroup.then(result =>{
             navigation.navigate('Group Created', result);
+            setIsLoading(false);
         })
     }
 
@@ -63,6 +66,7 @@ export default function AddGroup({navigation}) {
                     }}
                     disabled={IsDisable}
                     onPress={handleSubmit}
+                    loading={isLoading}
                 />
             </View>
         </KeyboardAwareScrollView>
