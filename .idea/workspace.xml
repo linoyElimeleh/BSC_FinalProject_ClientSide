@@ -21,16 +21,20 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/main" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ef0f8cc7-9f98-42f0-b2a5-759ab63624a8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Groups/GroupsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/GroupsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Groups/JoinGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/JoinGroup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Groups/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Groups/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,22 +131,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1646485397981" />
-    <state width="1515" height="204" key="GridCell.Tab.0.bottom" timestamp="1647089503936">
+    <state width="1515" height="204" key="GridCell.Tab.0.bottom" timestamp="1647118762434">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="204" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1647089503936" />
-    <state width="1515" height="204" key="GridCell.Tab.0.center" timestamp="1647089503936">
+    <state width="1515" height="204" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1647118762434" />
+    <state width="1515" height="204" key="GridCell.Tab.0.center" timestamp="1647118762434">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="204" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1647089503936" />
-    <state width="1515" height="204" key="GridCell.Tab.0.left" timestamp="1647089503934">
+    <state width="1515" height="204" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1647118762434" />
+    <state width="1515" height="204" key="GridCell.Tab.0.left" timestamp="1647118762433">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="204" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1647089503934" />
-    <state width="1515" height="204" key="GridCell.Tab.0.right" timestamp="1647089503936">
+    <state width="1515" height="204" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1647118762433" />
+    <state width="1515" height="204" key="GridCell.Tab.0.right" timestamp="1647118762434">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="204" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1647089503936" />
+    <state width="1515" height="204" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1647118762434" />
     <state x="478" y="145" width="579" height="534" key="find.popup" timestamp="1646995134617">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
