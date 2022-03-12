@@ -3,7 +3,7 @@ import {ScrollView, View} from 'react-native'
 import {ListItem, Icon,} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
-import userService from "../../services/userService";
+import {userService} from "../../services";
 
 export default function GroupsList() {
     const [groups, setGroups] = useState([]);

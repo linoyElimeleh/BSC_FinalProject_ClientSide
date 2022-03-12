@@ -1,5 +1,5 @@
-import GroupsScreen from "./Groups";
+import Groups from "./Groups";
 
 export {
-    GroupsScreen
+    Groups
 };

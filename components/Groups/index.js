@@ -1,5 +1,9 @@
 import GroupsScreen from "./GroupsScreen";
+import AddGroup from "./AddGroup";
+import GroupCreated from "./GroupCreated";
 
-export default {
-    GroupsScreen
+export  {
+    GroupsScreen,
+    AddGroup,
+    GroupCreated
 };

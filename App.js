@@ -1,13 +1,12 @@
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, View} from 'react-native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import WelcomePage from './components/welcomePage/WelcomePage';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
-import AddGroup from './components/Groups/AddGroup'
-import GroupCreated from './components/Groups/GroupCreated'
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import GroupsScreen from './components/Groups/GroupsScreen'
+
+import {GroupsScreen, AddGroup, GroupCreated} from './components/Groups'
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
