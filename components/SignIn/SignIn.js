@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Pressable, ActivityIndicator, TextInput } from 'react-native';
 import { Button, Text, Image, useTheme, Input } from 'react-native-elements';
-import { Login } from '../Services/AuthServices'
+import { Login } from '../../services/AuthServices'
 
 export default function SignIn({ navigation }) {
     const { theme } = useTheme();

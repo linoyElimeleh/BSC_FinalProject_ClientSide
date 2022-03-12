@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View} from 'react-native';
 import { Button, Text, useTheme, Input, Avatar } from 'react-native-elements';
-import { RegisterUser } from '../Services/AuthServices';
+import { RegisterUser } from '../../services/AuthServices';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
