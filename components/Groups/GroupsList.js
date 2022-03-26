@@ -20,7 +20,7 @@ export default function GroupsList() {
             })
         });
 
-    }, [groups]);
+    }, []);
 
     return (
         <View style={styles.list}>

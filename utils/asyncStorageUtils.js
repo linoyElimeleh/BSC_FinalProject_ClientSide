@@ -11,3 +11,11 @@ export const getData = async (key) => {
     }
 };
 
+export const storeData = async (key, value) => {
+    try {
+        await AsyncStorage.setItem(key, value)
+    } catch (e) {
+        console.log('AsyncStorage set error: ' + error.message);
+    }
+}
+

@@ -62,6 +62,7 @@ export default function SignUp() {
             setErrorMessage("")
             await storeData("Access Token", response.accessToken);
             await storeData("Refresh Access Token", response.refreshToken);
+            console.log("refresh is:"+response.refreshToken);
             navigation.navigate('Groups');
         }
     }
