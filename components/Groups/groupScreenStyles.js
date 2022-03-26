@@ -6,13 +6,13 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
     },
     floatingButtonPlus: {
-        position: 'fixed',
+        position: 'absolute',
         zIndex: 200,
         bottom: 10,
         right: 10
     },
     floatingButtonLink: {
-        position: 'fixed',
+        position: 'absolute',
         zIndex: 200,
         bottom: 10,
         right: 80

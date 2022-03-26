@@ -11,12 +11,12 @@ export default function GroupsScreen({navigation}){
             <View>
                 <FAB
                     icon={{ name: 'add', color: 'white' }}
-                    color="#4366b6" style={groupScreenStyles.floatingButtonPlus}
+                    color="#00aced" style={groupScreenStyles.floatingButtonPlus}
                     onPress={() => { navigation.navigate("Create Group")}}
-                />,
+                />
                 <FAB
                     icon={{ name: 'link', color: 'white' }}
-                    color="#4366b6" style={groupScreenStyles.floatingButtonLink}
+                    color="#00aced" style={groupScreenStyles.floatingButtonLink}
                     onPress={() => { navigation.navigate("Join Group")}}
                 />
             </View>
