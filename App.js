@@ -37,6 +37,13 @@ export default function App() {
                 <Stack.Screen
                     name="Groups"
                     component={GroupsScreen}
+                    options={({navigation}) =>
+                        (
+                            {
+                                headerLeft: () => {}
+                            }
+                        )
+                    }
                 />
                 <Stack.Screen
                     name="Create Group"

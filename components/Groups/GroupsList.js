@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {ScrollView, View, ActivityIndicator, StyleSheet} from 'react-native'
 import {ListItem, Icon,} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useIsFocused } from "@react-navigation/native";
 import styles from './styles';
 import {userService} from "../../services";
 import {getData} from "../../utils/asyncStorageUtils";
@@ -10,17 +9,19 @@ import {getData} from "../../utils/asyncStorageUtils";
 export default function GroupsList() {
     const [groups, setGroups] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
+    const isFocused = useIsFocused();
 
     useEffect(() => {
-        getData("Access Token").then((accessToken)=>{
-            const userGroups = userService.getUserGroups(accessToken);
-            userGroups.then(groups => {
-                setGroups(groups);
-                setIsLoading(false)
-            })
-        });
-
-    }, []);
+        if(isFocused){
+            getData("Access Token").then((accessToken)=>{
+                const userGroups = userService.getUserGroups(accessToken);
+                userGroups.then(groups => {
+                    setGroups(groups);
+                    setIsLoading(false)
+                })
+            });
+        }
+    }, [isFocused]);
 
     return (
         <View style={styles.list}>
