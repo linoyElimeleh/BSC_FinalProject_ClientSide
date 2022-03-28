@@ -3,11 +3,8 @@ import { StyleSheet, View, Pressable, ActivityIndicator } from 'react-native';
 import { Button, Text, Image, useTheme } from 'react-native-elements';
 
 
-export default function WelcomePage({navigation} ) {
+export default function WelcomePage({navigation}) {
     const { theme } = useTheme();
-    const [isSignInOpen, setIsSignInOpen] = useState(false)
-    const [isSignUpOpen, setIsSignUpOpen] = useState(false)
-
 
     return (
         <View style={styles.container}>
