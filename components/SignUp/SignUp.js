@@ -6,7 +6,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function SignUp() {
+export default function SignUp({ navigation }) {
     const {theme} = useTheme();
     const LineWidth = 290
     const [image, setImage] = useState("");

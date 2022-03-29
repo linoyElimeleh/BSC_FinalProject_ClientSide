@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import {View} from 'react-native'
 import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -10,12 +10,18 @@ export default function JoinGroup({navigation}) {
     const LineWidth = 290;
     const [inviteCode, setInviteCode] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [IsDisable, setIsDisable] = useState(true);
+
+    useEffect(() => {
+        inviteCode? setIsDisable(false) : setIsDisable(true)
+    }, [inviteCode])
 
     const handleSubmit = () => {
         setIsLoading(true);
         const promiseGroup = groupService.joinGroup(inviteCode);
         promiseGroup.then(result =>{
             setIsLoading(false);
+            navigation.navigate('Groups');
         })
     }
 
@@ -55,6 +61,7 @@ export default function JoinGroup({navigation}) {
                     }}
                     onPress={handleSubmit}
                     loading={isLoading}
+                    disabled={IsDisable}
                 />
             </View>
         </KeyboardAwareScrollView>
