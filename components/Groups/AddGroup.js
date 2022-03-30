@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {View} from 'react-native'
 import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -11,8 +11,12 @@ export default function AddGroup({navigation}) {
     const [groupName, setGroupName] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
-    const [IsDisable, setIsDisable] = useState("");
+    const [IsDisable, setIsDisable] = useState(true);
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        groupName? setIsDisable(false) : setIsDisable(true)
+    }, [groupName])
 
     const handleSubmit = () => {
         setIsLoading(true);
