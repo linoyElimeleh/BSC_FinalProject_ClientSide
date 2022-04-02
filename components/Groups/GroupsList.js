@@ -6,7 +6,7 @@ import styles from './styles';
 import {userService} from "../../services";
 import {getData} from "../../utils/asyncStorageUtils";
 
-export default function GroupsList() {
+export default function GroupsList({handlePress}) {
     const [groups, setGroups] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
     const isFocused = useIsFocused();
@@ -28,7 +28,7 @@ export default function GroupsList() {
             <ScrollView>
                 <ActivityIndicator animating={isLoading} style={styles.activityIndicatorWrapper}/>
                 {groups.map((group, i) => (
-                    <ListItem key={i} bottomDivider>
+                    <ListItem key={i} bottomDivider onPress={handlePress}>
                         <Icon name="user-circle-o" type="font-awesome" color="#00aced"/>
                         <ListItem.Content>
                             <ListItem.Title style={{color: '#4366b6'}}>

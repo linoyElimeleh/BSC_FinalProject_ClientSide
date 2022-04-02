@@ -5,9 +5,12 @@ import GroupsList from "./GroupsList";
 import groupScreenStyles from "./groupScreenStyles";
 
 export default function GroupsScreen({navigation}){
+    const handlePress=()=>{
+        navigation.navigate("Group")
+    }
     return(
         <View style={groupScreenStyles.container}>
-            <GroupsList/>
+            <GroupsList handlePress={handlePress}/>
             <View>
                 <FAB
                     icon={{ name: 'add', color: 'white' }}

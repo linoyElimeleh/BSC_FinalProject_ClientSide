@@ -7,7 +7,7 @@ import { HeaderBackButton } from '@react-navigation/elements';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
 
-import {GroupsScreen, AddGroup, GroupCreated, JoinGroup} from './components/Groups'
+import {GroupsScreen, AddGroup, GroupCreated, JoinGroup, GroupPage} from './components/Groups'
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
@@ -35,15 +35,19 @@ export default function App() {
                     component={SignUp}
                 />
                 <Stack.Screen
+                    name="Group"
+                    component={GroupPage}
+                />
+                <Stack.Screen
                     name="Groups"
                     component={GroupsScreen}
-                    options={({navigation}) =>
-                        (
-                            {
-                                headerLeft: () => {}
-                            }
-                        )
-                    }
+                    // options={({navigation}) =>
+                    //     (
+                    //         {
+                    //             headerLeft: () => {}
+                    //         }
+                    //     )
+                    // }
                 />
                 <Stack.Screen
                     name="Create Group"
