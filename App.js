@@ -8,6 +8,7 @@ import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
 
 import {GroupsScreen, AddGroup, GroupCreated, JoinGroup} from './components/Groups'
+import {CreateTask} from "./components/Tasks";
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
@@ -23,6 +24,10 @@ export default function App() {
         <NavigationContainer theme={MyTheme}>
             <Stack.Navigator>
                 <Stack.Screen
+                    name="Create New Task"
+                    component={CreateTask}
+                />
+                <Stack.Screen
                     name="Welcome Page"
                     component={WelcomePage}
                 />
@@ -37,7 +42,7 @@ export default function App() {
                 <Stack.Screen
                     name="Groups"
                     component={GroupsScreen}
-                    options={({navigation}) =>
+                    options={({}) =>
                         (
                             {
                                 headerLeft: () => {}
