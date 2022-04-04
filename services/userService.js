@@ -11,6 +11,21 @@ const getUserGroups = async (token) => {
     }
 };
 
+
+export const GetMeDetails = async () => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/users/me`,
+            {
+                method: 'GET',
+            });
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+        return (error)
+    }
+};
+
 export default {
     getUserGroups
 };

@@ -5,9 +5,10 @@ import GroupsList from "./GroupsList";
 import groupScreenStyles from "./groupScreenStyles";
 
 export default function GroupsScreen({navigation}){
-    const handlePress=()=>{
-        navigation.navigate("Group")
+    const handlePress=(group)=>{
+        navigation.navigate("Group",{group})
     }
+    
     return(
         <View style={groupScreenStyles.container}>
             <GroupsList handlePress={handlePress}/>

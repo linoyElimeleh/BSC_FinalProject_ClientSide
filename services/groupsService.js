@@ -16,6 +16,33 @@ const createGroup = async (group, token) => {
     return groupDetails;
 };
 
+export const GetGroupMembers = async (id) => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/groups/${id}/members`,
+            {
+                method: 'GET',
+            });
+        const json = await response.json();
+        return json
+    } catch (error) {
+        console.error(error);
+        return (error)
+    }
+};
+export const GetGroupTasks = async (id) => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/groups/${id}/tasks`,
+            {
+                method: 'GET',
+            });
+        const json = await response.json();
+        return json
+    } catch (error) {
+        console.error(error);
+        return (error)
+    }
+};
+
 const joinGroup = async (inviteCode, token) => {
     const response = await fetch(`${configData.SERVER_URL}/join`, {
         method: 'POST',
@@ -30,5 +57,5 @@ const joinGroup = async (inviteCode, token) => {
 
 export default {
     createGroup,
-    joinGroup
+    joinGroup,
 };

@@ -28,7 +28,7 @@ export default function GroupsList({handlePress}) {
             <ScrollView>
                 <ActivityIndicator animating={isLoading} style={styles.activityIndicatorWrapper}/>
                 {groups.map((group, i) => (
-                    <ListItem key={i} bottomDivider onPress={handlePress}>
+                    <ListItem key={i} bottomDivider onPress={()=>handlePress(group)}>
                         <Icon name="user-circle-o" type="font-awesome" color="#00aced"/>
                         <ListItem.Content>
                             <ListItem.Title style={{color: '#4366b6'}}>
