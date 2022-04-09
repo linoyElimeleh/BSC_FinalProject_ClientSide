@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {View, StyleSheet} from 'react-native'
 import {Text,} from 'react-native-elements';
-import { useIsFocused } from "@react-navigation/native";
 import { Dropdown } from 'react-native-element-dropdown';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 

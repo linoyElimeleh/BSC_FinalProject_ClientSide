@@ -1,20 +1,34 @@
 import React, {useState, useEffect} from 'react'
 import {View, StyleSheet} from 'react-native'
-import { Text, Input, Switch, CheckBox} from 'react-native-elements';
+import {Text, Input, Switch, Dialog, useTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import { Dropdown } from 'react-native-element-dropdown';
 import { useIsFocused } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import TimeAndDate from "./TimeAndDate";
 import {groupService} from '../../services'
 import CustomDropdown from "./CustomDropdown";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const mockId = 88;
+const snoozeData = [
+    {key:'4m', value:4},
+    {key:'5m', value:5},
+    {key:'6m', value:6},
+    {key:'7m', value:7},
+    {key:'8m', value:8},
+    {key:'9m', value:9},
+    {key:'10m', value:10},
+    {key: 'no snooze', value: null}
+]
 
 export default function CreateTask({}) {
     const [checked, setChecked] = useState(false);
     const [users, setUsers] = useState([]);
+    const [score,setScore] = useState(0);
+    const [dialogOpen,setDialogOpen] = useState(false);
     const isFocused = useIsFocused();
+    const {theme} = useTheme();
+
 
     useEffect(()=>{
         if(isFocused){
@@ -24,7 +38,11 @@ export default function CreateTask({}) {
                 setUsers(names);
             })
         }
-    },[isFocused])
+    },[isFocused]);
+
+    const onUpdateScore = (value) => {
+        setScore(value);
+    }
 
     return (
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
@@ -57,8 +75,46 @@ export default function CreateTask({}) {
                     h4
                 >Urgent</Text>
             </View>
-
             <TimeAndDate/>
+            <View style={{width:'50%'}}>
+                <CustomDropdown
+                    search={false}
+                    labelText='snooze'
+                    iconLabel='hourglass-start'
+                    placeholder='snooze'
+                    data={snoozeData}
+                />
+            </View>
+            <View style={{width:'50%'}}>
+                <Input
+                    leftIcon={{type: 'font-awesome', name: 'gamepad'}}
+                    placeholder="score (1 to 100)"
+                    onChangeText={onUpdateScore}
+                />
+            </View>
+            <View style={styles.row}>
+                <Text
+                    style={{marginRight:5}}
+                >
+                    Rejection points: {score*0.25}
+                </Text>
+                <Icon.Button
+                    style={{marginRight:5}}
+                    backgroundColor='#FFF1ED'
+                    color='black'
+                    name='info-circle'
+                    onPress={()=>setDialogOpen(true)}
+                >
+                    <Dialog
+                        isVisible={dialogOpen}
+                        onBackdropPress={() => setDialogOpen(!dialogOpen)}
+                    >
+                        <Dialog.Title title="Rejection points"/>
+                        <Text>The amount of points you pay to cancel the task. 25% of score</Text>
+                    </Dialog>
+
+                </Icon.Button>
+            </View>
         </KeyboardAwareScrollView>
     )
 };
