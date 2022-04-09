@@ -3,7 +3,6 @@ import {View} from 'react-native'
 import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {groupService} from '../../services';
-import styles from './styles';
 
 export default function AddGroup({navigation}) {
     const {theme} = useTheme();

@@ -1,47 +1,32 @@
 import React, {useState, useEffect} from 'react'
 import {View, StyleSheet} from 'react-native'
-import {Image, Text, Input, Switch, Button, useTheme, Avatar} from 'react-native-elements';
+import { Text, Input, Switch, CheckBox} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { Dropdown } from 'react-native-element-dropdown';
+import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import TimeAndDate from "./TimeAndDate";
+import {groupService} from '../../services'
 
-
-
-const data = [
-    { user: 'Mor', value: '1' },
-    { user: 'Yana', value: '2' },
-    { user: 'Yossi', value: '3' },
-    { user: 'Shir', value: '4' },
-    { user: 'Swagger', value: '5' },
-];
+const mockId = 88;
 
 export default function CreateTask({}) {
     const [checked, setChecked] = useState(false);
+    const [reoccurrence, setReoccurrence] = useState(false);
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
-    const [date, setDate] = useState(new Date(1598051730000));
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
+    const [users, setUsers] = useState([]);
+    const isFocused = useIsFocused();
 
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate;
-        setShow(false);
-        setDate(currentDate);
-    };
-
-    const showMode = (currentMode) => {
-        setShow(true);
-        setMode(currentMode);
-    };
-
-    const showDatepicker = () => {
-        showMode('date');
-    };
-
-    const showTimepicker = () => {
-        showMode('time');
-    };
+    useEffect(()=>{
+        if(isFocused){
+            const membersPromise = groupService.getGroupMembers(mockId);
+            membersPromise.then(members =>{
+                const names = members.map(({display_name,id}) => ({user:display_name,value:id}));
+                setUsers(names);
+            })
+        }
+    },[isFocused])
 
     const renderLabel = () => {
         if (value || isFocus) {
@@ -63,10 +48,6 @@ export default function CreateTask({}) {
                     leftIcon={{type: 'font-awesome', name: 'list-alt'}}
                     placeholder="Enter your description here"
                 />
-                <Input
-                    leftIcon={{type: 'font-awesome', name: 'list-alt'}}
-                    placeholder="Enter your description here"
-                />
             </View>
             <View style={styles.container}>
                 {renderLabel()}
@@ -76,7 +57,7 @@ export default function CreateTask({}) {
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
                     iconStyle={styles.iconStyle}
-                    data={data}
+                    data={users}
                     search
                     maxHeight={300}
                     labelField="user"
@@ -102,6 +83,7 @@ export default function CreateTask({}) {
             </View>
             <View style={styles.row}>
                 <Switch
+                    style={styles.switch}
                     value={checked}
                     onValueChange={(value) => setChecked(value)}
                 />
@@ -109,38 +91,20 @@ export default function CreateTask({}) {
                     h4
                 >Urgent</Text>
             </View>
-            <View>
-                <View>
-                    <Button onPress={showDatepicker} title="Show date picker!" />
-                </View>
-                <View>
-                    <Button onPress={showTimepicker} title="Show time picker!" />
-                </View>
-                <Text>selected: {date.toLocaleString()}</Text>
-                {show && (
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode={mode}
-                        is24Hour={true}
-                        onChange={onChange}
-                    />
-                )}
-            </View>
+
+            <TimeAndDate/>
         </KeyboardAwareScrollView>
     )
 };
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
         padding: 16,
     },
     row:{
         alignItems: "center",
         display: "flex",
         flexDirection: "row",
-        marginTop: '10%'
     },
     dropdown: {
         height: 50,
@@ -154,7 +118,7 @@ const styles = StyleSheet.create({
     },
     label: {
         position: 'absolute',
-        backgroundColor: 'white',
+        backgroundColor: '#FFF1ED',
         left: 22,
         top: 8,
         zIndex: 999,
@@ -175,4 +139,7 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize: 16,
     },
+    switch :{
+        margin: 5
+    }
 });

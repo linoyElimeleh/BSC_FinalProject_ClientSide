@@ -46,5 +46,5 @@ const unregister = fetchIntercept.register({
 export  {
     unregister,
     userService,
-    groupService
+    groupService,
 };

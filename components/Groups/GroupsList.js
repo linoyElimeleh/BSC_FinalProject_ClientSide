@@ -4,7 +4,6 @@ import {ListItem, Icon,} from 'react-native-elements';
 import { useIsFocused } from "@react-navigation/native";
 import styles from './styles';
 import {userService} from "../../services";
-import {getData} from "../../utils/asyncStorageUtils";
 
 export default function GroupsList() {
     const [groups, setGroups] = useState([]);
@@ -13,13 +12,11 @@ export default function GroupsList() {
 
     useEffect(() => {
         if(isFocused){
-            getData("Access Token").then((accessToken)=>{
-                const userGroups = userService.getUserGroups(accessToken);
-                userGroups.then(groups => {
-                    setGroups(groups);
-                    setIsLoading(false)
-                })
-            });
+            const userGroups = userService.getUserGroups();
+            userGroups.then(groups => {
+                setGroups(groups);
+                setIsLoading(false)
+            })
         }
     }, [isFocused]);
 

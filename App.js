@@ -1,21 +1,23 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, I18nManager ,Text, View} from 'react-native';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import WelcomePage from './components/welcomePage/WelcomePage';
 import { HeaderBackButton } from '@react-navigation/elements';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
-
 import {GroupsScreen, AddGroup, GroupCreated, JoinGroup} from './components/Groups'
 import {CreateTask} from "./components/Tasks";
+
+I18nManager.forceRTL(false);
+I18nManager.allowRTL(false);
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
-        background: 'white'
+        primary: '#FFF1ED',
+        background: '#FFF1ED'
     },
 }
 
@@ -50,6 +52,7 @@ export default function App() {
                         )
                     }
                 />
+
                 <Stack.Screen
                     name="Create Group"
                     component={AddGroup}
