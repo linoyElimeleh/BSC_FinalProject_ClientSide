@@ -7,14 +7,12 @@ import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import TimeAndDate from "./TimeAndDate";
 import {groupService} from '../../services'
+import CustomDropdown from "./CustomDropdown";
 
 const mockId = 88;
 
 export default function CreateTask({}) {
     const [checked, setChecked] = useState(false);
-    const [reoccurrence, setReoccurrence] = useState(false);
-    const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
     const [users, setUsers] = useState([]);
     const isFocused = useIsFocused();
 
@@ -22,63 +20,31 @@ export default function CreateTask({}) {
         if(isFocused){
             const membersPromise = groupService.getGroupMembers(mockId);
             membersPromise.then(members =>{
-                const names = members.map(({display_name,id}) => ({user:display_name,value:id}));
+                const names = members.map(({display_name,id}) => ({key:display_name,value:id}));
                 setUsers(names);
             })
         }
     },[isFocused])
 
-    const renderLabel = () => {
-        if (value || isFocus) {
-            return (
-                <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-                    Task Owner
-                </Text>
-            );
-        }
-        return null;
-    };
-
     return (
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
                                  style={{flex: 1}}
                                  showsVerticalScrollIndicator={false}>
-            <View style={styles.row}>
-                <Input
-                    leftIcon={{type: 'font-awesome', name: 'list-alt'}}
-                    placeholder="Enter your description here"
-                />
-            </View>
-            <View style={styles.container}>
-                {renderLabel()}
-                <Dropdown
-                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
+            <Input
+                leftIcon={{type: 'font-awesome', name: 'tasks'}}
+                placeholder="Title"
+            />
+            <Input
+                leftIcon={{type: 'font-awesome', name: 'list-alt'}}
+                placeholder="Enter your description here"
+            />
+            <View>
+                <CustomDropdown
+                    search={true}
                     data={users}
-                    search
-                    maxHeight={300}
-                    labelField="user"
-                    valueField="value"
-                    placeholder={!isFocus ? 'Select owner' : '...'}
-                    searchPlaceholder="Search..."
-                    value={value}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                        setValue(item.value);
-                        setIsFocus(false);
-                    }}
-                    renderLeftIcon={() => (
-                        <FontAwesome
-                            style={styles.icon}
-                            color={isFocus ? 'blue' : 'black'}
-                            name="user"
-                            size={20}
-                        />
-                    )}
+                    placeholder='Select Owner'
+                    iconLabel='user'
+                    labelText='Task Owner'
                 />
             </View>
             <View style={styles.row}>

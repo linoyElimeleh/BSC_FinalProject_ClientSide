@@ -6,31 +6,41 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Dropdown} from "react-native-element-dropdown/index";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import CustomDropdown from "./CustomDropdown";
 
 const data=[
-    {type: 'Daily', value:'1'},
-    {type: 'Weekly', value:'2'},
-    {type: 'Monthly', value:'3'}
+    {key: 'Daily', value:'1'},
+    {key: 'Weekly', value:'2'},
+    {key: 'Monthly', value:'3'}
 
 ]
 
 export default function TimeAndDate() {
-    const [date, setDate] = useState(new Date());
+    const [fromDate, setFromDate] = useState(new Date());
+    const [toDate, setToDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
     const [reoccurrence, setReoccurrence] = useState(false);
-    const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
-    const [showDate, setShowDate] = useState(false);
+    const [showFromDate, setShowFromDate] = useState(false);
+    const [showToDate, setShowToDate] = useState(false);
     const [showTime, setShowTime] = useState(false);
 
-    const onSetDate = (event, selectedDate) => {
+    const onSetFromDate = (event, selectedDate) => {
         if(selectedDate != null){
             const currentDate = selectedDate;
-            setShowDate(false);
-            setDate(currentDate);
+            setShowFromDate(false);
+            setFromDate(currentDate);
         }
-        setShowDate(false);
+        setShowFromDate(false);
     };
+    const onSetToDate = (event, selectedDate) => {
+        if(selectedDate != null){
+            const currentDate = selectedDate;
+            setShowToDate(false);
+            setToDate(currentDate);
+        }
+        setShowToDate(false);
+    };
+
 
     const onSetTime = (event, selectedTime) => {
         if(selectedTime != null){
@@ -39,17 +49,6 @@ export default function TimeAndDate() {
             setTime(currentDate);
         }
         setShowTime(false);
-    };
-
-    const renderLabel = () => {
-        if (reoccurrence && (value || isFocus)) {
-            return (
-                <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-                    Reoccurrence type
-                </Text>
-            );
-        }
-        return null;
     };
 
     return (
@@ -61,35 +60,14 @@ export default function TimeAndDate() {
                     checked={reoccurrence}
                     onPress={() => setReoccurrence(!reoccurrence)}
                 />
-                <View >
-                    {renderLabel()}
+                <View>
                     {reoccurrence && (
-                        <Dropdown
-                            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                            placeholderStyle={styles.placeholderStyle}
-                            selectedTextStyle={styles.selectedTextStyle}
-                            inputSearchStyle={styles.inputSearchStyle}
-                            iconStyle={styles.iconStyle}
+                        <CustomDropdown
                             data={data}
-                            maxHeight={300}
-                            labelField="type"
-                            valueField="value"
-                            placeholder={!isFocus ? 'Select frequency' : '...'}
-                            value={value}
-                            onFocus={() => setIsFocus(true)}
-                            onBlur={() => setIsFocus(false)}
-                            onChange={item => {
-                                setValue(item.value);
-                                setIsFocus(false);
-                            }}
-                            renderLeftIcon={() => (
-                                <FontAwesome
-                                    style={styles.icon}
-                                    color={isFocus ? 'blue' : 'black'}
-                                    name="user"
-                                    size={20}
-                                />
-                            )}
+                            search={false}
+                            iconLabel='repeat'
+                            labelText='Reoccurrence type'
+                            placeholder='Select frequency'
                         />
                     )}
                 </View>
@@ -100,14 +78,14 @@ export default function TimeAndDate() {
                         <Text>Date</Text>
                         <View style={[styles.card, styles.boxShadow]}>
                             <Chip
-                                title={date.toLocaleDateString()}
+                                title={fromDate.toLocaleDateString()}
                                 icon={{
                                     name: 'date-range',
                                     type: 'material',
                                     size: 20,
                                 }}
                                 iconRight
-                                onPress={()=> {setShowDate(true)}}
+                                onPress={()=> {setShowFromDate(true)}}
                                 buttonStyle={{
                                     backgroundColor: 'white',
                                     borderRadius: 10,
@@ -123,14 +101,14 @@ export default function TimeAndDate() {
                                 <Text>Date</Text>
                                 <View style={[styles.card, styles.boxShadow]}>
                                     <Chip
-                                        title={date.toLocaleDateString()}
+                                        title={toDate.toLocaleDateString()}
                                         icon={{
                                             name: 'date-range',
                                             type: 'material',
                                             size: 20,
                                         }}
                                         iconRight
-                                        onPress={()=> {setShowDate(true)}}
+                                        onPress={()=> {setShowToDate(true)}}
                                         buttonStyle={{
                                             backgroundColor: 'white',
                                             borderRadius: 10,
@@ -161,13 +139,22 @@ export default function TimeAndDate() {
                     />
                 </View>
                 <View>
-                    {showDate && (
+                    {showFromDate && (
                         <DateTimePicker
                             testID="dateTimePicker"
-                            value={date}
+                            value={fromDate}
                             mode='date'
                             is24Hour={true}
-                            onChange={onSetDate}
+                            onChange={onSetFromDate}
+                        />
+                    )}
+                    {showToDate && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={toDate}
+                            mode='date'
+                            is24Hour={true}
+                            onChange={onSetToDate}
                         />
                     )}
                     {showTime && (
