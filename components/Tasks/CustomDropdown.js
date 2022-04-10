@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {View, StyleSheet} from 'react-native'
 import {Text,} from 'react-native-elements';
-import { Dropdown } from 'react-native-element-dropdown';
+import {Dropdown} from 'react-native-element-dropdown';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function CustomDropdown({data, placeholder, labelText, search, iconLabel}) {
@@ -11,7 +11,7 @@ export default function CustomDropdown({data, placeholder, labelText, search, ic
     const renderLabel = () => {
         if (value || isFocus) {
             return (
-                <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+                <Text style={[styles.label, isFocus && {color: 'blue'}]}>
                     {labelText}
                 </Text>
             );
@@ -23,14 +23,14 @@ export default function CustomDropdown({data, placeholder, labelText, search, ic
         <View style={styles.container}>
             {renderLabel()}
             <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={data}
                 search={search}
-                maxHeight={300}
+                maxHeight={200}
                 labelField="key"
                 valueField="value"
                 placeholder={!isFocus ? placeholder : '...'}
@@ -44,7 +44,7 @@ export default function CustomDropdown({data, placeholder, labelText, search, ic
                 }}
                 renderLeftIcon={() => (
                     <FontAwesome
-                        style={styles.icon}
+                        style={styles.elements}
                         color={isFocus ? 'blue' : 'black'}
                         name={iconLabel}
                         size={20}
@@ -59,6 +59,9 @@ const styles = StyleSheet.create({
     container: {
         padding: 16,
     },
+    elements: {
+        marginRight: 5
+    },
     dropdown: {
         height: 50,
         borderColor: 'gray',
@@ -66,13 +69,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingHorizontal: 8,
     },
-    row:{
+    row: {
         alignItems: "center",
         display: "flex",
         flexDirection: "row",
     },
     label: {
-        backgroundColor: '#FFF1ED',
+        backgroundColor: '#FFFFFF',
         paddingHorizontal: 8,
         fontSize: 14,
     },

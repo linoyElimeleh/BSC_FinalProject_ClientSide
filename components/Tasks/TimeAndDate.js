@@ -55,7 +55,7 @@ export default function TimeAndDate() {
         <View>
             <View style={styles.row}>
                 <CheckBox
-                    containerStyle={{backgroundColor:'FFF1ED', borderWidth:0}}
+                    containerStyle={{backgroundColor: 'white', borderWidth:0}}
                     title="Reoccurrence"
                     checked={reoccurrence}
                     onPress={() => setReoccurrence(!reoccurrence)}
@@ -65,9 +65,9 @@ export default function TimeAndDate() {
                         <CustomDropdown
                             data={data}
                             search={false}
+                            placeholder='Select frequency'
                             iconLabel='repeat'
                             labelText='Reoccurrence type'
-                            placeholder='Select frequency'
                         />
                     )}
                 </View>
@@ -159,7 +159,7 @@ export default function TimeAndDate() {
                     )}
                     {showTime && (
                         <DateTimePicker
-                            testID="dateTimePicker"
+                                testID="dateTimePicker"
                             value={time}
                             mode='time'
                             is24Hour={true}

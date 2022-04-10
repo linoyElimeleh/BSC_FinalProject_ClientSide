@@ -71,9 +71,7 @@ export default function CreateTask({}) {
                     value={checked}
                     onValueChange={(value) => setChecked(value)}
                 />
-                <Text
-                    h4
-                >Urgent</Text>
+                <Text>Urgent</Text>
             </View>
             <TimeAndDate/>
             <View style={{width:'50%'}}>
@@ -100,7 +98,7 @@ export default function CreateTask({}) {
                 </Text>
                 <Icon.Button
                     style={{marginRight:5}}
-                    backgroundColor='#FFF1ED'
+                    backgroundColor='#ffffff'
                     color='black'
                     name='info-circle'
                     onPress={()=>setDialogOpen(true)}
@@ -140,7 +138,7 @@ const styles = StyleSheet.create({
     },
     label: {
         position: 'absolute',
-        backgroundColor: '#FFF1ED',
+        backgroundColor: '#ffffff',
         left: 22,
         top: 8,
         zIndex: 999,
