@@ -4,7 +4,7 @@ import {Text,} from 'react-native-elements';
 import {Dropdown} from 'react-native-element-dropdown';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function CustomDropdown({data, placeholder, labelText, search, iconLabel}) {
+export default function CustomDropdown({data, placeholder, labelText, search, iconLabel, onChange}) {
     const [isFocus, setIsFocus] = useState(false)
     const [value, setValue] = useState(null);
 
@@ -41,6 +41,7 @@ export default function CustomDropdown({data, placeholder, labelText, search, ic
                 onChange={item => {
                     setValue(item.value);
                     setIsFocus(false);
+                    onChange(item.value)
                 }}
                 renderLeftIcon={() => (
                     <FontAwesome

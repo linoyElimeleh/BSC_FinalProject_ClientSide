@@ -20,6 +20,7 @@ export default function TimeAndDate() {
     const [toDate, setToDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
     const [reoccurrence, setReoccurrence] = useState(false);
+    const [repeat, setRepeat] = useState(null);
     const [showFromDate, setShowFromDate] = useState(false);
     const [showToDate, setShowToDate] = useState(false);
     const [showTime, setShowTime] = useState(false);
@@ -32,6 +33,7 @@ export default function TimeAndDate() {
         }
         setShowFromDate(false);
     };
+
     const onSetToDate = (event, selectedDate) => {
         if(selectedDate != null){
             const currentDate = selectedDate;
@@ -40,7 +42,6 @@ export default function TimeAndDate() {
         }
         setShowToDate(false);
     };
-
 
     const onSetTime = (event, selectedTime) => {
         if(selectedTime != null){
@@ -68,6 +69,7 @@ export default function TimeAndDate() {
                             placeholder='Select frequency'
                             iconLabel='repeat'
                             labelText='Reoccurrence type'
+                            onChange={(value) => setRepeat(value)}
                         />
                     )}
                 </View>
