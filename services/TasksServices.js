@@ -18,13 +18,12 @@ const DeleteTask = async (groupId,idJson) => {
 
 const AssignTask = async (groupID,taskUserJson) => {
     try {
-        const response = await fetch(`${configData.SERVER_URL}/groups/${groupID}/assign`,
+        const response = await fetch(`${configData.SERVER_URL}/groups/${groupID}/task/assign`,
             {
                 method: 'PUT',
                 body: JSON.stringify(taskUserJson)
             });
-        const json = await response.json();
-        return json
+        return response.status
     } catch (error) {
         console.error(error);
         return (error)

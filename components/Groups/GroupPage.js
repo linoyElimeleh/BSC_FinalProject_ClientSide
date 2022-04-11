@@ -44,6 +44,7 @@ export default function GroupPage({ route, navigation }) {
 
     const UpdateGrouptasks = async () => {
         let response = await GetGroupTasks(group.id);
+        console.log(response)
         setTasks(response)
     }
 
@@ -67,7 +68,6 @@ export default function GroupPage({ route, navigation }) {
         }
         else {
             setIsLoading(false)
-            console.log(response)
             UpdateGrouptasks()
         }
     }
@@ -80,9 +80,13 @@ export default function GroupPage({ route, navigation }) {
         setIsVisible(false)
         setIsLoading(true)
         let response = await TasksServices.AssignTask(group.id, bodyJson);
-        setIsLoading(false)
-        console.log(response)
-        UpdateGrouptasks()
+        if (response.status>300) {
+            //snackBar
+        }
+        else {
+            setIsLoading(false)
+            UpdateGrouptasks()
+        }
     }
 
     const handleDone = async () => {
