@@ -4,7 +4,7 @@ import {Text, Input, Switch, Dialog, useTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { useIsFocused } from "@react-navigation/native";
 import TimeAndDate from "./TimeAndDate";
-import {groupService} from '../../services'
+import {groupService,categoriesService} from '../../services'
 import CustomDropdown from "./CustomDropdown";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -24,6 +24,7 @@ const snoozeData = [
 export default function CreateTask({}) {
     const [checked, setChecked] = useState(false);
     const [users, setUsers] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [score,setScore] = useState(0);
     const [dialogOpen,setDialogOpen] = useState(false);
     const isFocused = useIsFocused();
@@ -36,6 +37,11 @@ export default function CreateTask({}) {
             membersPromise.then(members =>{
                 const names = members.map(({display_name,id}) => ({key:display_name,value:id}));
                 setUsers(names);
+            })
+            const categoriesPromise = categoriesService.getCategories(mockId);
+            categoriesPromise.then(categories =>{
+                const names = categories.map(({title,id}) => ({key:title,value:id}));
+                setCategories(names);
             })
         }
     },[isFocused]);
@@ -63,6 +69,15 @@ export default function CreateTask({}) {
                     placeholder='Select Owner'
                     iconLabel='user'
                     labelText='Task Owner'
+                />
+            </View>
+            <View>
+                <CustomDropdown
+                    search={true}
+                    data={categories}
+                    placeholder='Select Category'
+                    iconLabel='file'
+                    labelText='Task Category'
                 />
             </View>
             <View style={styles.row}>

@@ -1,5 +1,6 @@
 import userService  from "./userService";
 import groupService from './groupsService';
+import categoriesService from "./categoriesService";
 import fetchIntercept from 'fetch-intercept';
 import {RefreshToken} from "./AuthServices";
 import {getData,storeData} from "../utils/asyncStorageUtils";
@@ -47,4 +48,5 @@ export  {
     unregister,
     userService,
     groupService,
+    categoriesService
 };
