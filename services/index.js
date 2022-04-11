@@ -1,4 +1,5 @@
 import userService  from "./userService";
+import TasksServices  from "./TasksServices";
 import groupService from './groupsService';
 import fetchIntercept from 'fetch-intercept';
 import {RefreshToken} from "./AuthServices";
@@ -46,5 +47,6 @@ const unregister = fetchIntercept.register({
 export  {
     unregister,
     userService,
-    groupService
+    groupService,
+    TasksServices
 };
