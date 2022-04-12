@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Icon, BottomSheet, ListItem } from 'react-native-elements';
 
-export default function BottomSheetGroups({ route, navigation, handleAssign, handleDelete, handleDone, handleEdit, handleReject, isVisible }) {
+export default function BottomSheetGroups({ route, navigation, handleAssign, handleDelete, handleDone, handleEdit, handleReject, isVisible,setIsVisible}) {
     return (
         <View style={{ display: 'flex', flexDirection: 'column' }}>
             <BottomSheet modalProps={{}} isVisible={isVisible}  >

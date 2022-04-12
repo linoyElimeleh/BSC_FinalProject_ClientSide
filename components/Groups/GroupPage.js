@@ -44,6 +44,10 @@ export default function GroupPage({ route, navigation }) {
         members && tasks && me && setIsLoading(false)
     }, [members && tasks && me])
 
+    useEffect(() => {
+        console.log(isSwitchChecked)
+    }, [isSwitchChecked])
+
     const UpdateGrouptasks = async () => {
         let response = await GetGroupTasks(group.id);
         console.log(response)
@@ -112,7 +116,7 @@ export default function GroupPage({ route, navigation }) {
             </View>
             <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", height: "100%" }}>
                 {!isLoading && tasks.map((task, i) => (
-                    isSwitchChecked && task.user_id == me.id || !isSwitchChecked &&
+                (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
                     <Card containerStyle={{ width: 175, backgroundColor: task.done == true ? "#b0ffa473" : "white" }} key={i}>
                         <Card.Title style={{ display: "flex", flexDirection: "column" }}>
                             {<Icon name="menu" onPress={() => { setIsVisible(true), setCurrentTaskId(task.id) }} />}
@@ -140,7 +144,7 @@ export default function GroupPage({ route, navigation }) {
             </View>
 
             {isVisible && <BottomSheetGroups handleAssign={handleAssign} handleDelete={handleDelete}
-                handleDone={handleDone} handleEdit={handleEdit} handleReject={handleReject} isVisible={isVisible} />}
+                handleDone={handleDone} handleEdit={handleEdit} handleReject={handleReject} isVisible={isVisible} setIsVisible={setIsVisible}/>}
 
             <FAB
                 icon={{ name: 'add', color: 'white' }}
