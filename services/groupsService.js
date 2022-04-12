@@ -55,7 +55,19 @@ const joinGroup = async (inviteCode, token) => {
     return groupDetails;
 };
 
+export const getGroupMembers = async (groupId) => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/groups/${groupId}/members`)
+        const members = await response.json();
+        return members
+    } catch (error) {
+        console.error(error);
+        return (error)
+    }
+};
+
 export default {
     createGroup,
     joinGroup,
+    getGroupMembers
 };
