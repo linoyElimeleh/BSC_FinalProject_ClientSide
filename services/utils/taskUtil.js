@@ -12,7 +12,7 @@ const createTask = (task) => {
             snooze_interval: task.snooze,
             score: task.score
         },
-        userID: task.taskOwner
+        userId: task.taskOwner
     }
     return taskBody;
 };

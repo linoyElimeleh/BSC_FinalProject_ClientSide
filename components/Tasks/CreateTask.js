@@ -8,6 +8,7 @@ import {groupService, categoriesService} from '../../services'
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
 import {taskService} from "../../services";
+import groupsService from "../../services/groupsService";
 const mockId = 88;
 
 const snoozeData = [
@@ -48,7 +49,8 @@ const DISPLAY_VALUES = Platform.select({
     windows: [],
 });
 
-export default function CreateTask({}) {
+export default function CreateTask({navigation, route}) {
+    const group = route.params;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [taskOwner, setTaskOwner] = useState(null);
@@ -103,7 +105,7 @@ export default function CreateTask({}) {
 
     useEffect(() => {
         if (isFocused) {
-            const membersPromise = groupService.getGroupMembers(mockId);
+            const membersPromise = groupService.getGroupMembers(group.id);
 
             membersPromise.then(members => {
                 const notAssigned = [{label: 'not assigned', value: null}]
@@ -127,9 +129,9 @@ export default function CreateTask({}) {
     const handleSubmit = () => {
         setIsLoading(true);
         const task = {title, description, taskOwner, category, fromDate, time, toDate, repeat, snooze, score};
-        const promiseGroup = taskService.createTask(task,mockId);
+        const promiseGroup = taskService.createTask(task,group.id);
         promiseGroup.then(result =>{
-            console.log(result);
+            navigation.navigate('Group', {group});
             setIsLoading(false);
         })
     };

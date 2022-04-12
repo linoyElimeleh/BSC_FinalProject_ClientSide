@@ -145,7 +145,7 @@ export default function GroupPage({ route, navigation }) {
             <FAB
                 icon={{ name: 'add', color: 'white' }}
                 color="#00aced" style={{ bottom: 200, right: 30, position: 'absolute', zIndex: 200 }}
-                onPress={() => {navigation.navigate('Create Task')}}
+                onPress={() => {navigation.navigate('Create Task', group)}}
             />
         </View>
     )
