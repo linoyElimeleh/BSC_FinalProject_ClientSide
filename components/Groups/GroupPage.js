@@ -1,19 +1,18 @@
 import React, { useEffect, useState, useFocusEffect } from 'react';
 import { StyleSheet, View, Pressable, ActivityIndicator, TextInput } from 'react-native';
-import { Button, Text, Image, useTheme, Input, Card, Icon, Divider, Avatar, BottomSheet, ListItem, Switch, FAB, Header as HeaderRNE, HeaderProps } from 'react-native-elements';
+import { Button, Text, Image, useTheme, Input, Card, Icon, Divider, Avatar, ListItem, Switch, FAB, Header as HeaderRNE, HeaderProps } from 'react-native-elements';
 import { Login } from '../../services/AuthServices'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import groupScreenStyles from "./groupScreenStyles";
 import { GetGroupMembers, GetGroupTasks } from '../../services/groupsService'
 import { GetMeDetails } from '../../services/userService'
 import { TasksServices } from '../../services'
+import BottomSheetGroups from './BottomSheet';
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group
     const [members, setMembers] = useState();
     const [tasks, setTasks] = useState();
-    const [isDisable, setIsDisable] = useState(true);
-    const [errorMessage, setErrorMessage] = useState("");
     const [isVisible, setIsVisible] = useState(false);
     const [isSwitchChecked, setIsSwitchChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +40,9 @@ export default function GroupPage({ route, navigation }) {
         MeDetails()
     }, [])
 
+    useEffect(() => {
+        members && tasks && me && setIsLoading(false)
+    }, [members && tasks && me])
 
     const UpdateGrouptasks = async () => {
         let response = await GetGroupTasks(group.id);
@@ -48,28 +50,13 @@ export default function GroupPage({ route, navigation }) {
         setTasks(response)
     }
 
-
-
-    useEffect(() => {
-        members && tasks && me && setIsLoading(false)
-    }, [members && tasks && me])
-
     const handleDelete = async () => {
-        // console.log(currentTaskId)
         const idJson = {
             "taskId": currentTaskId
         }
-        setIsVisible(false)
         setIsLoading(true)
         let response = await TasksServices.DeleteTask(group.id, idJson);
-
-        if (response.error) {
-            //snackBar
-        }
-        else {
-            setIsLoading(false)
-            UpdateGrouptasks()
-        }
+        handleBottomSheetRequsts(response)
     }
 
     const handleAssign = async () => {
@@ -77,16 +64,9 @@ export default function GroupPage({ route, navigation }) {
             "taskId": currentTaskId,
             "userId": me.id
         }
-        setIsVisible(false)
         setIsLoading(true)
         let response = await TasksServices.AssignTask(group.id, bodyJson);
-        if (response.status>300) {
-            //snackBar
-        }
-        else {
-            setIsLoading(false)
-            UpdateGrouptasks()
-        }
+        handleBottomSheetRequsts(response)
     }
 
     const handleDone = async () => {
@@ -94,24 +74,27 @@ export default function GroupPage({ route, navigation }) {
             "taskId": currentTaskId,
             "status": true
         }
-        setIsVisible(false)
         setIsLoading(true)
         let response = await TasksServices.SetStatusTask(group.id, bodyJson);
-        if (response.status>300) {
+        handleBottomSheetRequsts(response)
+    }
+
+    const handleEdit = () => {
+        //navigation but the page will be ready only at the next time
+    }
+    const handleReject = () => {
+        //navigation but the page will be ready only at the next time
+    }
+
+    const handleBottomSheetRequsts = (response) => {
+        setIsVisible(false)
+        if (response.status > 300) {
             //snackBar
         }
         else {
             setIsLoading(false)
             UpdateGrouptasks()
         }
-    }
-
-    const handleEdit = () => {
-        //navigation
-    }
-
-    const handleReject = () => {
-        //navigation but the page will be ready only at the next time
     }
 
     return (
@@ -128,14 +111,11 @@ export default function GroupPage({ route, navigation }) {
                 <Text style={{ marginTop: "1.5%" }}>Only My Tasks</Text>
             </View>
             <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", height: "100%" }}>
-
                 {!isLoading && tasks.map((task, i) => (
                     isSwitchChecked && task.user_id == me.id || !isSwitchChecked &&
                     <Card containerStyle={{ width: 175, backgroundColor: task.done == true ? "#b0ffa473" : "white" }} key={i}>
                         <Card.Title style={{ display: "flex", flexDirection: "column" }}>
-                            {
-                                // !task.done && 
-                                <Icon name="menu" onPress={() => { setIsVisible(true), setCurrentTaskId(task.id) }} />}
+                            {<Icon name="menu" onPress={() => { setIsVisible(true), setCurrentTaskId(task.id) }} />}
                             <Text>
                                 {task.title}
                             </Text>
@@ -159,77 +139,14 @@ export default function GroupPage({ route, navigation }) {
 
             </View>
 
-            <BottomSheet modalProps={{}} isVisible={isVisible}  >
-                <ListItem
-                    key={1}
-                    containerStyle={{ backgroundColor: 'green' }}
-                    onPress={() => handleDone()}
-                >
-                    <ListItem.Content >
-                        <ListItem.Title >Done!</ListItem.Title>
-                    </ListItem.Content>
-                </ListItem>
-                <ListItem
-                    key={2}
-                    //containerStyle={l.containerStyle}
-                    onPress={() => handleAssign()}
-                >
-                    <ListItem.Content>
-                        <ListItem.Title>Assign to me</ListItem.Title>
-                    </ListItem.Content>
-                </ListItem>
-                <ListItem
-                    key={3}
-                    //containerStyle={l.containerStyle}
-                    onPress={() => handleEdit()}
-                >
-                    <ListItem.Content>
-                        <ListItem.Title>Edit</ListItem.Title>
-                    </ListItem.Content>
-                </ListItem>
-                <ListItem
-                    key={4}
-                    //containerStyle={l.containerStyle}
-                    onPress={() => handleDelete()}
-                >
-                    <ListItem.Content>
-                        <ListItem.Title >Delete</ListItem.Title>
-                    </ListItem.Content>
-                </ListItem>
-                <ListItem
-                    key={5}
-                    //containerStyle={l.containerStyle}
-                    onPress={() => handleReject()}
-                >
-                    <ListItem.Content>
-                        <ListItem.Title >Reject</ListItem.Title>
-                    </ListItem.Content>
-                </ListItem>
-                <ListItem
-                    key={6}
-                    //containerStyle={l.containerStyle}
-                    onPress={() => setIsVisible(!isVisible)}
-                >
-                    <ListItem.Content>
-                        <ListItem.Title style={{ display: "flex", justifyContent: "center" }} >
-                            close
-                            <Icon name="close" />
-                        </ListItem.Title>
-                    </ListItem.Content>
-                </ListItem>
-            </BottomSheet>
+            {isVisible && <BottomSheetGroups handleAssign={handleAssign} handleDelete={handleDelete}
+                handleDone={handleDone} handleEdit={handleEdit} handleReject={handleReject} isVisible={isVisible} />}
 
-
-
-
-            {/* <View style={{bottom:-430,right:30,position:'absolute'}}> */}
             <FAB
                 icon={{ name: 'add', color: 'white' }}
                 color="#00aced" style={{ bottom: 200, right: 30, position: 'absolute', zIndex: 200 }}
                 onPress={() => { }}
             />
-            {/* </View> */}
-
         </View>
     )
 }
