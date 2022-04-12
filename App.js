@@ -16,19 +16,25 @@ const MyTheme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#FFF1ED',
-        background: '#FFF1ED'
+        primary: '#FFFFFF',
+        background: '#FFFFFF'
     },
 }
 
 export default function App() {
     return (
         <NavigationContainer theme={MyTheme}>
-            <Stack.Navigator>
-                <Stack.Screen
-                    name="Create New Task"
-                    component={CreateTask}
-                />
+            <Stack.Navigator
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: '#2089dc',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
+            >
                 <Stack.Screen
                     name="Welcome Page"
                     component={WelcomePage}
@@ -53,7 +59,6 @@ export default function App() {
                         )
                     }
                 />
-
                 <Stack.Screen
                     name="Create Group"
                     component={AddGroup}

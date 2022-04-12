@@ -1,56 +1,120 @@
 import React, {useState, useEffect, useRef} from 'react'
-import {View, StyleSheet} from 'react-native'
-import {Text, Input, Switch, Dialog, useTheme, Button} from 'react-native-elements';
+import {View, StyleSheet, Platform} from 'react-native'
+import {Text, Input, Switch, Dialog, useTheme, Button, ListItem, Icon, Slider} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useIsFocused} from "@react-navigation/native";
-import TimeAndDate from "./TimeAndDate";
 import {groupService, categoriesService} from '../../services'
-import CustomDropdown from "./CustomDropdown";
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+// import Icon from 'react-native-vector-icons/FontAwesome';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import RNPickerSelect from "react-native-picker-select";
+import {taskService} from "../../services";
 const mockId = 88;
 
 const snoozeData = [
-    {key: '4m', value: 4},
-    {key: '5m', value: 5},
-    {key: '6m', value: 6},
-    {key: '7m', value: 7},
-    {key: '8m', value: 8},
-    {key: '9m', value: 9},
-    {key: '10m', value: 10},
-    {key: 'no snooze', value: null}
+    {label: 'no snooze', value: null},
+    {label: '4m', value: 4},
+    {label: '5m', value: 5},
+    {label: '6m', value: 6},
+    {label: '7m', value: 7},
+    {label: '8m', value: 8},
+    {label: '9m', value: 9},
+    {label: '10m', value: 10},
 ];
+
+const repeatData = [
+    {label: 'Never', value: null},
+    {label: 'Daily', value: 1},
+    {label: 'Weekly', value: 2},
+    {label: 'Monthly', value: 3},
+];
+
+const IOS_DISPLAY = Object.freeze({
+    default: 'default',
+    spinner: 'spinner',
+    compact: 'compact',
+    inline: 'inline',
+});
+
+const ANDROID_DISPLAY = Object.freeze({
+    default: 'default',
+    spinner: 'spinner',
+    clock: 'clock',
+    calendar: 'calendar',
+});
+
+const DISPLAY_VALUES = Platform.select({
+    ios: Object.values(IOS_DISPLAY),
+    android: Object.values(ANDROID_DISPLAY),
+    windows: [],
+});
 
 export default function CreateTask({}) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [checked, setChecked] = useState(false);
     const [taskOwner, setTaskOwner] = useState(null);
     const [category, setCategory] = useState(null);
-    const [snooze, setSnooze] = useState(null);
     const [users, setUsers] = useState([]);
     const [categories, setCategories] = useState([]);
     const [score, setScore] = useState(0);
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [IsDisable, setIsDisable] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const isFocused = useIsFocused();
-    const {theme} = useTheme(``);
     const dateTimeRef = useRef(null);
+    const [fromDate, setFromDate] = useState(new Date());
+    const [toDate, setToDate] = useState(new Date());
+    const [time, setTime] = useState(new Date());
+    const [timeExpanded, setTimeExpanded] = useState(false);
+    const [dateExpanded, setDateExpanded] = useState(false);
+    const [endsExpanded, setEndsExpanded] = useState(false);
+    const [display, setDisplay] = useState(DISPLAY_VALUES[1]);
+    const [urgent, setUrgent] = useState(false);
+    const [repeat, setRepeat] = useState(null);
+    const [snooze, setSnooze] = useState(null);
+    const [showEnds, setShowEnds] = useState(false);
+
+    const onSetFromDate = (event, selectedDate) => {
+        if (selectedDate != null) {
+            const currentDate = selectedDate;
+            setFromDate(currentDate);
+        }
+    };
+
+    const onSetTime = (event, selectedTime) => {
+        if (selectedTime != null) {
+            const currentDate = selectedTime;
+            setTime(currentDate);
+        }
+    };
+
+    const onSetToDate = (event, selectedDate) => {
+        if (selectedDate != null) {
+            const currentDate = selectedDate;
+            setToDate(currentDate);
+        }
+    };
+
+    const onRepeatChange = (value) => {
+        if (value !== null) {
+            setShowEnds(true)
+        } else {
+            setShowEnds(false);
+        }
+        setRepeat(value);
+    }
 
     useEffect(() => {
         if (isFocused) {
             const membersPromise = groupService.getGroupMembers(mockId);
 
             membersPromise.then(members => {
-                const names = members.map(({display_name, id}) => ({key: display_name, value: id}));
-                setUsers(names);
+                const notAssigned = [{label: 'not assigned', value: null}]
+                const names = members.map(({display_name, id}) => ({label: display_name, value: id}));
+                setUsers(notAssigned.concat(names));
             })
 
             const categoriesPromise = categoriesService.getCategories();
 
             categoriesPromise.then(categories => {
-                const names = categories.map(({title, id}) => ({key: title, value: id}));
+                const names = categories.map(({title, id}) => ({label: title, value: id}));
                 setCategories(names);
             })
         }
@@ -62,9 +126,13 @@ export default function CreateTask({}) {
 
     const handleSubmit = () => {
         setIsLoading(true);
-        const task = {title, description, taskOwner};
-        console.log(dateTimeRef.current);
-    }
+        const task = {title, description, taskOwner, category, fromDate, time, toDate, repeat, snooze, score};
+        const promiseGroup = taskService.createTask(task,mockId);
+        promiseGroup.then(result =>{
+            console.log(result);
+            setIsLoading(false);
+        })
+    };
 
     return (
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
@@ -80,44 +148,199 @@ export default function CreateTask({}) {
                 placeholder="Enter your description here"
                 onChangeText={value => setDescription(value)}
             />
-            <View>
-                <CustomDropdown
-                    search={true}
-                    data={users}
-                    placeholder='Select Owner'
-                    iconLabel='user'
-                    labelText='Task Owner'
-                    onChange={(value) => setTaskOwner(value)}
-                />
-            </View>
-            <View>
-                <CustomDropdown
-                    search={true}
-                    data={categories}
-                    placeholder='Select Category'
-                    iconLabel='file'
-                    labelText='Task Category'
-                    onChange={(value) => setCategory(value)}
-                />
-            </View>
-            <View style={styles.row}>
-                <Switch
-                    style={styles.switch}
-                    value={checked}
-                    onValueChange={(value) => setChecked(value)}
-                />
-                <Text>Urgent</Text>
-            </View>
-            <TimeAndDate ref={dateTimeRef}/>
-            <View style={{width: '50%'}}>
-                <CustomDropdown
-                    search={false}
-                    labelText='snooze'
-                    iconLabel='hourglass-start'
-                    placeholder='snooze'
-                    data={snoozeData}
-                    onChange={(value) => setSnooze(value)}
-                />
+            <View style={styles.list}>
+                <RNPickerSelect
+                    onValueChange={(value) => setCategory(value)}
+                    items={categories}
+                    placeholder={{}}
+                >
+                    <ListItem bottomDivider>
+                        <ListItem.Content>
+                            <ListItem.Title>
+                                {
+                                    <Icon name="category" size={20}/>
+                                }
+                                Category
+                            </ListItem.Title>
+                               <ListItem.Subtitle
+                                right>
+                                {
+                                    categories.find(categoryType => categoryType.value === category)?.label
+                                }
+                            </ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+                </RNPickerSelect>
+                <RNPickerSelect
+                    onValueChange={(value) => setTaskOwner(value)}
+                    items={users}
+                    placeholder={{}}
+                >
+                    <ListItem bottomDivider>
+                        <ListItem.Content>
+                            <ListItem.Title>
+                                {
+                                    <Icon name="person" size={20}/>
+                                }
+                                Task owner
+                            </ListItem.Title>
+                            <ListItem.Subtitle
+                                right>
+                                {
+                                    users.find(userID => userID.value === taskOwner)?.label
+                                }
+                            </ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+                </RNPickerSelect>
+                <ListItem bottomDivider>
+                    <ListItem.Content>
+                        <ListItem.Title>
+                            {
+                                <Icon name="warning" size={20}/>
+                            }
+                            Urgent {
+
+                            <Switch
+                                style={styles.switch}
+                                value={urgent}
+                                onValueChange={(value) => setUrgent(value)}
+                            />
+                        }</ListItem.Title>
+                    </ListItem.Content>
+                </ListItem>
+                <ListItem.Accordion
+                    content={
+                        <>
+                            <Icon name="date-range" size={20}/>
+                            <ListItem.Content>
+                                <ListItem.Title>Date</ListItem.Title>
+                                <ListItem.Subtitle>{fromDate.toDateString()}</ListItem.Subtitle>
+                            </ListItem.Content>
+                        </>
+                    }
+                    isExpanded={dateExpanded}
+                    onPress={() => {
+                        setDateExpanded(!dateExpanded);
+                    }}
+                    bottomDivider
+                >
+                    <View>
+                        {
+                            <DateTimePicker
+                                testID="dateTimePicker"
+                                value={fromDate}
+                                mode='date'
+                                is24Hour={true}
+                                onChange={onSetFromDate}
+                                style={styles.datePicker}
+                            />
+                        }
+                    </View>
+                </ListItem.Accordion>
+                <ListItem.Accordion bottomDivider
+                                    content={
+                                        <>
+                                            <Icon name="access-time" size={20}/>
+                                            <ListItem.Content>
+                                                <ListItem.Title>Time</ListItem.Title>
+                                                <ListItem.Subtitle>{time.toDateString()}</ListItem.Subtitle>
+                                            </ListItem.Content>
+                                        </>
+                                    }
+                                    isExpanded={timeExpanded}
+                                    onPress={() => {
+                                        setTimeExpanded(!timeExpanded);
+                                    }}
+                >
+                    <View>
+                        {
+                            <DateTimePicker
+                                testID="dateTimePicker"
+                                value={time}
+                                mode='time'
+                                is24Hour={true}
+                                onChange={onSetTime}
+                                display={display}
+                            />
+                        }
+                    </View>
+                </ListItem.Accordion>
+                <RNPickerSelect
+                    onValueChange={(value) => onRepeatChange(value)}
+                    items={repeatData}
+                    placeholder={{}}
+                >
+                    <ListItem bottomDivider>
+                        <ListItem.Content>
+                            <ListItem.Title>
+                                {
+                                    <Icon name="repeat" size={20}/>
+                                }
+                                Repeat
+                            </ListItem.Title>
+                            <ListItem.Subtitle
+                                right>
+                                {
+                                    repeatData.find(repeatType => repeatType.value === repeat)?.label
+                                }
+                            </ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+                </RNPickerSelect>
+                {showEnds &&
+                    <ListItem.Accordion
+                        content={
+                            <>
+                                <Icon name="date-range" size={20}/>
+                                <ListItem.Content>
+                                    <ListItem.Title>Ends</ListItem.Title>
+                                    <ListItem.Subtitle>{toDate.toDateString()}</ListItem.Subtitle>
+                                </ListItem.Content>
+                            </>
+                        }
+                        isExpanded={endsExpanded}
+                        onPress={() => {
+                            setEndsExpanded(!endsExpanded);
+                        }}
+                        bottomDivider
+                    >
+
+                        <View>
+                            {
+                                <DateTimePicker
+                                    testID="dateTimePicker"
+                                    value={fromDate}
+                                    mode='date'
+                                    is24Hour={true}
+                                    onChange={onSetToDate}
+                                    display={display}
+                                />
+                            }
+                        </View>
+                    </ListItem.Accordion>}
+                <RNPickerSelect
+                    onValueChange={(value) => setSnooze(value)}
+                    items={snoozeData}
+                    placeholder={{}}
+                >
+                    <ListItem bottomDivider>
+                        <ListItem.Content>
+                            <ListItem.Title>
+                                {
+                                    <Icon name="snooze" size={20}/>
+                                }
+                                Snooze
+                            </ListItem.Title>
+                            <ListItem.Subtitle
+                                right>
+                                {
+                                    snoozeData.find(snoozeType => snoozeType.value === snooze)?.label
+                                }
+                            </ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+                </RNPickerSelect>
             </View>
             <View style={{width: '50%'}}>
                 <Input
@@ -132,32 +355,18 @@ export default function CreateTask({}) {
                 >
                     Rejection points: {score * 0.25}
                 </Text>
-                <Icon.Button
-                    style={{marginRight: 5}}
-                    backgroundColor='#ffffff'
-                    color='black'
-                    name='info-circle'
-                    onPress={() => setDialogOpen(true)}
-                >
-                    <Dialog
-                        isVisible={dialogOpen}
-                        onBackdropPress={() => setDialogOpen(!dialogOpen)}
-                    >
-                        <Dialog.Title title="Rejection points"/>
-                        <Text>The amount of points you pay to cancel the task. 25% of score</Text>
-                    </Dialog>
-
-                </Icon.Button>
-                <Button
-                    title={'Create Group'}
-                    containerStyle={{
-                        width: 200,
-                        marginHorizontal: 50,
-                        marginVertical: 10,
-                    }}
-                    onPress={handleSubmit}
-                    loading={isLoading}
-                />
+            </View>
+            <View style={{ alignItems: 'center', marginTop: '10%' }}>
+            <Button
+                title={'Create Task'}
+                containerStyle={{
+                    width: 200,
+                    marginHorizontal: 50,
+                    marginVertical: 10,
+                }}
+                onPress={handleSubmit}
+                loading={isLoading}
+            />
             </View>
         </KeyboardAwareScrollView>
     )
@@ -206,6 +415,18 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     switch: {
-        margin: 5
+        marginTop: -7,
+    },
+    datePicker: {
+        width: 320,
+        height: 260,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    list: {
+        marginTop: 20,
+        borderTopWidth: 1,
+        borderColor: '#6e6d6d'
     }
 });
