@@ -4,16 +4,17 @@ const createTask = (task) => {
             title: task.title,
             description: task.title,
             category_id: task.category,
-            due_date: task.fromDate+task.time,
+            due_date: task.dueDate,
             done: false,
             repeat: task.repeat,
-            end_repeat: task.toDate,
+            end_repeat: task.endDate,
             urgent: task.urgent,
             snooze_interval: task.snooze,
             score: task.score
         },
         userId: task.taskOwner
     }
+    console.log(JSON.stringify(taskBody));
     return taskBody;
 };
 
