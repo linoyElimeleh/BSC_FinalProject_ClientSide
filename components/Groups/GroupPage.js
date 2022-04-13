@@ -8,6 +8,7 @@ import { GetGroupMembers, GetGroupTasks } from '../../services/groupsService'
 import { GetMeDetails } from '../../services/userService'
 import { TasksServices } from '../../services'
 import BottomSheetGroups from './BottomSheet';
+import {useIsFocused} from "@react-navigation/native";
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group
@@ -18,6 +19,7 @@ export default function GroupPage({ route, navigation }) {
     const [isLoading, setIsLoading] = useState(true);
     const [currentTaskId, setCurrentTaskId] = useState();
     const [me, setMe] = useState();
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         const GroupMembers = async () => {
@@ -38,7 +40,7 @@ export default function GroupPage({ route, navigation }) {
         GroupMembers()
         Grouptasks()
         MeDetails()
-    }, [])
+    }, [isFocused])
 
     useEffect(() => {
         members && tasks && me && setIsLoading(false)
