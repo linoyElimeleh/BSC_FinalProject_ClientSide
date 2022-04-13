@@ -23,7 +23,7 @@ const snoozeData = [
 ];
 
 const repeatData = [
-    {label: 'Never', value: null},
+    {label: 'Never', value: -1},
     {label: 'Daily', value: 1},
     {label: 'Weekly', value: 2},
     {label: 'Monthly', value: 3},
@@ -60,7 +60,6 @@ export default function CreateTask({navigation, route}) {
     const [score, setScore] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const isFocused = useIsFocused();
-    const dateTimeRef = useRef(null);
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
@@ -69,7 +68,7 @@ export default function CreateTask({navigation, route}) {
     const [endsExpanded, setEndsExpanded] = useState(false);
     const [display, setDisplay] = useState(DISPLAY_VALUES[1]);
     const [urgent, setUrgent] = useState(false);
-    const [repeat, setRepeat] = useState(null);
+    const [repeat, setRepeat] = useState(-1);
     const [snooze, setSnooze] = useState(null);
     const [showEnds, setShowEnds] = useState(false);
 
@@ -128,8 +127,11 @@ export default function CreateTask({navigation, route}) {
 
     const handleSubmit = () => {
         setIsLoading(true);
-        const task = {title, description, taskOwner, category, fromDate, time, toDate, repeat, snooze, score};
+        const dueDate = new Date(fromDate.setHours(time.getHours())).toISOString();
+        const endDate = new Date(toDate).toISOString();
+        const task = {title, description, taskOwner, category, dueDate, endDate, repeat, snooze, score, urgent};
         const promiseGroup = taskService.createTask(task,group.id);
+
         promiseGroup.then(result =>{
             navigation.navigate('Group', {group});
             setIsLoading(false);
@@ -202,7 +204,6 @@ export default function CreateTask({navigation, route}) {
                                 <Icon name="warning" size={20}/>
                             }
                             Urgent {
-
                             <Switch
                                 style={styles.switch}
                                 value={urgent}
@@ -235,7 +236,7 @@ export default function CreateTask({navigation, route}) {
                                 mode='date'
                                 is24Hour={true}
                                 onChange={onSetFromDate}
-                                style={styles.datePicker}
+                                display={display}
                             />
                         }
                     </View>
@@ -246,7 +247,7 @@ export default function CreateTask({navigation, route}) {
                                             <Icon name="access-time" size={20}/>
                                             <ListItem.Content>
                                                 <ListItem.Title>Time</ListItem.Title>
-                                                <ListItem.Subtitle>{time.toDateString()}</ListItem.Subtitle>
+                                                <ListItem.Subtitle>{time.toLocaleTimeString()}</ListItem.Subtitle>
                                             </ListItem.Content>
                                         </>
                                     }
@@ -382,13 +383,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         display: "flex",
         flexDirection: "row",
-    },
-    dropdown: {
-        height: 50,
-        borderColor: 'gray',
-        borderWidth: 0.5,
-        borderRadius: 8,
-        paddingHorizontal: 8,
     },
     icon: {
         marginRight: 5,
