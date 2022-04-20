@@ -47,6 +47,7 @@ const DISPLAY_VALUES = Platform.select({
     ios: Object.values(IOS_DISPLAY),
     android: Object.values(ANDROID_DISPLAY),
     windows: [],
+    web: Object.values(IOS_DISPLAY),
 });
 
 export default function CreateTask({navigation, route}) {
@@ -140,7 +141,7 @@ export default function CreateTask({navigation, route}) {
 
     return (
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
-                                 style={{flex: 1}}
+                                 contentContainerStyle={{flexGrow: 1, justifyContent: "space-around"}}
                                  showsVerticalScrollIndicator={false}>
             <Input
                 leftIcon={{type: 'font-awesome', name: 'tasks'}}

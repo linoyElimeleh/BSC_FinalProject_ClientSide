@@ -2,19 +2,9 @@ import React from 'react';
 import {AddGroup, GroupCreated, GroupPage, GroupsScreen, JoinGroup} from "../Groups";
 import CreateTask from "../Tasks/CreateTask";
 import {HeaderBackButton} from "@react-navigation/elements";
-import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
-const MyTheme = {
-    ...DefaultTheme,
-    colors: {
-        ...DefaultTheme.colors,
-        primary: '#FFFFFF',
-        background: '#FFFFFF'
-    },
-}
-
 export default function Home() {
 
     return (
@@ -30,11 +20,12 @@ export default function Home() {
             }}
         >
             <Stack.Screen
-                name="Groups"
+                name="GroupsList"
                 component={GroupsScreen}
                 options={({}) =>
                     (
                         {
+                            title:"Groups",
                             headerLeft: ()=>{},
                             headerBackVisible:false,
                         }

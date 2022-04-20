@@ -23,9 +23,7 @@ const MyTheme = {
 export default function App() {
     return (
         <NavigationContainer theme={MyTheme}>
-            <Stack.Navigator
-
-            >
+            <Stack.Navigator>
                 <Stack.Screen
                     name="Welcome Page"
                     component={WelcomePage}

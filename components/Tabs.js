@@ -1,33 +1,51 @@
 import {StyleSheet, I18nManager ,Text, View} from 'react-native';
 import {DefaultTheme} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {GroupsScreen, AddGroup, GroupCreated, JoinGroup, GroupPage} from './Groups'
-import {Home, Goals, Profile} from "./Screens";
+import {Home, Goals} from "./Screens";
+import {ProfileStack} from "./Screens/Stacks";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 
 I18nManager.forceRTL(false);
 I18nManager.allowRTL(false);
 
 const Tab = createBottomTabNavigator();
-
-const MyTheme = {
-    ...DefaultTheme,
-    colors: {
-        ...DefaultTheme.colors,
-        primary: '#FFFFFF',
-        background: '#FFFFFF'
-    },
-}
-
 export default function Tabs() {
     return (
         <Tab.Navigator
             screenOptions={{
-                headerShown:false
-            }}>
-            <Tab.Screen name="Groups" component={Home} />
-            <Tab.Screen name="Goals" component={Goals} />
-            <Tab.Screen name="Me" component={Profile} />
+                headerShown:false,
+                tabBarActiveTintColor: 'lightblue',
+                tabBarInactiveTintColor: 'lightgray',
+            }}
+        >
+            <Tab.Screen
+                name="Groups"
+                component={Home}
+                options={{
+                    tabBarIcon:({color,size}) =>(
+                        <FontAwesome name="group" color={color} size={size}/>
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="Goals"
+                component={Goals}
+                options={{
+                    tabBarIcon:({color,size}) =>(
+                        <FontAwesome name="trophy" color={color} size={size}/>
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="Me"
+                component={ProfileStack}
+                options={{
+                    tabBarIcon:({color,size}) =>(
+                        <FontAwesome name="user" color={color} size={size}/>
+                    )
+                }}
+            />
         </Tab.Navigator>
     );
 }
