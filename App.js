@@ -59,6 +59,7 @@ export default function App() {
                     options={({}) =>
                         (
                             {
+                                headerLeft: ()=>{},
                                 headerBackVisible:false
                             }
                         )

@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, View, Pressable, ActivityIndicator } from 'react-native';
 import { Button, Text, Image, useTheme } from 'react-native-elements';
+import {getData} from "../../utils/asyncStorageUtils";
 
 
 export default function WelcomePage({navigation}) {
     const { theme } = useTheme();
+    useEffect(async ()=>{
+        const loggedInUser = await getData("Access Token");
+        if(loggedInUser){
+            navigation.navigate('Groups');
+        }
+    })
 
     return (
         <View style={styles.container}>
