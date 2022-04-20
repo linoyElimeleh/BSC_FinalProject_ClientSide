@@ -4,12 +4,12 @@ import { Button, Text, Image, useTheme } from 'react-native-elements';
 import {getData} from "../../utils/asyncStorageUtils";
 
 
-export default function WelcomePage({navigation}) {
+export default function Profile({navigation}) {
     const { theme } = useTheme();
     useEffect(async ()=>{
         const loggedInUser = await getData("Access Token");
         if(loggedInUser){
-            navigation.navigate('Tabs');
+            navigation.navigate('Groups');
         }
     })
 
@@ -20,34 +20,8 @@ export default function WelcomePage({navigation}) {
                 h1
                 h1Style={{ color: theme?.colors?.primary }}
             >
-                TODO-Bom
+                Profile
             </Text>
-            <View style={styles.imageView}> 
-                <Image style={styles.image}
-                    source={require("./todoP.jpeg")}
-                    containerStyle={styles.imageContainer}
-                    PlaceholderContent={<ActivityIndicator />}
-                />
-            </View>
-            
-            <Button
-                title={'Sign In'}
-                containerStyle={{
-                    width: 200,
-                    marginHorizontal: 50,
-                    marginVertical: 10,
-                }}
-                onPress={() => navigation.navigate('Sign In')}
-            />
-            <Button
-                title={'Sign Up'}
-                containerStyle={{
-                    width: 200,
-                    marginHorizontal: 50,
-                    marginVertical: 10,
-                }}
-                onPress={() => navigation.navigate('Sign Up')}
-            />
         </View>
     )
 }
