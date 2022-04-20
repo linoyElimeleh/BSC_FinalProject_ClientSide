@@ -1,21 +1,25 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import { StyleSheet, View, Pressable, ActivityIndicator } from 'react-native';
-import {Button, Text, Dialog, useTheme, Avatar, Input} from 'react-native-elements';
+import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {Button, Text, Dialog, useTheme, Avatar, Image, Input} from 'react-native-elements';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {removeData} from "../../utils/asyncStorageUtils";
 import {GetMeDetails} from "../../services/userService";
 import {useIsFocused} from "@react-navigation/native";
-
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Profile({navigation}) {
     const { theme } = useTheme();
-    const [disabled,setDisabled] = useState(true);
+    const [image, setImage] = useState(null);
+    const [imageBase64, setImageBase64] = useState(null);
     const [dialogOpen,setDialogOpen] = useState(false);
+    const [cameraDialogOpen,setCameraDialogOpen] = useState(false);
     const [initialUserName,setInitialUserName] = useState("");
     const [userName,setUserName] = useState("");
     const [email,setEmail] = useState("");
     const [birthDate,setBirthDate] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const isFocused = useIsFocused();
+
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -36,6 +40,45 @@ export default function Profile({navigation}) {
         setBirthDate(response.birth_date);
         setInitialUserName(response.display_name);
     },[isFocused]);
+
+
+    const openCamera = async () => {
+        setIsLoading(true);
+        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        if (permissionResult.granted === false) {
+            alert("You've refused to allow this appp to access your camera!");
+            return;
+        }
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            presentationStyle: ImagePicker.UIImagePickerPresentationStyle.BlurOverFullScreen,
+            quality: 1,
+            base64: true
+        });
+        applyResult(result);
+    }
+
+    const pickImage = async () => {
+        setIsLoading(true);
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            presentationStyle: ImagePicker.UIImagePickerPresentationStyle.BlurOverFullScreen,
+            quality: 1,
+            base64: true
+        });
+        applyResult(result);
+
+    };
+
+    function applyResult(result) {
+        if (!result.cancelled) {
+            setImage(result.uri);
+            setImageBase64(result.base64)
+        }
+        setIsLoading(false)
+    }
 
     const checkChange = () => {
         const userNameChanged = userName !== initialUserName;
@@ -65,6 +108,32 @@ export default function Profile({navigation}) {
                     <Dialog.Button title="cancel" onPress={() => setDialogOpen(false)}/>
                 </Dialog.Actions>
             </Dialog>
+            <Dialog
+                isVisible={cameraDialogOpen}
+                onBackdropPress={() => setCameraDialogOpen(!cameraDialogOpen)}>
+                <Dialog.Title title="Select Image"/>
+                {["Take Photo...", "Select from Library..."].map((l, i) => (
+                    <Button
+                        key={i}
+                        title={l}
+                        style={{marginTop: 10}}
+                        buttonStyle={{backgroundColor: "white", justifyContent: "flex-start"}}
+                        titleStyle={{color: "black"}}
+                        onPress={async () => {
+                            switch (i) {
+                                case 0:
+                                    await openCamera()
+                                    break
+                                case 1:
+                                    await pickImage();
+                                    break
+                            }
+                            setCameraDialogOpen(false)
+                        }}
+                    >
+                    </Button>
+                ))}
+            </Dialog>
             <View style={styles.containerStyle}>
                 <Text
                     h1
@@ -73,14 +142,23 @@ export default function Profile({navigation}) {
                     My Profile
                 </Text>
                 <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
-                    <Avatar
-                        size={64}
-                        rounded
-                        icon={{name: 'adb', type: 'material'}}
-                        containerStyle={{backgroundColor: 'orange'}}
-                    >
-                        <Avatar.Accessory size={24}/>
-                    </Avatar>
+                    {image?
+                        <Image
+                            source={{uri:image}}
+                            PlaceholderContent={<ActivityIndicator />}
+                            onPress={()=>setCameraDialogOpen(true)}
+                            style={styles.image}/>
+                        :
+                        <Avatar
+                            size={64}
+                            rounded
+                            icon={{name: 'adb', type: 'material'}}
+                            containerStyle={{backgroundColor: 'orange'}}
+                            onPress={()=>setCameraDialogOpen(true)}
+                        >
+                            <Avatar.Accessory size={24}/>
+                        </Avatar>
+                    }
                 </View>
                 <Input
                     containerStyle={styles.textStyle}
@@ -137,6 +215,12 @@ const styles = StyleSheet.create({
     },
     textStyle:{
         width:280
+    },
+    image:{
+        width: 150,
+        height: 150,
+        borderRadius: 150 / 2,
+        overflow: "hidden",
     }
 });
 
