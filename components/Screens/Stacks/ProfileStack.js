@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, View, Pressable, ActivityIndicator } from 'react-native';
 import { Button, Text, Dialog, useTheme } from 'react-native-elements';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Profile} from "../index";
+import {Profile,EditProfile} from "../index";
 import ChangePassword from "../../SignUp/ChangePassword";
 
 const Stack = createNativeStackNavigator();
@@ -28,6 +28,11 @@ export default function ProfileStack({navigation}) {
             <Stack.Screen
                 name="Profile"
                 component={Profile}
+            />
+            <Stack.Screen
+                name="EditProfile"
+                component={EditProfile}
+                options={{title: "Edit Profile"}}
             />
             <Stack.Screen
                 name="ChangePassword"
