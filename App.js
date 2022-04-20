@@ -51,6 +51,7 @@ export default function App() {
                 <Stack.Screen
                     name="Group"
                     component={GroupPage}
+                    options={({ route }) => ({ title: route.params.name })}
                 />
                 <Stack.Screen
                     name="Groups"
