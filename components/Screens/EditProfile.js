@@ -1,50 +1,50 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import {Button, Text, Dialog, useTheme, Avatar, Image, Input} from 'react-native-elements';
+import {StyleSheet, View, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {Button, Text, Dialog, useTheme, Avatar, Image, Input, BottomSheet, ListItem} from 'react-native-elements';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import {removeData} from "../../utils/asyncStorageUtils";
 import {GetMeDetails} from "../../services/userService";
 import {useIsFocused} from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 
 export default function EditProfile({navigation}) {
-    const { theme } = useTheme();
+    const {theme} = useTheme();
     const [image, setImage] = useState(null);
     const [imageBase64, setImageBase64] = useState(null);
-    const [dialogOpen,setDialogOpen] = useState(false);
-    const [cameraDialogOpen,setCameraDialogOpen] = useState(false);
-    const [initialUserName,setInitialUserName] = useState("");
-    const [userName,setUserName] = useState("");
-    const [email,setEmail] = useState("");
-    const [birthDate,setBirthDate] = useState("");
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [cameraDialogOpen, setCameraDialogOpen] = useState(false);
+    const [initialUserName, setInitialUserName] = useState("");
+    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
+    const [birthDate, setBirthDate] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const isFocused = useIsFocused();
 
-    useLayoutEffect(()=>{
+    useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () =>
                 <Icon.Button
                     name="logout"
                     backgroundColor={theme?.colors?.primary}
-                    onPress={()=>setDialogOpen(true)}
+                    onPress={() => setDialogOpen(true)}
                     size={28}
                 />
         })
     })
 
-    useEffect(async ()=>{
+    useEffect(async () => {
         let response = await GetMeDetails();
         setUserName(response.display_name);
         setEmail(response.email);
         setBirthDate(response.birth_date);
         setInitialUserName(response.display_name);
-    },[isFocused]);
+    }, [isFocused]);
 
     const openCamera = async () => {
         setIsLoading(true);
         const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
         if (permissionResult.granted === false) {
-            alert("You've refused to allow this appp to access your camera!");
+            alert("You've refused to allow this app to access your camera!");
             return;
         }
         let result = await ImagePicker.launchCameraAsync({
@@ -55,6 +55,7 @@ export default function EditProfile({navigation}) {
             base64: true
         });
         applyResult(result);
+        setIsVisible(false);
     }
 
     const pickImage = async () => {
@@ -67,7 +68,7 @@ export default function EditProfile({navigation}) {
             base64: true
         });
         applyResult(result);
-
+        setIsVisible(false);
     };
 
     function applyResult(result) {
@@ -83,45 +84,35 @@ export default function EditProfile({navigation}) {
         return !userNameChanged
     }
 
-    const logout = () => {
-        const removed = removeData("Access Token");
-        if(removed){
-            navigation.navigate('Welcome Page')
-        }
-        else {
-            alert("cant logout!");
-            setDialogOpen(false);
-        }
-    }
-
     return (
         <View>
-            <Dialog
-                isVisible={cameraDialogOpen}
-                onBackdropPress={() => setCameraDialogOpen(!cameraDialogOpen)}>
-                <Dialog.Title title="Select Image"/>
-                {["Take Photo...", "Select from Library..."].map((l, i) => (
-                    <Button
-                        key={i}
-                        title={l}
-                        style={{marginTop: 10}}
-                        buttonStyle={{backgroundColor: "white", justifyContent: "flex-start"}}
-                        titleStyle={{color: "black"}}
-                        onPress={async () => {
-                            switch (i) {
-                                case 0:
-                                    await openCamera()
-                                    break
-                                case 1:
-                                    await pickImage();
-                                    break
-                            }
-                            setCameraDialogOpen(false)
-                        }}
-                    >
-                    </Button>
-                ))}
-            </Dialog>
+           <BottomSheet>
+               isVisible={isVisible}
+               containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
+               >
+               <View style={styles.header}>
+                   <View style={styles.panelHeader}>
+                       <View style={styles.panelHandle} />
+                   </View>
+               </View>
+               <View style={styles.panel}>
+                   <View style={{alignItems: 'center'}}>
+                       <Text style={styles.panelTitle}>Upload Photo</Text>
+                       <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+                   </View>
+                   <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
+                       <Text style={styles.panelButtonTitle}>Take Photo</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity style={styles.panelButton} onPress={pickImage}>
+                       <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity
+                       style={styles.panelButton}
+                       onPress={() => setIsVisible(false)}>
+                       <Text style={styles.panelButtonTitle}>Cancel</Text>
+                   </TouchableOpacity>
+               </View>
+           </BottomSheet>
             <View style={styles.containerStyle}>
                 <Text
                     h1
@@ -130,11 +121,11 @@ export default function EditProfile({navigation}) {
                     My Profile
                 </Text>
                 <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
-                    {image?
+                    {image ?
                         <Image
-                            source={{uri:image}}
-                            PlaceholderContent={<ActivityIndicator />}
-                            onPress={()=>setCameraDialogOpen(true)}
+                            source={{uri: image}}
+                            PlaceholderContent={<ActivityIndicator/>}
+                            onPress={() => setIsVisible(true)}
                             style={styles.image}/>
                         :
                         <Avatar
@@ -142,7 +133,7 @@ export default function EditProfile({navigation}) {
                             rounded
                             icon={{name: 'adb', type: 'material'}}
                             containerStyle={{backgroundColor: 'orange'}}
-                            onPress={()=>setCameraDialogOpen(true)}
+                            onPress={() => setIsVisible(true)}
                         >
                             <Avatar.Accessory size={24}/>
                         </Avatar>
@@ -151,7 +142,9 @@ export default function EditProfile({navigation}) {
                 <Input
                     containerStyle={styles.textStyle}
                     leftIcon={{type: 'font-awesome', name: 'user'}}
-                    onChangeText={value => { setUserName(value) }}
+                    onChangeText={value => {
+                        setUserName(value)
+                    }}
                     value={userName}
                 />
                 <Input
@@ -173,7 +166,6 @@ export default function EditProfile({navigation}) {
                     //onPress={HandleSubmit}
                     //loading={isLoading}
                 />
-
             </View>
         </View>
     )
@@ -182,26 +174,80 @@ export default function EditProfile({navigation}) {
 
 const styles = StyleSheet.create({
     changePasswordText: {
-        color:"blue",
+        color: "blue",
         margin: 5
     },
-    buttonStyle:{
+    buttonStyle: {
         width: 200,
         marginHorizontal: 50,
         marginVertical: 10,
     },
-    containerStyle:{
+    containerStyle: {
         alignItems: "center",
         display: "flex",
         marginTop: '10%'
     },
-    textStyle:{
-        width:280
+    textStyle: {
+        width: 280
     },
-    image:{
+    image: {
         width: 150,
         height: 150,
         borderRadius: 150 / 2,
         overflow: "hidden",
-    }
+    },
+    panel: {
+        padding: 20,
+        backgroundColor: '#FFFFFF',
+        paddingTop: 20,
+        // borderTopLeftRadius: 20,
+        // borderTopRightRadius: 20,
+        // shadowColor: '#000000',
+        // shadowOffset: {width: 0, height: 0},
+        // shadowRadius: 5,
+        // shadowOpacity: 0.4,
+    },
+    header: {
+        backgroundColor: '#FFFFFF',
+        shadowColor: '#333333',
+        shadowOffset: {width: -1, height: -3},
+        shadowRadius: 2,
+        shadowOpacity: 0.4,
+        // elevation: 5,
+        paddingTop: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    },
+    panelHeader: {
+        alignItems: 'center',
+    },
+    panelHandle: {
+        width: 40,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#00000040',
+        marginBottom: 10,
+    },
+    panelTitle: {
+        fontSize: 27,
+        height: 35,
+    },
+    panelSubtitle: {
+        fontSize: 14,
+        color: 'gray',
+        height: 30,
+        marginBottom: 10,
+    },
+    panelButton: {
+        padding: 13,
+        borderRadius: 10,
+        backgroundColor: '#FF6347',
+        alignItems: 'center',
+        marginVertical: 7,
+    },
+    panelButtonTitle: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'white',
+    },
 });
