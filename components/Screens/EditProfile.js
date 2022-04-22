@@ -1,11 +1,10 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {Button, Text, Dialog, useTheme, Avatar, Image, Input, BottomSheet, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {GetMeDetails} from '../../services/userService';
 import {useIsFocused} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import RBSheet from 'react-native-raw-bottom-sheet';
 
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
@@ -15,10 +14,7 @@ export default function EditProfile({navigation}) {
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [birthDate, setBirthDate] = useState();
-    const [isLoading, setIsLoading] = useState(false);
-    const [isVisible, setIsVisible] = useState(false);
     const isFocused = useIsFocused();
-    const refRBSheet = useRef();
 
     useEffect(async () => {
         let response = await GetMeDetails();
@@ -28,116 +24,13 @@ export default function EditProfile({navigation}) {
         setInitialUserName(response.display_name);
     }, [isFocused]);
 
-    const openCamera = async () => {
-        setIsLoading(true);
-        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-        if (permissionResult.granted === false) {
-            alert("You've refused to allow this app to access your camera!");
-            return;
-        }
-        let result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            presentationStyle: ImagePicker.UIImagePickerPresentationStyle.BlurOverFullScreen,
-            quality: 1,
-            base64: true
-        });
-        refRBSheet.current.close();
-        applyResult(result);
-    }
-
-    const pickImage = async () => {
-        setIsLoading(true);
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            presentationStyle: ImagePicker.UIImagePickerPresentationStyle.BlurOverFullScreen,
-            quality: 1,
-            base64: true
-        });
-        refRBSheet.current.close();
-        applyResult(result);
-    };
-
-    function applyResult(result) {
-        if (!result.cancelled) {
-            setImage(result.uri);
-            setImageBase64(result.base64)
-        }
-        setIsLoading(false)
-    }
-
     const checkChange = () => {
-        const userNameChanged = userName !== initialUserName;
+        const userNameChanged = userName !== initialUserName  ;
         return !userNameChanged
     }
 
     return (
         <View>
-                <RBSheet
-                    ref={refRBSheet}
-                    closeOnDragDown={true}
-                    closeOnPressMask={true}
-                    customStyles={{
-                        wrapper: {
-                            backgroundColor: "transparent"
-                        },
-                        draggableIcon: {
-                            backgroundColor: "transparent"
-                        }
-                    }}
-                    height={360}
-                >
-                    <View style={styles.header}>
-                        <View style={styles.panelHeader}>
-                            <View style={styles.panelHandle}/>
-                        </View>
-                    </View>
-                    <View style={styles.panel}>
-                        <View style={{alignItems: 'center'}}>
-                            <Text style={styles.panelTitle}>Upload Photo</Text>
-                            <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
-                        </View>
-                        <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
-                            <Text style={styles.panelButtonTitle}>Take Photo</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.panelButton} onPress={pickImage}>
-                            <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.panelButton}
-                            onPress={() => setIsVisible(false)}>
-                            <Text style={styles.panelButtonTitle}>Cancel</Text>
-                        </TouchableOpacity>
-                    </View>
-                </RBSheet>
-            <BottomSheet
-                isVisible={isVisible}
-                containerStyle={{backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)'}}
-            >
-                <View style={styles.header}>
-                    <View style={styles.panelHeader}>
-                        <View style={styles.panelHandle}/>
-                    </View>
-                </View>
-                <View style={styles.panel}>
-                    <View style={{alignItems: 'center'}}>
-                        <Text style={styles.panelTitle}>Upload Photo</Text>
-                        <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
-                    </View>
-                    <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
-                        <Text style={styles.panelButtonTitle}>Take Photo</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={pickImage}>
-                        <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.panelButton}
-                        onPress={() => setIsVisible(false)}>
-                        <Text style={styles.panelButtonTitle}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
-            </BottomSheet>
             <View style={styles.containerStyle}>
                 <Text
                     h1
@@ -145,25 +38,12 @@ export default function EditProfile({navigation}) {
                 >
                     My Profile
                 </Text>
-                <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
-                    {image ?
-                        <Image
-                            source={{uri: image}}
-                            PlaceholderContent={<ActivityIndicator/>}
-                            onPress={() => refRBSheet.current.open()}
-                            style={styles.image}/>
-                        :
-                        <Avatar
-                            size={64}
-                            rounded
-                            icon={{name: 'adb', type: 'material'}}
-                            containerStyle={{backgroundColor: 'orange'}}
-                            onPress={() => refRBSheet.current.open()}
-                        >
-                            <Avatar.Accessory size={24}/>
-                        </Avatar>
-                    }
-                </View>
+                <ImagePicker>
+                    avatarIcon='adb'
+                    image={image}
+                    setImageBase64={setImageBase64}
+                    setImage={setImage}
+                </ImagePicker>
                 <Input
                     containerStyle={styles.textStyle}
                     leftIcon={{type: 'font-awesome', name: 'user'}}
@@ -194,8 +74,7 @@ export default function EditProfile({navigation}) {
             </View>
         </View>
     )
-}
-
+    }
 
 const styles = StyleSheet.create({
     changePasswordText: {
