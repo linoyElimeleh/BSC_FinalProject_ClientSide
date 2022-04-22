@@ -20,7 +20,6 @@ export default function EditProfile({navigation}) {
     const [isLoading, setIsLoading] = useState(false);
     const isFocused = useIsFocused();
 
-
     useLayoutEffect(()=>{
         navigation.setOptions({
             headerRight: () =>

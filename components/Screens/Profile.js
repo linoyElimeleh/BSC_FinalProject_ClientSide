@@ -45,16 +45,19 @@ export default function Profile({navigation}) {
                 </Dialog.Actions>
             </Dialog>
             {
-                [{name:"Edit Profile",route:"EditProfile"},{name:"Change Password",route: "ChangePassword"}].map((l,i)=>(
+                [{name:"Edit Profile",route:"EditProfile", icon:"account-edit-outline"},{name:"Change Password",route: "ChangePassword", icon:"lock"}].map((l,i)=>(
                     <ListItem
                         key={i}
                         bottomDivider
                         onPress={()=>navigation.navigate(l.route)}
                     >
                         <ListItem.Content>
-                            <ListItem.Title>{l.name}</ListItem.Title>
+                            <ListItem.Title>
+                                <Icon name={l.icon} size={20} />
+                                 <Text> {l.name}</Text>
+                            </ListItem.Title>
                         </ListItem.Content>
-                        <ListItem.Chevron />
+                        <ListItem.Chevron/>
                     </ListItem>
                 ))
             }
