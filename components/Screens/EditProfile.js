@@ -1,36 +1,24 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {Button, Text, Dialog, useTheme, Avatar, Image, Input, BottomSheet, ListItem} from 'react-native-elements';
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import {GetMeDetails} from "../../services/userService";
-import {useIsFocused} from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {GetMeDetails} from '../../services/userService';
+import {useIsFocused} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
     const [image, setImage] = useState(null);
     const [imageBase64, setImageBase64] = useState(null);
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [cameraDialogOpen, setCameraDialogOpen] = useState(false);
     const [initialUserName, setInitialUserName] = useState("");
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
-    const [birthDate, setBirthDate] = useState("");
+    const [birthDate, setBirthDate] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const isFocused = useIsFocused();
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () =>
-                <Icon.Button
-                    name="logout"
-                    backgroundColor={theme?.colors?.primary}
-                    onPress={() => setDialogOpen(true)}
-                    size={28}
-                />
-        })
-    })
+    const refRBSheet = useRef();
 
     useEffect(async () => {
         let response = await GetMeDetails();
@@ -54,8 +42,8 @@ export default function EditProfile({navigation}) {
             quality: 1,
             base64: true
         });
+        refRBSheet.current.close();
         applyResult(result);
-        setIsVisible(false);
     }
 
     const pickImage = async () => {
@@ -67,8 +55,8 @@ export default function EditProfile({navigation}) {
             quality: 1,
             base64: true
         });
+        refRBSheet.current.close();
         applyResult(result);
-        setIsVisible(false);
     };
 
     function applyResult(result) {
@@ -86,33 +74,70 @@ export default function EditProfile({navigation}) {
 
     return (
         <View>
-           <BottomSheet>
-               isVisible={isVisible}
-               containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
-               >
-               <View style={styles.header}>
-                   <View style={styles.panelHeader}>
-                       <View style={styles.panelHandle} />
-                   </View>
-               </View>
-               <View style={styles.panel}>
-                   <View style={{alignItems: 'center'}}>
-                       <Text style={styles.panelTitle}>Upload Photo</Text>
-                       <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
-                   </View>
-                   <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
-                       <Text style={styles.panelButtonTitle}>Take Photo</Text>
-                   </TouchableOpacity>
-                   <TouchableOpacity style={styles.panelButton} onPress={pickImage}>
-                       <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-                   </TouchableOpacity>
-                   <TouchableOpacity
-                       style={styles.panelButton}
-                       onPress={() => setIsVisible(false)}>
-                       <Text style={styles.panelButtonTitle}>Cancel</Text>
-                   </TouchableOpacity>
-               </View>
-           </BottomSheet>
+                <RBSheet
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={true}
+                    customStyles={{
+                        wrapper: {
+                            backgroundColor: "transparent"
+                        },
+                        draggableIcon: {
+                            backgroundColor: "transparent"
+                        }
+                    }}
+                    height={360}
+                >
+                    <View style={styles.header}>
+                        <View style={styles.panelHeader}>
+                            <View style={styles.panelHandle}/>
+                        </View>
+                    </View>
+                    <View style={styles.panel}>
+                        <View style={{alignItems: 'center'}}>
+                            <Text style={styles.panelTitle}>Upload Photo</Text>
+                            <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+                        </View>
+                        <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
+                            <Text style={styles.panelButtonTitle}>Take Photo</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.panelButton} onPress={pickImage}>
+                            <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.panelButton}
+                            onPress={() => setIsVisible(false)}>
+                            <Text style={styles.panelButtonTitle}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </RBSheet>
+            <BottomSheet
+                isVisible={isVisible}
+                containerStyle={{backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)'}}
+            >
+                <View style={styles.header}>
+                    <View style={styles.panelHeader}>
+                        <View style={styles.panelHandle}/>
+                    </View>
+                </View>
+                <View style={styles.panel}>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={styles.panelTitle}>Upload Photo</Text>
+                        <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+                    </View>
+                    <TouchableOpacity style={styles.panelButton} onPress={openCamera}>
+                        <Text style={styles.panelButtonTitle}>Take Photo</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.panelButton} onPress={pickImage}>
+                        <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.panelButton}
+                        onPress={() => setIsVisible(false)}>
+                        <Text style={styles.panelButtonTitle}>Cancel</Text>
+                    </TouchableOpacity>
+                </View>
+            </BottomSheet>
             <View style={styles.containerStyle}>
                 <Text
                     h1
@@ -125,7 +150,7 @@ export default function EditProfile({navigation}) {
                         <Image
                             source={{uri: image}}
                             PlaceholderContent={<ActivityIndicator/>}
-                            onPress={() => setIsVisible(true)}
+                            onPress={() => refRBSheet.current.open()}
                             style={styles.image}/>
                         :
                         <Avatar
@@ -133,7 +158,7 @@ export default function EditProfile({navigation}) {
                             rounded
                             icon={{name: 'adb', type: 'material'}}
                             containerStyle={{backgroundColor: 'orange'}}
-                            onPress={() => setIsVisible(true)}
+                            onPress={() => refRBSheet.current.open()}
                         >
                             <Avatar.Accessory size={24}/>
                         </Avatar>
@@ -241,7 +266,7 @@ const styles = StyleSheet.create({
     panelButton: {
         padding: 13,
         borderRadius: 10,
-        backgroundColor: '#FF6347',
+        backgroundColor: '#2089dc',
         alignItems: 'center',
         marginVertical: 7,
     },

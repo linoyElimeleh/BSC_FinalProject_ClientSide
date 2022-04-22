@@ -1,4 +1,4 @@
-import {StyleSheet, I18nManager ,Text, View} from 'react-native';
+import {StyleSheet, I18nManager, Text, View} from 'react-native';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import WelcomePage from './components/welcomePage/WelcomePage';
@@ -23,7 +23,15 @@ const MyTheme = {
 export default function App() {
     return (
         <NavigationContainer theme={MyTheme}>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#2089dc'
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}>
                 <Stack.Screen
                     name="Welcome Page"
                     component={WelcomePage}
@@ -42,8 +50,9 @@ export default function App() {
                     options={({}) =>
                         (
                             {
-                                headerLeft: ()=>{},
-                                headerBackVisible:false,
+                                headerLeft: () => {
+                                },
+                                headerBackVisible: false,
                                 headerShown: false
                             }
                         )
