@@ -311,19 +311,20 @@ export default function CreateTask({navigation, route}) {
                             }}
                             bottomDivider
                         >
-
-                            <View>
-                                {
-                                    <DateTimePicker
-                                        testID="dateTimePicker"
-                                        value={fromDate}
-                                        mode='date'
-                                        is24Hour={true}
-                                        onChange={onSetToDate}
-                                        display={display}
-                                    />
-                                }
-                            </View>
+                            { endsExpanded &&
+                                <View>
+                                    {
+                                        <DateTimePicker
+                                            testID="dateTimePicker"
+                                            value={fromDate}
+                                            mode='date'
+                                            is24Hour={true}
+                                            onChange={onSetToDate}
+                                            display={display}
+                                        />
+                                    }
+                                </View>
+                            }
                         </ListItem.Accordion>}
                     <RNPickerSelect
                         onValueChange={(value) => setSnooze(value)}
