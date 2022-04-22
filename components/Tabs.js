@@ -5,7 +5,6 @@ import {Home, Goals} from "./Screens";
 import {ProfileStack} from "./Screens/Stacks";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-
 I18nManager.forceRTL(false);
 I18nManager.allowRTL(false);
 

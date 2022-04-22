@@ -40,7 +40,6 @@ export default function EditProfile({navigation}) {
         setInitialUserName(response.display_name);
     },[isFocused]);
 
-
     const openCamera = async () => {
         setIsLoading(true);
         const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -97,7 +96,6 @@ export default function EditProfile({navigation}) {
 
     return (
         <View>
-
             <Dialog
                 isVisible={cameraDialogOpen}
                 onBackdropPress={() => setCameraDialogOpen(!cameraDialogOpen)}>
