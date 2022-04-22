@@ -1,12 +1,16 @@
-import React, {useLayoutEffect, useState} from 'react';
-import { View} from 'react-native';
-import {Text, Dialog, useTheme, ListItem} from 'react-native-elements';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {Text, Dialog, useTheme, ListItem, Image, Avatar} from 'react-native-elements';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {removeData} from "../../utils/asyncStorageUtils";
+import {GetMeDetails} from "../../services/userService";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function Profile({navigation}) {
     const { theme } = useTheme();
     const [dialogOpen,setDialogOpen] = useState(false);
+    const [userName,setUserName] = useState("");
+    const isFocused = useIsFocused();
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -18,8 +22,12 @@ export default function Profile({navigation}) {
                     size={28}
                 />
         })
-    })
+    });
 
+    useEffect(async ()=>{
+        let response = await GetMeDetails();
+        setUserName(response.display_name);
+    },[isFocused]);
 
     const logout = () => {
         const removed = removeData("Access Token");
@@ -44,17 +52,30 @@ export default function Profile({navigation}) {
                     <Dialog.Button title="cancel" onPress={() => setDialogOpen(false)}/>
                 </Dialog.Actions>
             </Dialog>
+            <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
+                    <Avatar
+                        size={64}
+                        rounded
+                        icon={{name: 'adb', type: 'material'}}
+                        containerStyle={{backgroundColor: 'orange'}}
+                    >
+                    </Avatar>
+                <Text>{userName}</Text>
+            </View>
             {
-                [{name:"Edit Profile",route:"EditProfile"},{name:"Change Password",route: "ChangePassword"}].map((l,i)=>(
+                [{name:"Edit Profile",route:"EditProfile", icon:"account-edit-outline"},{name:"Change Password",route: "ChangePassword", icon:"lock"}].map((l,i)=>(
                     <ListItem
                         key={i}
                         bottomDivider
                         onPress={()=>navigation.navigate(l.route)}
                     >
                         <ListItem.Content>
-                            <ListItem.Title>{l.name}</ListItem.Title>
+                            <ListItem.Title>
+                                <Icon name={l.icon} size={20} />
+                                 <Text> {l.name}</Text>
+                            </ListItem.Title>
                         </ListItem.Content>
-                        <ListItem.Chevron />
+                        <ListItem.Chevron/>
                     </ListItem>
                 ))
             }

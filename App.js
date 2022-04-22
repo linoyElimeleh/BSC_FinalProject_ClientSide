@@ -28,7 +28,6 @@ export default function App() {
                     name="Welcome Page"
                     component={WelcomePage}
                 />
-
                 <Stack.Screen
                     name="Sign In"
                     component={SignIn}

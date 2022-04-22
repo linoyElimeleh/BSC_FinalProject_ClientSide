@@ -20,7 +20,6 @@ export default function EditProfile({navigation}) {
     const [isLoading, setIsLoading] = useState(false);
     const isFocused = useIsFocused();
 
-
     useLayoutEffect(()=>{
         navigation.setOptions({
             headerRight: () =>
@@ -40,7 +39,6 @@ export default function EditProfile({navigation}) {
         setBirthDate(response.birth_date);
         setInitialUserName(response.display_name);
     },[isFocused]);
-
 
     const openCamera = async () => {
         setIsLoading(true);
@@ -98,7 +96,6 @@ export default function EditProfile({navigation}) {
 
     return (
         <View>
-
             <Dialog
                 isVisible={cameraDialogOpen}
                 onBackdropPress={() => setCameraDialogOpen(!cameraDialogOpen)}>
