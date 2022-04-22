@@ -56,7 +56,7 @@ export default function Profile({navigation}) {
                     <Avatar
                         size={64}
                         rounded
-                        icon={{name: 'adb', type: 'material'}}
+                        icon={{name: 'person', type: 'material'}}
                         containerStyle={{backgroundColor: 'orange'}}
                     >
                     </Avatar>

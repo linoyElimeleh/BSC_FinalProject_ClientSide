@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {GetMeDetails} from '../../services/userService';
 import {useIsFocused} from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import {PhotoPickerWithMenu} from "../App";
 
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
@@ -38,12 +39,11 @@ export default function EditProfile({navigation}) {
                 >
                     My Profile
                 </Text>
-                <ImagePicker>
-                    avatarIcon='adb'
+                <PhotoPickerWithMenu
+                    avatarIcon='person'
                     image={image}
                     setImageBase64={setImageBase64}
-                    setImage={setImage}
-                </ImagePicker>
+                    setImage={setImage}/>
                 <Input
                     containerStyle={styles.textStyle}
                     leftIcon={{type: 'font-awesome', name: 'user'}}

@@ -1,10 +1,10 @@
 import React, {useRef, useState} from 'react';
 import {ActivityIndicator, StyleSheet, TouchableOpacity, View} from "react-native";
 import { Text, Avatar, Image} from 'react-native-elements';
-import * as ImagePicker from "expo-image-picker";
 import RBSheet from 'react-native-raw-bottom-sheet';
+import * as ImagePicker from 'expo-image-picker';
 
-export default function ImagePicker(image, setImage, setImageBase64, avatarIcon) {
+export default function PhotoPickerWithMenu({image, setImage, setImageBase64, avatarIcon}) {
     const refRBSheet = useRef();
     const [isLoading, setIsLoading] = useState(false);
 
