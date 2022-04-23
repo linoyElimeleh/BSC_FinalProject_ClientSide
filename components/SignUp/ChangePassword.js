@@ -18,7 +18,13 @@ export default function ChangePassword({navigation}) {
     useEffect(() => {
         currentPassword.length > 6 && newPassword.length > 6 &&  newPassword == confPassword ?
             setDisabled(false) : setDisabled(true)
-    }, [currentPassword, newPassword, confPassword])
+    }, [currentPassword, newPassword, confPassword]);
+
+    const handleSubmit = () =>{
+        //TODO: make here the server request
+        //TODO: navigate back to profile
+    }
+
 
 
     return (
@@ -51,7 +57,7 @@ export default function ChangePassword({navigation}) {
                     title={'Change Password'}
                     containerStyle={styles.buttonStyle}
                     disabled={disabled}
-                    //onPress={HandleSubmit}
+                    onPress={handleSubmit}
                     //loading={isLoading}
                 />
             </View>
