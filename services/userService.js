@@ -1,6 +1,6 @@
 import {configData} from '../settings'
 
-const getUserGroups = async (token) => {
+const getUserGroups = async () => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/users/me/groups`);
         const groups = await response.json();
@@ -8,6 +8,21 @@ const getUserGroups = async (token) => {
 
     } catch (error) {
         console.error(error);
+    }
+};
+
+
+export const GetMeDetails = async () => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/users/me`,
+            {
+                method: 'GET',
+            });
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+        return (error)
     }
 };
 
