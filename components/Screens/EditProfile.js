@@ -4,8 +4,8 @@ import {Button, Text, Dialog, useTheme, Avatar, Image, Input, BottomSheet, ListI
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {GetMeDetails} from '../../services/userService';
 import {useIsFocused} from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
 import {PhotoPickerWithMenu} from "../App";
+import {formatDate} from "../../utils/dateUtils";
 
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
@@ -21,13 +21,15 @@ export default function EditProfile({navigation}) {
         let response = await GetMeDetails();
         setUserName(response.display_name);
         setEmail(response.email);
-        setBirthDate(response.birth_date);
+        const date = new Date(response.birth_date);
+        const formattedDate = formatDate(date);
+        setBirthDate(formattedDate);
         setInitialUserName(response.display_name);
     }, [isFocused]);
 
     const checkChange = () => {
-        const userNameChanged = userName !== initialUserName  ;
-        return !userNameChanged
+        const userNameChanged = userName !== initialUserName;
+        return !(userNameChanged || image != null)
     }
 
     return (
