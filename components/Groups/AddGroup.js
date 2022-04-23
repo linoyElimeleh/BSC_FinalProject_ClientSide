@@ -3,6 +3,8 @@ import {View} from 'react-native'
 import {Image, Text, Input, Button, useTheme, Avatar} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {groupService} from '../../services';
+import * as ImagePicker from "expo-image-picker";
+import {PhotoPickerWithMenu} from "../App";
 
 export default function AddGroup({navigation}) {
     const {theme} = useTheme();
@@ -12,16 +14,17 @@ export default function AddGroup({navigation}) {
     const [image, setImage] = useState('');
     const [IsDisable, setIsDisable] = useState(true);
     const [isLoading, setIsLoading] = useState(false)
+    const [imageBase64, setImageBase64] = useState(null);
 
     useEffect(() => {
-        groupName? setIsDisable(false) : setIsDisable(true)
+        groupName ? setIsDisable(false) : setIsDisable(true)
     }, [groupName])
 
     const handleSubmit = () => {
         setIsLoading(true);
         const group = {groupName, description, image};
         const promiseGroup = groupService.createGroup(group);
-        promiseGroup.then(result =>{
+        promiseGroup.then(result => {
             navigation.navigate('Group Created', result);
             setIsLoading(false);
         })
@@ -38,16 +41,12 @@ export default function AddGroup({navigation}) {
                 >
                     Create Group
                 </Text>
-                <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
-                    <Avatar
-                        size={64}
-                        rounded
-                        icon={{type: 'font-awesome', name: 'users'}}
-                        containerStyle={{backgroundColor: 'orange'}}
-                    >
-                        <Avatar.Accessory size={24}/>
-                    </Avatar>
-                </View>
+                <PhotoPickerWithMenu
+                    avatarIcon='group'
+                    image={image}
+                    setImageBase64={setImageBase64}
+                    setImage={setImage}
+                />
                 <Input
                     containerStyle={{width: LineWidth}}
                     placeholder='Name'

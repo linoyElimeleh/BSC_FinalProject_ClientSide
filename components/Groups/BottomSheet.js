@@ -59,8 +59,6 @@ export default function BottomSheetGroups({ route, navigation, handleAssign, han
                     </ListItem.Content>
                 </ListItem>
             </BottomSheet>
-
-
         </View>
     )
 }

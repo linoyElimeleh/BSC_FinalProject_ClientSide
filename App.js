@@ -1,17 +1,16 @@
-import {StyleSheet, I18nManager ,Text, View} from 'react-native';
+import {StyleSheet, I18nManager, Text, View} from 'react-native';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import WelcomePage from './components/welcomePage/WelcomePage';
-import { HeaderBackButton } from '@react-navigation/elements';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
-import CreateTask from './components/Tasks/CreateTask'
-import {GroupsScreen, AddGroup, GroupCreated, JoinGroup, GroupPage} from './components/Groups'
+import Tabs from "./components/Tabs";
 
 I18nManager.forceRTL(false);
 I18nManager.allowRTL(false);
 
 const Stack = createNativeStackNavigator();
+
 const MyTheme = {
     ...DefaultTheme,
     colors: {
@@ -24,22 +23,19 @@ const MyTheme = {
 export default function App() {
     return (
         <NavigationContainer theme={MyTheme}>
-            <Stack.Navigator
-                screenOptions={{
-                    headerStyle: {
-                        backgroundColor: '#2089dc',
-                    },
-                    headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
-                }}
-            >
+            <Stack.Navigator screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#2089dc'
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}>
                 <Stack.Screen
                     name="Welcome Page"
                     component={WelcomePage}
                 />
-
                 <Stack.Screen
                     name="Sign In"
                     component={SignIn}
@@ -49,39 +45,15 @@ export default function App() {
                     component={SignUp}
                 />
                 <Stack.Screen
-                    name="Group"
-                    component={GroupPage}
-                />
-                <Stack.Screen
-                    name="Groups"
-                    component={GroupsScreen}
+                    name="Tabs"
+                    component={Tabs}
                     options={({}) =>
                         (
                             {
-                                headerLeft: () => {}
-                            }
-                        )
-                    }
-                />
-                <Stack.Screen
-                    name="Create Group"
-                    component={AddGroup}
-                />
-                <Stack.Screen
-                    name="Join Group"
-                    component={JoinGroup}
-                />
-                <Stack.Screen
-                    name="Create Task"
-                    component={CreateTask}
-                />
-                <Stack.Screen
-                    name="Group Created"
-                    component={GroupCreated}
-                    options={({navigation}) =>
-                        (
-                            {
-                                headerLeft: () => (<HeaderBackButton onPress={()=> navigation.navigate('Groups')}/>)
+                                headerLeft: () => {
+                                },
+                                headerBackVisible: false,
+                                headerShown: false
                             }
                         )
                     }
@@ -90,8 +62,7 @@ export default function App() {
         </NavigationContainer>
     );
 }
-
-const styles = StyleSheet.create({
+StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
