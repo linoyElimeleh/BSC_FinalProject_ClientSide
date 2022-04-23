@@ -14,7 +14,7 @@ export default function EditProfile({navigation}) {
     const [initialUserName, setInitialUserName] = useState("");
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
-    const [birthDate, setBirthDate] = useState();
+    const [birthDate, setBirthDate] = useState("");
     const isFocused = useIsFocused();
 
     useEffect(async () => {
@@ -30,6 +30,11 @@ export default function EditProfile({navigation}) {
     const checkChange = () => {
         const userNameChanged = userName !== initialUserName;
         return !(userNameChanged || image != null)
+    }
+
+    const handleSubmit = () =>{
+        //TODO: make here the server request
+        //TODO: navigate back to profile
     }
 
     return (
@@ -70,7 +75,7 @@ export default function EditProfile({navigation}) {
                     title={'Edit'}
                     containerStyle={styles.buttonStyle}
                     disabled={checkChange()}
-                    //onPress={HandleSubmit}
+                    onPress={handleSubmit}
                     //loading={isLoading}
                 />
             </View>
