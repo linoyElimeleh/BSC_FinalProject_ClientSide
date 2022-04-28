@@ -4,6 +4,7 @@ import {Button, Text, useTheme, Input, Avatar} from 'react-native-elements';
 import {RegisterUser} from '../../services/AuthServices';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PhotoPickerWithMenu} from "../App";
 
 
 export default function SignUp({ navigation }) {
@@ -18,6 +19,7 @@ export default function SignUp({ navigation }) {
     const [isDisable, setIsDisable] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [imageBase64, setImageBase64] = useState(null);
 
     useEffect(() => {
         ValidateDate() && ValidateEmail() && password.length > 6 && password.length && password == confPassword ?
@@ -31,19 +33,6 @@ export default function SignUp({ navigation }) {
             console.log('AsyncStorage set error: ' + error.message);
         }
     }
-
-    //get example
-    // const getData = async (key) => {
-    //     try {
-    //         const value = await AsyncStorage.getItem(key)
-    //         if (value !== null) {
-    //             return(value)
-    //         }
-    //     } catch (e) {
-    //         console.log('AsyncStorage get error: ' + error.message);
-    //     }
-    // }
-    //getData("Access Token");
 
     const HandleSubmit = async () => {
         setIsLoading(true)
@@ -63,7 +52,7 @@ export default function SignUp({ navigation }) {
             await storeData("Access Token", response.accessToken);
             await storeData("Refresh Access Token", response.refreshToken);
             console.log("refresh is:"+response.refreshToken);
-            navigation.navigate('Groups');
+            navigation.navigate('Tabs');
         }
     }
 
@@ -106,16 +95,11 @@ export default function SignUp({ navigation }) {
                 >
                     Create Account
                 </Text>
-                <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
-                    <Avatar
-                        size={64}
-                        rounded
-                        icon={{name: 'adb', type: 'material'}}
-                        containerStyle={{backgroundColor: 'orange'}}
-                    >
-                        <Avatar.Accessory size={24}/>
-                    </Avatar>
-                </View>
+                <PhotoPickerWithMenu
+                    avatarIcon='person'
+                    image={image}
+                    setImageBase64={setImageBase64}
+                    setImage={setImage}/>
                 <Input
                     containerStyle={{width: LineWidth}}
                     placeholder='Name'

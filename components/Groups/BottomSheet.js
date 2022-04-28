@@ -3,72 +3,13 @@ import { View , TouchableOpacity,StyleSheet,Text} from 'react-native';
 import { Icon, BottomSheet, ListItem } from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-export default function BottomSheetGroups({ route, navigation, handleAssign, handleDelete, handleDone, handleEdit, handleReject}) {
+export default function BottomSheetGroups({ route, navigation, handleAssign, setIsDeleteDialogVisible, handleDone, handleEdit, setIsRejectDialogVisible,setIsVisible}) {
     const refRBSheet = useRef();
     useEffect(()=>{
         refRBSheet.current.open()
     })
     
     return (
-        // <View style={{ display: 'flex', flexDirection: 'column' }}>
-        //     <BottomSheet modalProps={{}} isVisible={isVisible}  >
-        //         <ListItem
-        //             key={1}
-        //             containerStyle={{ backgroundColor: 'green' }}
-        //             onPress={() => handleDone()}
-        //         >
-        //             <ListItem.Content >
-        //                 <ListItem.Title >Done!</ListItem.Title>
-        //             </ListItem.Content>
-        //         </ListItem>
-        //         <ListItem
-        //             key={2}
-        //             onPress={() => handleAssign()}
-        //         >
-        //             <ListItem.Content>
-        //                 <ListItem.Title>Assign to me</ListItem.Title>
-        //             </ListItem.Content>
-        //         </ListItem>
-        //         <ListItem
-        //             key={3}
-        //             onPress={() => handleEdit()}
-        //         >
-        //             <ListItem.Content>
-        //                 <ListItem.Title>Assign to me Edit</ListItem.Title>
-        //             </ListItem.Content>
-        //         </ListItem>
-        //         <ListItem
-        //             key={4}
-        //             onPress={() => handleDelete()}
-        //         >
-        //             <ListItem.Content>
-        //                 <ListItem.Title >Assign to me Edit Delete</ListItem.Title>
-        //             </ListItem.Content>
-        //         </ListItem>
-        //         <ListItem
-        //             key={5}
-        //             onPress={() => handleReject()}
-        //         >
-        //             <ListItem.Content>
-        //                 <ListItem.Title >Assign to me Edit Delete Reject</ListItem.Title>
-        //             </ListItem.Content>
-        //         </ListItem>
-        //         <ListItem
-        //             key={6}
-        //             onPress={() => setIsVisible(!isVisible)}
-        //         >
-        //             <ListItem.Content>
-        //                 <ListItem.Title style={{ display: "flex", justifyContent: "center" }} >
-        //                     close
-        //                     <Icon name="close" />
-        //                 </ListItem.Title>
-        //             </ListItem.Content>
-        //         </ListItem>
-        //     </BottomSheet>
-        // </View>
-
-
-
         <View>
             <RBSheet
                 ref={refRBSheet}
@@ -93,21 +34,22 @@ export default function BottomSheetGroups({ route, navigation, handleAssign, han
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.panelTitle}>Task Actions</Text>
                     </View>
-                    <TouchableOpacity style={styles.panelButton} onPress={handleDone} >
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleDone(),setIsVisible(false)}} >
                         <Text style={styles.panelButtonTitle}>Done!</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={handleAssign}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleAssign(),setIsVisible(false)}}>
                         <Text style={styles.panelButtonTitle}>Assign to me</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={handleEdit}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleEdit(),setIsVisible(false)}}>
                         <Text style={styles.panelButtonTitle}>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={handleDelete}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{setIsDeleteDialogVisible(true),refRBSheet.current.close()}}>
                         <Text style={styles.panelButtonTitle}> Delete</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={handleReject}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{setIsRejectDialogVisible(true),refRBSheet.current.close()}}>
                         <Text style={styles.panelButtonTitle}>Reject</Text>
                     </TouchableOpacity>
+
                 </View>
             </RBSheet>
 

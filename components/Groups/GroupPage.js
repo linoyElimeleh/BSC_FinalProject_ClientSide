@@ -8,16 +8,20 @@ import { GetGroupMembers, GetGroupTasks } from '../../services/groupsService'
 import { GetMeDetails } from '../../services/userService'
 import { TasksServices } from '../../services'
 import BottomSheetGroups from './BottomSheet';
-import {useIsFocused} from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
+import DeleteTaskDialog from "../Tasks/DeteleTaskDialg"
+import RejectTaskDialog from '../Tasks/RejectTask'
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group
     const [members, setMembers] = useState();
     const [tasks, setTasks] = useState();
     const [isVisible, setIsVisible] = useState(false);
+    const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
+    const [isRejectDialogVisible, setIsRejectDialogVisible] = useState(false);
     const [isSwitchChecked, setIsSwitchChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [currentTaskId, setCurrentTaskId] = useState();
+    const [currentTask, setCurrentTask] = useState();
     const [me, setMe] = useState();
     const isFocused = useIsFocused();
 
@@ -57,8 +61,9 @@ export default function GroupPage({ route, navigation }) {
     }
 
     const handleDelete = async () => {
+        setIsVisible(false)
         const idJson = {
-            "taskId": currentTaskId
+            "taskId": currentTask.id
         }
         setIsLoading(true)
         let response = await TasksServices.DeleteTask(group.id, idJson);
@@ -67,7 +72,7 @@ export default function GroupPage({ route, navigation }) {
 
     const handleAssign = async () => {
         const bodyJson = {
-            "taskId": currentTaskId,
+            "taskId": currentTask.id,
             "userId": me.id
         }
         setIsLoading(true)
@@ -77,7 +82,7 @@ export default function GroupPage({ route, navigation }) {
 
     const handleDone = async () => {
         const bodyJson = {
-            "taskId": currentTaskId,
+            "taskId": currentTask.id,
             "status": true
         }
         setIsLoading(true)
@@ -89,7 +94,16 @@ export default function GroupPage({ route, navigation }) {
         //navigation but the page will be ready only at the next time
     }
     const handleReject = () => {
-        //navigation but the page will be ready only at the next time
+
+        setIsVisible(false)
+        // const idJson = {
+        //     "taskId": currentTask.id
+        // }
+        // setIsLoading(true)
+        // let response = await TasksServices.DeleteTask(group.id, idJson);
+        // handleBottomSheetRequsts(response)
+
+        
     }
 
     const handleBottomSheetRequsts = (response) => {
@@ -116,48 +130,56 @@ export default function GroupPage({ route, navigation }) {
                 />
                 <Text style={{ marginTop: "1.5%" }}>Only My Tasks</Text>
             </View>
-            
-           <ScrollView>
-               
-            <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",paddingBottom:160}}>
-            
-                {!isLoading && tasks.map((task, i) => (
-                (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
-                    <Card containerStyle={{ width: 175, backgroundColor: task.done == true ? "#b0ffa473" : "white" }} key={i}>
-                        <Card.Title style={{ display: "flex", flexDirection: "column" }}>
-                            {<Icon name="menu" onPress={() => { setIsVisible(true), setCurrentTaskId(task.id) }} />}
-                            <Text>
-                                {task.title}
+
+            <ScrollView>
+
+                <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", paddingBottom: 160 }}>
+
+                    {!isLoading && tasks.map((task, i) => (
+                        (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
+                        <Card containerStyle={{ width: 175, backgroundColor: task.done == true ? "#b0ffa473" : "white" }} key={i}>
+                            <Card.Title style={{ display: "flex", flexDirection: "column" }}>
+                                {<Icon name="menu" onPress={() => { setIsVisible(true), setCurrentTask(task) }} />}
+                                <Text>
+                                    {task.title}
+                                </Text>
+                            </Card.Title>
+                            <Card.Divider />
+                            <Text style={{ marginBottom: 10 }} >
+                                {task.description}
                             </Text>
-                        </Card.Title>
-                        <Card.Divider />
-                        <Text style={{ marginBottom: 10 }} >
-                            {task.description}
-                        </Text>
-                        <View>
-                            <Avatar
-                                size={64}
-                                rounded
-                                source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }}
-                            >
-                                <Avatar.Accessory size={24} source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }} />
-                            </Avatar>
-                        </View>
+                            <View>
+                                <Avatar
+                                    size={64}
+                                    rounded
+                                    source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }}
+                                >
+                                    <Avatar.Accessory size={24} source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }} />
+                                </Avatar>
+                            </View>
 
-                    </Card>
-                ))}
+                        </Card>
+                    ))}
 
-            </View>
-                       
-</ScrollView>
-            {isVisible && <BottomSheetGroups handleAssign={handleAssign} handleDelete={handleDelete}
-                handleDone={handleDone} handleEdit={handleEdit} handleReject={handleReject}/>}
- 
+                </View>
+
+            </ScrollView>
+            {isVisible && <BottomSheetGroups handleAssign={handleAssign} setIsDeleteDialogVisible={setIsDeleteDialogVisible}
+                handleDone={handleDone} handleEdit={handleEdit} setIsRejectDialogVisible={setIsRejectDialogVisible} setIsVisible={setIsVisible} />}
+
             <FAB
                 icon={{ name: 'add', color: 'white' }}
                 color="#00aced" style={{ bottom: 200, right: 30, position: 'absolute', zIndex: 200 }}
-                onPress={() => {navigation.navigate('Create Task', group)}}
+                onPress={() => { navigation.navigate('Create Task', group) }}
             />
+
+            {isDeleteDialogVisible &&
+                <DeleteTaskDialog isVisible={isDeleteDialogVisible}
+                    setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete} />}
+
+            {isRejectDialogVisible &&
+                <RejectTaskDialog task={currentTask} isVisible={isRejectDialogVisible}
+                    setIsVisible={setIsRejectDialogVisible} handleDelete={handleReject} />}
         </View>
     )
 }

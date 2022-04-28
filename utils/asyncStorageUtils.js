@@ -19,3 +19,14 @@ export const storeData = async (key, value) => {
     }
 }
 
+export const removeData = async (key) => {
+    try{
+        await AsyncStorage.removeItem(key);
+        return true;
+    }
+    catch (e){
+        console.log('AsyncStorage remove error: ' + error.message);
+        return false;
+    }
+}
+

@@ -45,7 +45,7 @@ export default function SignIn({ navigation }) {
             setErrorMessage("")
             await storeData("Access Token", response.accessToken);
             await storeData("Refresh Access Token", response.refreshToken);
-            navigation.navigate('Groups');
+            navigation.navigate('Tabs');
         }
     }
 
