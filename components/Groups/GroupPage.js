@@ -151,7 +151,7 @@ export default function GroupPage({ route, navigation }) {
                        
 </ScrollView>
             {isVisible && <BottomSheetGroups handleAssign={handleAssign} handleDelete={handleDelete}
-                handleDone={handleDone} handleEdit={handleEdit} handleReject={handleReject} isVisible={isVisible} setIsVisible={setIsVisible}/>}
+                handleDone={handleDone} handleEdit={handleEdit} handleReject={handleReject}/>}
  
             <FAB
                 icon={{ name: 'add', color: 'white' }}
