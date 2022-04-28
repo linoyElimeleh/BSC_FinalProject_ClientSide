@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useFocusEffect } from 'react';
-import { StyleSheet, View, Pressable, ActivityIndicator, TextInput } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Button, Text, Image, useTheme, Input, Card, Icon, Divider, Avatar, ListItem, Switch, FAB, Header as HeaderRNE, HeaderProps } from 'react-native-elements';
 import { Login } from '../../services/AuthServices'
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -116,7 +116,11 @@ export default function GroupPage({ route, navigation }) {
                 />
                 <Text style={{ marginTop: "1.5%" }}>Only My Tasks</Text>
             </View>
-            <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", height: "100%" }}>
+            
+           <ScrollView>
+               
+            <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",paddingBottom:160}}>
+            
                 {!isLoading && tasks.map((task, i) => (
                 (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
                     <Card containerStyle={{ width: 175, backgroundColor: task.done == true ? "#b0ffa473" : "white" }} key={i}>
@@ -144,10 +148,11 @@ export default function GroupPage({ route, navigation }) {
                 ))}
 
             </View>
-
+                       
+</ScrollView>
             {isVisible && <BottomSheetGroups handleAssign={handleAssign} handleDelete={handleDelete}
                 handleDone={handleDone} handleEdit={handleEdit} handleReject={handleReject} isVisible={isVisible} setIsVisible={setIsVisible}/>}
-
+ 
             <FAB
                 icon={{ name: 'add', color: 'white' }}
                 color="#00aced" style={{ bottom: 200, right: 30, position: 'absolute', zIndex: 200 }}
