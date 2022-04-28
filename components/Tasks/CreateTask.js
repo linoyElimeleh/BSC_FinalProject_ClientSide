@@ -69,6 +69,22 @@ export default function CreateTask({navigation, route}) {
     const [snooze, setSnooze] = useState(null);
     const [showEnds, setShowEnds] = useState(false);
 
+
+    useEffect(()=>{
+       if (route.params.isEdit){
+           const task=route.params.task
+           setTitle(task.title)
+           setDescription()
+           setCategories()
+           setTaskOwner()
+           setUrgent()
+           setFromDate()
+           setRepeat()
+           setToDate()
+           setSnooze()
+           setScore()
+       }
+    })
     const onSetFromDate = (event, selectedDate) => {
         if (selectedDate != null) {
             const currentDate = selectedDate;
@@ -143,6 +159,7 @@ export default function CreateTask({navigation, route}) {
                 <Input
                     leftIcon={{type: 'font-awesome', name: 'tasks'}}
                     placeholder="Title"
+                    value={title}
                     onChangeText={value => setTitle(value)}
                 />
                 <Input

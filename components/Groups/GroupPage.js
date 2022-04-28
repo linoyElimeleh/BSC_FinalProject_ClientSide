@@ -1,15 +1,12 @@
-import React, { useEffect, useState, useFocusEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import { Button, Text, Image, useTheme, Input, Card, Icon, Divider, Avatar, ListItem, Switch, FAB, Header as HeaderRNE, HeaderProps } from 'react-native-elements';
-import { Login } from '../../services/AuthServices'
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import groupScreenStyles from "./groupScreenStyles";
+import { Text, Card, Icon, Divider, Avatar, Switch, FAB, Header as HeaderRNE } from 'react-native-elements';
 import { GetGroupMembers, GetGroupTasks } from '../../services/groupsService'
 import { GetMeDetails } from '../../services/userService'
 import { TasksServices } from '../../services'
 import BottomSheetGroups from './BottomSheet';
 import { useIsFocused } from "@react-navigation/native";
-import DeleteTaskDialog from "../Tasks/DeteleTaskDialg"
+import DeleteTaskDialog from "../Tasks/DeleteTaskDialg"
 import RejectTaskDialog from '../Tasks/RejectTask'
 
 export default function GroupPage({ route, navigation }) {
@@ -91,6 +88,8 @@ export default function GroupPage({ route, navigation }) {
     }
 
     const handleEdit = () => {
+        navigation.navigate('Create Task',{isedit:true ,task:currentTask})
+        
         //navigation but the page will be ready only at the next time
     }
     const handleReject = () => {
