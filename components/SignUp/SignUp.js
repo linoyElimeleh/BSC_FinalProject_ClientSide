@@ -1,15 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
-import {Button, Text, useTheme, Input, Avatar} from 'react-native-elements';
-import {RegisterUser} from '../../services/AuthServices';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {PhotoPickerWithMenu} from "../App";
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import { Button, Text, useTheme, Input, Avatar } from "react-native-elements";
+import { RegisterUser } from "../../services/AuthServices";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PhotoPickerWithMenu } from "../App";
 
-
-export default function SignUp({ navigation }) {
-    const {theme} = useTheme();
-    const LineWidth = 290
+export default function SignUp({ navigation, route }) {
+    const { theme } = useTheme();
+    const LineWidth = 290;
     const [image, setImage] = useState("");
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
@@ -21,52 +20,60 @@ export default function SignUp({ navigation }) {
     const [isLoading, setIsLoading] = useState(false);
     const [imageBase64, setImageBase64] = useState(null);
 
+    const { pushToken } = route.params;
+
     useEffect(() => {
-        ValidateDate() && ValidateEmail() && password.length > 6 && password.length && password == confPassword ?
-            setIsDisable(false) : setIsDisable(true)
-    }, [name, date, email, password, confPassword])
+        ValidateDate() &&
+        ValidateEmail() &&
+        password.length > 6 &&
+        password.length &&
+        password == confPassword
+            ? setIsDisable(false)
+            : setIsDisable(true);
+    }, [name, date, email, password, confPassword]);
 
     const storeData = async (key, value) => {
         try {
-            await AsyncStorage.setItem(key, value)
+            await AsyncStorage.setItem(key, value);
         } catch (e) {
-            console.log('AsyncStorage set error: ' + error.message);
+            console.log("AsyncStorage set error: " + error.message);
         }
-    }
+    };
 
     const HandleSubmit = async () => {
-        setIsLoading(true)
+        setIsLoading(true);
         const regisretRequest = {
-            "email": email,
-            "password": password,
-            "display_name": name,
-            "birth_date": date,
-            "image": "https://some-image.com"
-        }
-        let response = await RegisterUser(regisretRequest)
-        setIsLoading(false)
+            email: email,
+            password: password,
+            display_name: name,
+            birth_date: date,
+            image: "https://some-image.com",
+        };
+        const token = pushToken ? { notification_token: pushToken } : {};
+        let response = await RegisterUser({...regisretRequest, ...token});
+        setIsLoading(false);
         if (response.error) {
-            setErrorMessage(response.error)
+            setErrorMessage(response.error);
         } else {
-            setErrorMessage("")
+            setErrorMessage("");
             await storeData("Access Token", response.accessToken);
             await storeData("Refresh Access Token", response.refreshToken);
-            console.log("refresh is:"+response.refreshToken);
-            navigation.navigate('Tabs');
+            navigation.navigate("Tabs");
         }
-    }
+    };
 
     const ValidateEmail = () => {
-        if (!email.length) return true
-        const validCheck = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(email)
-        return validCheck
-    }
+        if (!email.length) return true;
+        const validCheck = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(
+            email
+        );
+        return validCheck;
+    };
 
     const ValidateDate = () => {
-        if (!date.length) return true
+        if (!date.length) return true;
         // First check for the pattern
-        if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date))
-            return false;
+        if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date)) return false;
         // Parse the date parts to integers
         var parts = date.split("/");
         var day = parseInt(parts[1], 10);
@@ -81,67 +88,79 @@ export default function SignUp({ navigation }) {
             monthLength[1] = 29;
         // Check the range of the day
         return day > 0 && day <= monthLength[month - 1];
-    }
-
+    };
 
     return (
-        <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
-                                 style={{flex: 1}}
-                                 showsVerticalScrollIndicator={false}>
-            <View style={{alignItems: "center", display: "flex", marginTop: '10%'}}>
-                <Text
-                    h1
-                    h1Style={{color: theme?.colors?.primary}}
-                >
+        <KeyboardAwareScrollView
+            keyboardShouldPersistTaps={"always"}
+            style={{ flex: 1 }}
+            showsVerticalScrollIndicator={false}
+        >
+            <View
+                style={{
+                    alignItems: "center",
+                    display: "flex",
+                    marginTop: "10%",
+                }}
+            >
+                <Text h1 h1Style={{ color: theme?.colors?.primary }}>
                     Create Account
                 </Text>
                 <PhotoPickerWithMenu
-                    avatarIcon='person'
+                    avatarIcon="person"
                     image={image}
                     setImageBase64={setImageBase64}
-                    setImage={setImage}/>
-                <Input
-                    containerStyle={{width: LineWidth}}
-                    placeholder='Name'
-                    leftIcon={{type: 'font-awesome', name: 'user'}}
-                    onChangeText={value => setName(value)}
+                    setImage={setImage}
                 />
                 <Input
-                    containerStyle={{width: LineWidth}}
-                    placeholder='mm/dd/yyy'
-                    leftIcon={{type: 'font-awesome', name: 'calendar'}}
+                    containerStyle={{ width: LineWidth }}
+                    placeholder="Name"
+                    leftIcon={{ type: "font-awesome", name: "user" }}
+                    onChangeText={(value) => setName(value)}
+                />
+                <Input
+                    containerStyle={{ width: LineWidth }}
+                    placeholder="mm/dd/yyy"
+                    leftIcon={{ type: "font-awesome", name: "calendar" }}
                     errorMessage={ValidateDate() ? "" : "date is invalid"}
-                    onChangeText={value => setDate(value)}
+                    onChangeText={(value) => setDate(value)}
                 />
                 <Input
-                    containerStyle={{width: LineWidth}}
-                    placeholder='Email@address.com'
-                    leftIcon={{type: 'font-awesome', name: 'envelope'}}
+                    containerStyle={{ width: LineWidth }}
+                    placeholder="Email@address.com"
+                    leftIcon={{ type: "font-awesome", name: "envelope" }}
                     errorMessage={ValidateEmail() ? "" : "Email is invalid"}
-                    onChangeText={value => setEmail(value)}
+                    onChangeText={(value) => setEmail(value)}
                 />
                 <Input
-                    containerStyle={{width: LineWidth}}
-                    placeholder='Password(min 7 chars)'
-                    leftIcon={{type: 'font-awesome', name: 'lock'}}
-                    errorMessage={password.length > 6 || !password.length ? "" : "Password is under 7 chars"}
-                    onChangeText={value => setPassword(value)}
+                    containerStyle={{ width: LineWidth }}
+                    placeholder="Password(min 7 chars)"
+                    leftIcon={{ type: "font-awesome", name: "lock" }}
+                    errorMessage={
+                        password.length > 6 || !password.length
+                            ? ""
+                            : "Password is under 7 chars"
+                    }
+                    onChangeText={(value) => setPassword(value)}
                     secureTextEntry={true}
                 />
                 <Input
-                    containerStyle={{width: LineWidth}}
-                    placeholder='Confirm Password'
-                    leftIcon={{type: 'font-awesome', name: 'lock'}}
-                    errorMessage={password == confPassword || !confPassword.length ? "" : "Passwords are not equals"}
-                    onChangeText={value => setConfPassword(value)}
+                    containerStyle={{ width: LineWidth }}
+                    placeholder="Confirm Password"
+                    leftIcon={{ type: "font-awesome", name: "lock" }}
+                    errorMessage={
+                        password == confPassword || !confPassword.length
+                            ? ""
+                            : "Passwords are not equals"
+                    }
+                    onChangeText={(value) => setConfPassword(value)}
                     secureTextEntry={true}
                 />
-                <Text
-                    h4
-                    h4Style={{color: theme?.colors?.warning}}
-                >{errorMessage}</Text>
+                <Text h4 h4Style={{ color: theme?.colors?.warning }}>
+                    {errorMessage}
+                </Text>
                 <Button
-                    title={'Sign Up'}
+                    title={"Sign Up"}
                     containerStyle={{
                         width: 200,
                         marginHorizontal: 50,
@@ -153,7 +172,5 @@ export default function SignUp({ navigation }) {
                 />
             </View>
         </KeyboardAwareScrollView>
-
-
-    )
+    );
 }

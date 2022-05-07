@@ -10,14 +10,13 @@ const createTask = (task) => {
             end_repeat: task.endDate,
             urgent: task.urgent,
             snooze_interval: task.snooze,
-            score: task.score
+            score: task.score,
         },
-        userId: task.taskOwner
-    }
-    console.log(JSON.stringify(taskBody));
+        userId: task.taskOwner,
+    };
     return taskBody;
 };
 
 export default {
-    createTask
+    createTask,
 };

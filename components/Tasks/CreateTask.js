@@ -1,42 +1,49 @@
-import React, {useState, useEffect} from 'react'
-import {View, StyleSheet, Platform, SafeAreaView} from 'react-native'
-import {Text, Input, Switch, Button, ListItem, Icon} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useIsFocused} from "@react-navigation/native";
-import {groupService, categoriesService} from '../../services'
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Platform, SafeAreaView } from "react-native";
+import {
+    Text,
+    Input,
+    Switch,
+    Button,
+    ListItem,
+    Icon,
+} from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useIsFocused } from "@react-navigation/native";
+import { groupService, categoriesService } from "../../services";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
-import {taskService} from "../../services";
+import { taskService } from "../../services";
 const snoozeData = [
-    {label: 'no snooze', value: null},
-    {label: '4m', value: 4},
-    {label: '5m', value: 5},
-    {label: '6m', value: 6},
-    {label: '7m', value: 7},
-    {label: '8m', value: 8},
-    {label: '9m', value: 9},
-    {label: '10m', value: 10},
+    { label: "no snooze", value: null },
+    { label: "4m", value: 4 },
+    { label: "5m", value: 5 },
+    { label: "6m", value: 6 },
+    { label: "7m", value: 7 },
+    { label: "8m", value: 8 },
+    { label: "9m", value: 9 },
+    { label: "10m", value: 10 },
 ];
 
 const repeatData = [
-    {label: 'Never', value: -1},
-    {label: 'Daily', value: 1},
-    {label: 'Weekly', value: 2},
-    {label: 'Monthly', value: 3},
+    { label: "Never", value: -1 },
+    { label: "Daily", value: 1 },
+    { label: "Weekly", value: 2 },
+    { label: "Monthly", value: 3 },
 ];
 
 const IOS_DISPLAY = Object.freeze({
-    default: 'default',
-    spinner: 'spinner',
-    compact: 'compact',
-    inline: 'inline',
+    default: "default",
+    spinner: "spinner",
+    compact: "compact",
+    inline: "inline",
 });
 
 const ANDROID_DISPLAY = Object.freeze({
-    default: 'default',
-    spinner: 'spinner',
-    clock: 'clock',
-    calendar: 'calendar',
+    default: "default",
+    spinner: "spinner",
+    clock: "clock",
+    calendar: "calendar",
 });
 
 const DISPLAY_VALUES = Platform.select({
@@ -46,10 +53,10 @@ const DISPLAY_VALUES = Platform.select({
     web: Object.values(IOS_DISPLAY),
 });
 
-export default function CreateTask({navigation, route}) {
+export default function CreateTask({ navigation, route }) {
     const group = route.params;
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
     const [taskOwner, setTaskOwner] = useState(null);
     const [category, setCategory] = useState(null);
     const [users, setUsers] = useState([]);
@@ -91,64 +98,87 @@ export default function CreateTask({navigation, route}) {
     };
 
     const onRepeatChoose = () => {
-        if(repeat === -1){
-            setShowEnds(false)
-        }else{
-            setShowEnds(true)
+        if (repeat === -1) {
+            setShowEnds(false);
+        } else {
+            setShowEnds(true);
         }
-    }
+    };
 
     useEffect(() => {
         if (isFocused) {
             const membersPromise = groupService.getGroupMembers(group.id);
 
-            membersPromise.then(members => {
-                const notAssigned = [{label: 'not assigned', value: null}]
-                const names = members.map(({display_name, id}) => ({label: display_name, value: id}));
+            membersPromise.then((members) => {
+                const notAssigned = [{ label: "not assigned", value: null }];
+                const names = members.map(({ display_name, id }) => ({
+                    label: display_name,
+                    value: id,
+                }));
                 setUsers(notAssigned.concat(names));
-            })
+            });
 
             const categoriesPromise = categoriesService.getCategories();
 
-            categoriesPromise.then(categories => {
-                const names = categories.map(({title, id}) => ({label: title, value: id}));
+            categoriesPromise.then((categories) => {
+                const names = categories.map(({ title, id }) => ({
+                    label: title,
+                    value: id,
+                }));
                 setCategories(names);
-            })
+            });
         }
     }, [isFocused]);
 
     const onUpdateScore = (value) => {
         setScore(value);
-    }
+    };
 
     const handleSubmit = () => {
         setIsLoading(true);
-        const dueDate = new Date(fromDate.setHours(time.getHours())).toISOString();
-        const endDate = new Date(toDate).toISOString();
-        const task = {title, description, taskOwner, category, dueDate, endDate, repeat, snooze, score, urgent};
-        const promiseGroup = taskService.createTask(task,group.id);
+        const dueDateTimestamp = new Date(
+            fromDate.setHours(time.getHours())
+        ).setMinutes(time.getMinutes());
+        const dueDate = new Date(dueDateTimestamp).toLocaleString("en-US");
 
-        promiseGroup.then(result =>{
-            navigation.navigate('Group', {group});
+        const endDate = toDate.toLocaleString("en-US");
+
+        const task = {
+            title,
+            description,
+            taskOwner,
+            category,
+            dueDate,
+            endDate,
+            repeat,
+            snooze,
+            score,
+            urgent,
+        };
+        const promiseGroup = taskService.createTask(task, group.id);
+
+        promiseGroup.then((result) => {
+            navigation.navigate("Group", { group });
             setIsLoading(false);
-        })
+        });
     };
 
     return (
-        <SafeAreaView style={{flex:1}}>
-            <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}
-                                     showsVerticalScrollIndicator={false}
-                                     automaticallyAdjustContentInsets={false}
+        <SafeAreaView style={{ flex: 1 }}>
+            <KeyboardAwareScrollView
+                keyboardShouldPersistTaps={"always"}
+                showsVerticalScrollIndicator={false}
+                automaticallyAdjustContentInsets={false}
             >
                 <Input
-                    leftIcon={{type: 'font-awesome', name: 'tasks'}}
+                    leftIcon={{ type: "font-awesome", name: "tasks" }}
                     placeholder="Title"
-                    onChangeText={value => setTitle(value)}
+                    onChangeText={(value) => setTitle(value)}
                 />
                 <Input
-                    leftIcon={{type: 'font-awesome', name: 'list-alt'}}
+                    leftIcon={{ type: "font-awesome", name: "list-alt" }}
                     placeholder="Enter your description here"
-                    onChangeText={value => setDescription(value)}
+                    onChangeText={(value) => setDescription(value)}
                 />
                 <View style={styles.list}>
                     <RNPickerSelect
@@ -159,15 +189,15 @@ export default function CreateTask({navigation, route}) {
                         <ListItem bottomDivider>
                             <ListItem.Content>
                                 <ListItem.Title>
-                                    {
-                                        <Icon name="category" size={20}/>
-                                    }
+                                    {<Icon name="category" size={20} />}
                                     Category
                                 </ListItem.Title>
-                                <ListItem.Subtitle
-                                    right>
+                                <ListItem.Subtitle right>
                                     {
-                                        categories.find(categoryType => categoryType.value === category)?.label
+                                        categories.find(
+                                            (categoryType) =>
+                                                categoryType.value === category
+                                        )?.label
                                     }
                                 </ListItem.Subtitle>
                             </ListItem.Content>
@@ -181,15 +211,15 @@ export default function CreateTask({navigation, route}) {
                         <ListItem bottomDivider>
                             <ListItem.Content>
                                 <ListItem.Title>
-                                    {
-                                        <Icon name="person" size={20}/>
-                                    }
+                                    {<Icon name="person" size={20} />}
                                     Task owner
                                 </ListItem.Title>
-                                <ListItem.Subtitle
-                                    right>
+                                <ListItem.Subtitle right>
                                     {
-                                        users.find(userID => userID.value === taskOwner)?.label
+                                        users.find(
+                                            (userID) =>
+                                                userID.value === taskOwner
+                                        )?.label
                                     }
                                 </ListItem.Subtitle>
                             </ListItem.Content>
@@ -198,25 +228,29 @@ export default function CreateTask({navigation, route}) {
                     <ListItem bottomDivider>
                         <ListItem.Content>
                             <ListItem.Title>
+                                {<Icon name="warning" size={20} />}
+                                Urgent{" "}
                                 {
-                                    <Icon name="warning" size={20}/>
+                                    <Switch
+                                        style={styles.switch}
+                                        value={urgent}
+                                        onValueChange={(value) =>
+                                            setUrgent(value)
+                                        }
+                                    />
                                 }
-                                Urgent {
-                                <Switch
-                                    style={styles.switch}
-                                    value={urgent}
-                                    onValueChange={(value) => setUrgent(value)}
-                                />
-                            }</ListItem.Title>
+                            </ListItem.Title>
                         </ListItem.Content>
                     </ListItem>
                     <ListItem.Accordion
                         content={
                             <>
-                                <Icon name="date-range" size={20}/>
+                                <Icon name="date-range" size={20} />
                                 <ListItem.Content>
                                     <ListItem.Title>Date</ListItem.Title>
-                                    <ListItem.Subtitle>{fromDate.toDateString()}</ListItem.Subtitle>
+                                    <ListItem.Subtitle>
+                                        {fromDate.toDateString()}
+                                    </ListItem.Subtitle>
                                 </ListItem.Content>
                             </>
                         }
@@ -226,50 +260,53 @@ export default function CreateTask({navigation, route}) {
                         }}
                         bottomDivider
                     >
-                        {dateExpanded &&
+                        {dateExpanded && (
                             <View>
                                 {
                                     <DateTimePicker
                                         testID="dateTimePicker"
                                         value={fromDate}
-                                        mode='date'
+                                        mode="date"
                                         is24Hour={true}
                                         onChange={onSetFromDate}
                                         display={display}
                                     />
                                 }
                             </View>
-                        }
+                        )}
                     </ListItem.Accordion>
-                    <ListItem.Accordion bottomDivider
-                                        content={
-                                            <>
-                                                <Icon name="access-time" size={20}/>
-                                                <ListItem.Content>
-                                                    <ListItem.Title>Time</ListItem.Title>
-                                                    <ListItem.Subtitle>{time.toLocaleTimeString()}</ListItem.Subtitle>
-                                                </ListItem.Content>
-                                            </>
-                                        }
-                                        isExpanded={timeExpanded}
-                                        onPress={() => {
-                                            setTimeExpanded(!timeExpanded);
-                                        }}
+                    <ListItem.Accordion
+                        bottomDivider
+                        content={
+                            <>
+                                <Icon name="access-time" size={20} />
+                                <ListItem.Content>
+                                    <ListItem.Title>Time</ListItem.Title>
+                                    <ListItem.Subtitle>
+                                        {time.toLocaleTimeString()}
+                                    </ListItem.Subtitle>
+                                </ListItem.Content>
+                            </>
+                        }
+                        isExpanded={timeExpanded}
+                        onPress={() => {
+                            setTimeExpanded(!timeExpanded);
+                        }}
                     >
-                        {timeExpanded &&
+                        {timeExpanded && (
                             <View>
                                 {
                                     <DateTimePicker
                                         testID="dateTimePicker"
                                         value={time}
-                                        mode='time'
+                                        mode="time"
                                         is24Hour={true}
                                         onChange={onSetTime}
                                         display={display}
                                     />
                                 }
                             </View>
-                        }
+                        )}
                     </ListItem.Accordion>
                     <RNPickerSelect
                         onDonePress={() => onRepeatChoose()}
@@ -280,28 +317,30 @@ export default function CreateTask({navigation, route}) {
                         <ListItem bottomDivider>
                             <ListItem.Content>
                                 <ListItem.Title>
-                                    {
-                                        <Icon name="repeat" size={20}/>
-                                    }
+                                    {<Icon name="repeat" size={20} />}
                                     Repeat
                                 </ListItem.Title>
-                                <ListItem.Subtitle
-                                    right>
+                                <ListItem.Subtitle right>
                                     {
-                                        repeatData.find(repeatType => repeatType.value === repeat)?.label
+                                        repeatData.find(
+                                            (repeatType) =>
+                                                repeatType.value === repeat
+                                        )?.label
                                     }
                                 </ListItem.Subtitle>
                             </ListItem.Content>
                         </ListItem>
                     </RNPickerSelect>
-                    {showEnds &&
+                    {showEnds && (
                         <ListItem.Accordion
                             content={
                                 <>
-                                    <Icon name="date-range" size={20}/>
+                                    <Icon name="date-range" size={20} />
                                     <ListItem.Content>
                                         <ListItem.Title>Ends</ListItem.Title>
-                                        <ListItem.Subtitle>{toDate.toDateString()}</ListItem.Subtitle>
+                                        <ListItem.Subtitle>
+                                            {toDate.toDateString()}
+                                        </ListItem.Subtitle>
                                     </ListItem.Content>
                                 </>
                             }
@@ -311,21 +350,22 @@ export default function CreateTask({navigation, route}) {
                             }}
                             bottomDivider
                         >
-                            { endsExpanded &&
+                            {endsExpanded && (
                                 <View>
                                     {
                                         <DateTimePicker
                                             testID="dateTimePicker"
                                             value={fromDate}
-                                            mode='date'
+                                            mode="date"
                                             is24Hour={true}
                                             onChange={onSetToDate}
                                             display={display}
                                         />
                                     }
                                 </View>
-                            }
-                        </ListItem.Accordion>}
+                            )}
+                        </ListItem.Accordion>
+                    )}
                     <RNPickerSelect
                         onValueChange={(value) => setSnooze(value)}
                         items={snoozeData}
@@ -334,36 +374,34 @@ export default function CreateTask({navigation, route}) {
                         <ListItem bottomDivider>
                             <ListItem.Content>
                                 <ListItem.Title>
-                                    {
-                                        <Icon name="snooze" size={20}/>
-                                    }
+                                    {<Icon name="snooze" size={20} />}
                                     Snooze
                                 </ListItem.Title>
-                                <ListItem.Subtitle
-                                    right>
+                                <ListItem.Subtitle right>
                                     {
-                                        snoozeData.find(snoozeType => snoozeType.value === snooze)?.label
+                                        snoozeData.find(
+                                            (snoozeType) =>
+                                                snoozeType.value === snooze
+                                        )?.label
                                     }
                                 </ListItem.Subtitle>
                             </ListItem.Content>
                         </ListItem>
                     </RNPickerSelect>
                 </View>
-                <View style={{width: '50%'}}>
+                <View style={{ width: "50%" }}>
                     <Input
-                        leftIcon={{type: 'font-awesome', name: 'gamepad'}}
+                        leftIcon={{ type: "font-awesome", name: "gamepad" }}
                         placeholder="score (1 to 100)"
                         onChangeText={onUpdateScore}
                     />
                 </View>
-                <Text
-                    style={{marginRight: 5}}
-                >
+                <Text style={{ marginRight: 5 }}>
                     Rejection points: {score * 0.25}
                 </Text>
-                <View style={{ alignItems: 'center', marginTop: '10%' }}>
+                <View style={{ alignItems: "center", marginTop: "10%" }}>
                     <Button
-                        title={'Create Task'}
+                        title={"Create Task"}
                         containerStyle={{
                             width: 200,
                             marginHorizontal: 50,
@@ -375,8 +413,8 @@ export default function CreateTask({navigation, route}) {
                 </View>
             </KeyboardAwareScrollView>
         </SafeAreaView>
-    )
-};
+    );
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -391,8 +429,8 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     label: {
-        position: 'absolute',
-        backgroundColor: '#ffffff',
+        position: "absolute",
+        backgroundColor: "#ffffff",
         left: 22,
         top: 8,
         zIndex: 999,
@@ -419,13 +457,13 @@ const styles = StyleSheet.create({
     datePicker: {
         width: 320,
         height: 260,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
     },
     list: {
         marginTop: 20,
         borderTopWidth: 1,
-        borderColor: '#6e6d6d'
-    }
+        borderColor: "#6e6d6d",
+    },
 });
