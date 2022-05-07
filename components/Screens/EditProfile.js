@@ -36,12 +36,10 @@ export default function EditProfile({navigation}) {
     }
 
     const handleSubmit = async () =>{
-        //TODO: make here the server request
         const response = await editProfile(id,userName, image)
         if(response.ok){
             navigation.navigate('Profile');
         }
-        //TODO: navigate back to profile
     }
 
     return (
