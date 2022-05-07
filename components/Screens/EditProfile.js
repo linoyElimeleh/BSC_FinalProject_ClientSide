@@ -6,10 +6,12 @@ import {GetMeDetails} from '../../services/userService';
 import {useIsFocused} from '@react-navigation/native';
 import {PhotoPickerWithMenu} from "../App";
 import {formatDate} from "../../utils/dateUtils";
+import {editProfile} from "../../services/userService";
 
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
     const [image, setImage] = useState(null);
+    const [id,setId] = useState(0);
     const [imageBase64, setImageBase64] = useState(null);
     const [initialUserName, setInitialUserName] = useState("");
     const [userName, setUserName] = useState("");
@@ -19,6 +21,7 @@ export default function EditProfile({navigation}) {
 
     useEffect(async () => {
         let response = await GetMeDetails();
+        setId(response.id)
         setUserName(response.display_name);
         setEmail(response.email);
         const date = new Date(response.birth_date);
@@ -32,8 +35,12 @@ export default function EditProfile({navigation}) {
         return !(userNameChanged || image != null)
     }
 
-    const handleSubmit = () =>{
+    const handleSubmit = async () =>{
         //TODO: make here the server request
+        const response = await editProfile(id,userName, image)
+        if(response.ok){
+            navigation.navigate('Profile');
+        }
         //TODO: navigate back to profile
     }
 

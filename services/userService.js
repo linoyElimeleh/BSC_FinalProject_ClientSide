@@ -26,6 +26,21 @@ export const GetMeDetails = async () => {
     }
 };
 
+export const editProfile = async (id, displayName,image) => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/users`,
+            {
+                method: 'PUT',
+                body: JSON.stringify({id,"display_name":displayName,image})
+            });
+        return response;
+    } catch (error) {
+        console.error(error);
+        return (error)
+    }
+};
+
+
 export default {
     getUserGroups
 };
