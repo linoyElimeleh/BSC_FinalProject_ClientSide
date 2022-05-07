@@ -17,10 +17,10 @@ export default StyleSheet.create({
     },
     miniLogo:{
         flex: 1,
-        height: 100,
-        width: 10,
+        height: 70,
+        width: 2,
         alignSelf: "center",
-        margin: 5
+        margin: 2
     },
     input: {
         height: 48,

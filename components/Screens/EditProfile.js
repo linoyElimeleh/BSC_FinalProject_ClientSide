@@ -11,7 +11,6 @@ import {editProfile} from "../../services/userService";
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
     const [image, setImage] = useState(null);
-    const [id,setId] = useState(0);
     const [imageBase64, setImageBase64] = useState(null);
     const [initialUserName, setInitialUserName] = useState("");
     const [userName, setUserName] = useState("");
@@ -21,7 +20,6 @@ export default function EditProfile({navigation}) {
 
     useEffect(async () => {
         let response = await GetMeDetails();
-        setId(response.id)
         setUserName(response.display_name);
         setEmail(response.email);
         const date = new Date(response.birth_date);
@@ -36,7 +34,7 @@ export default function EditProfile({navigation}) {
     }
 
     const handleSubmit = async () =>{
-        const response = await editProfile(id,userName, image)
+        const response = await editProfile(userName, image, email)
         if(response.ok){
             navigation.navigate('Profile');
         }

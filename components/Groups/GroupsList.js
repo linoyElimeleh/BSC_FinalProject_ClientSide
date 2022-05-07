@@ -16,7 +16,6 @@ const images=[
     image4
 ]
 
-
 export default function GroupsList({handlePress}) {
     const [groups, setGroups] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
@@ -24,7 +23,7 @@ export default function GroupsList({handlePress}) {
 
     useEffect(() => {
         if(isFocused){
-            const userGroups = userService.getUserGroups();
+            const userGroups = userService.getUserGroupsExtended();
             userGroups.then(groups => {
                 setGroups(groups);
                 setIsLoading(false)
@@ -51,7 +50,8 @@ export default function GroupsList({handlePress}) {
                             <ListItem.Title style={{color: '#4366b6'}}>
                                 {group.name}
                             </ListItem.Title>
-                            <ListItem.Subtitle>{group.description}</ListItem.Subtitle>
+                            <ListItem.Subtitle>{group.group_description}</ListItem.Subtitle>
+                            <ListItem.Subtitle>your score: {group.current_user_score}</ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem>
                 ))}

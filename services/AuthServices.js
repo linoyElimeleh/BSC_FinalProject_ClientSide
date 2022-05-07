@@ -48,7 +48,7 @@ export const RefreshToken = async (token) => {
 
 export const changePassword = async (oldPassword, newPassword) => {
     try {
-        const response = await fetch(`${configData.SERVER_URL}/users/changePassword`,
+        const response = await fetch(`${configData.SERVER_URL}/auth/changePassword`,
             {
                 method: 'PUT',
                 body: JSON.stringify({oldPassword,newPassword})
