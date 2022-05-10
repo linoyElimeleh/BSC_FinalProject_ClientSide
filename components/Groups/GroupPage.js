@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import { Text, Card, Icon, Avatar, Switch, FAB, Header as HeaderRNE } from 'react-native-elements';
+import React, { useEffect, useState, useRef, useFocusEffect } from 'react';
+import { StyleSheet, View, ScrollView,Pressable,ActivityIndicator,TextInput} from 'react-native';
+import { Text, Card, Icon, Avatar, Switch, FAB, Header as HeaderRNE,Button,Divider,ListItem,HeaderProps} from 'react-native-elements';
 import { GetGroupMembers, GetGroupTasks } from '../../services/groupsService'
 import { GetMeDetails } from '../../services/userService'
 import { TasksServices } from '../../services'
@@ -10,8 +10,9 @@ import DeleteTaskDialog from "../Tasks/DeleteTaskDialg"
 import RejectTaskDialog from '../Tasks/RejectTask'
 import Dialog from "react-native-dialog";
 
+
 export default function GroupPage({ route, navigation }) {
-    const group = route.params.group
+    const group = route.params.group;
     const [members, setMembers] = useState();
     const [tasks, setTasks] = useState();
     const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
@@ -26,33 +27,31 @@ export default function GroupPage({ route, navigation }) {
     useEffect(() => {
         const GroupMembers = async () => {
             let response = await GetGroupMembers(group.id);
-            console.log(response)
-            setMembers(response)
-        }
+            setMembers(response);
+        };
         const Grouptasks = async () => {
             let response = await GetGroupTasks(group.id);
-            console.log(response)
-            setTasks(response)
-        }
+            setTasks(response);
+        };
         const MeDetails = async () => {
             let response = await GetMeDetails();
-            console.log(response)
-            setMe(response)
-        }
-        GroupMembers()
-        Grouptasks()
-        MeDetails()
-    }, [isFocused])
+            setMe(response);
+        };
+        GroupMembers();
+        Grouptasks();
+        MeDetails();
+    }, [isFocused]);
 
     useEffect(() => {
-        members && tasks && me && setIsLoading(false)
-    }, [members && tasks && me])
+        members && tasks && me && setIsLoading(false);
+    }, [members && tasks && me]);
+
+    useEffect(() => {}, [isSwitchChecked]);
 
     const UpdateGrouptasks = async () => {
         let response = await GetGroupTasks(group.id);
-        console.log(response)
-        setTasks(response)
-    }
+        setTasks(response);
+    };
 
     const handleDelete = async () => {
         const idJson = {
@@ -60,8 +59,8 @@ export default function GroupPage({ route, navigation }) {
         }
         setIsLoading(true)
         let response = await TasksServices.DeleteTask(group.id, idJson);
-        handleBottomSheetRequsts(response)
-    }
+        handleBottomSheetRequsts(response);
+    };
 
     const handleAssign = async () => {
         const bodyJson = {
@@ -70,8 +69,8 @@ export default function GroupPage({ route, navigation }) {
         }
         setIsLoading(true)
         let response = await TasksServices.AssignTask(group.id, bodyJson);
-        handleBottomSheetRequsts(response)
-    }
+        handleBottomSheetRequsts(response);
+    };
 
     const handleDone = async () => {
         const bodyJson = {
@@ -80,13 +79,13 @@ export default function GroupPage({ route, navigation }) {
         }
         setIsLoading(true)
         let response = await TasksServices.SetStatusTask(group.id, bodyJson);
-        handleBottomSheetRequsts(response)
-    }
+        handleBottomSheetRequsts(response);
+    };
 
     const handleEdit = () => {
         navigation.navigate('Create Task', { isEdit: true, task: currentTask })
         //navigation but the page will be ready only at the next time
-    }
+    };
     const handleReject = () => {
         // const idJson = {
         //     "taskId": currentTask.id
@@ -99,16 +98,11 @@ export default function GroupPage({ route, navigation }) {
     const handleBottomSheetRequsts = (response) => {
         if (response.status > 300) {
             //snackBar
-        }
-        else {
-            setIsLoading(false)
-            UpdateGrouptasks()
+        } else {
+            setIsLoading(false);
+            UpdateGrouptasks();
         }
     }
-    useEffect(() => {
-        console.log(isDeleteDialogVisible, 'momor')
-        // setIsLoading(isLoading)
-    }, [isDeleteDialogVisible])
 
     const handleA = () => {
         setIsDeleteDialogVisible(true)
@@ -119,13 +113,25 @@ export default function GroupPage({ route, navigation }) {
         refRBSheet.current.close()
     }
     return (
-        <View style={{ display: 'flex', flexDirection: 'column' }}>
-            {console.log("grouppage")}
-            {!isLoading &&
+        <View style={{ display: "flex", flexDirection: "column" }}>
+            {!isLoading && (
                 <HeaderRNE
-                    centerComponent={{ text: group.name + " - " + members.map(member => (member.display_name)), style: styles.heading }}
-                />}
-            <View style={{ display: "flex", flexDirection: "row", marginTop: "3%" }} >
+                    centerComponent={{
+                        text:
+                            group.name +
+                            " - " +
+                            members?.map((member) => member.display_name),
+                        style: styles.heading,
+                    }}
+                />
+            )}
+            <View
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    marginTop: "3%",
+                }}
+            >
                 <Switch
                     value={isSwitchChecked}
                     onValueChange={(value) => setIsSwitchChecked(value)}
@@ -188,11 +194,8 @@ export default function GroupPage({ route, navigation }) {
                     me={me} groupID={group.id} />
             }
         </View>
-    )
+    );
 }
-
-
-
 
 const styles = StyleSheet.create({
     subHeader: {
@@ -200,45 +203,44 @@ const styles = StyleSheet.create({
         color: "white",
         textAlign: "center",
         paddingVertical: 5,
-        marginBottom: 10
+        marginBottom: 10,
     },
     horizontal: {
         marginBottom: 10,
     },
     horizontalText: {
-        textAlign: 'center',
+        textAlign: "center",
         fontSize: 16,
         marginVertical: 10,
     },
     vertical: {
         marginBottom: 10,
-        display: 'flex',
-        flexDirection: 'row-reverse',
-
-    }, headerContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#397af8',
+        display: "flex",
+        flexDirection: "row-reverse",
+    },
+    headerContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#397af8",
         marginBottom: 20,
-        width: '100%',
+        width: "100%",
         paddingVertical: 15,
     },
     heading: {
-        color: 'white',
+        color: "white",
         fontSize: 22,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         top: -30,
         paddingBottom: -20,
     },
     headerRight: {
-        display: 'flex',
-        flexDirection: 'row',
+        display: "flex",
+        flexDirection: "row",
         marginTop: 5,
     },
     subheaderText: {
-        color: 'white',
+        color: "white",
         fontSize: 16,
-        fontWeight: 'bold'
-    }
-
+        fontWeight: "bold",
+    },
 });
