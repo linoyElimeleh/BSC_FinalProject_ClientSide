@@ -3,6 +3,7 @@ import TasksServices  from "./TasksServices";
 import groupService from './groupsService';
 import categoriesService from "./categoriesService";
 import taskService from "./taskService";
+import ScoreServices from "./ScoresServices";
 import fetchIntercept from 'fetch-intercept';
 import {RefreshToken} from "./AuthServices";
 import {getData, storeData} from "../utils/asyncStorageUtils";
@@ -50,5 +51,6 @@ export {
     groupService,
     TasksServices,
     categoriesService,
-    taskService
+    taskService,
+    ScoreServices
 };

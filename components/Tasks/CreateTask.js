@@ -71,18 +71,18 @@ export default function CreateTask({navigation, route}) {
 
 
     useEffect(()=>{
-       if (route.params.isEdit){
-           const task=route.params.task
+       if (route.params?.isEdit){
+          const task=route.params.task
            setTitle(task.title)
-           setDescription()
-           setCategories()
-           setTaskOwner()
-           setUrgent()
-           setFromDate()
-           setRepeat()
-           setToDate()
-           setSnooze()
-           setScore()
+           setDescription(task.description)
+           //setCategories(task.category_id)
+           setTaskOwner(task.owner_id)
+           setUrgent(task.urgent)
+           //setFromDate(task.due_date)
+           //setTime(task.time)//no time
+           setRepeat(task.repeat)
+           setSnooze(task.snooze_interval)
+           setScore(task.score)
        }
     })
     const onSetFromDate = (event, selectedDate) => {
@@ -165,6 +165,7 @@ export default function CreateTask({navigation, route}) {
                 <Input
                     leftIcon={{type: 'font-awesome', name: 'list-alt'}}
                     placeholder="Enter your description here"
+                    value={description}
                     onChangeText={value => setDescription(value)}
                 />
                 <View style={styles.list}>
@@ -172,6 +173,7 @@ export default function CreateTask({navigation, route}) {
                         onValueChange={(value) => setCategory(value)}
                         items={categories}
                         placeholder={{}}
+                        value={categories}
                     >
                         <ListItem bottomDivider>
                             <ListItem.Content>
@@ -380,7 +382,7 @@ export default function CreateTask({navigation, route}) {
                 </Text>
                 <View style={{ alignItems: 'center', marginTop: '10%' }}>
                     <Button
-                        title={'Create Task'}
+                        title={route.params?.isEdit?'Edit Task':'Create Task'}
                         containerStyle={{
                             width: 200,
                             marginHorizontal: 50,

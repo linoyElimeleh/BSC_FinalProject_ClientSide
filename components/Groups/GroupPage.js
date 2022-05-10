@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import { Text, Card, Icon, Divider, Avatar, Switch, FAB, Header as HeaderRNE } from 'react-native-elements';
+import { Text, Card, Icon, Avatar, Switch, FAB, Header as HeaderRNE } from 'react-native-elements';
 import { GetGroupMembers, GetGroupTasks } from '../../services/groupsService'
 import { GetMeDetails } from '../../services/userService'
 import { TasksServices } from '../../services'
@@ -8,12 +8,12 @@ import BottomSheetGroups from './BottomSheet';
 import { useIsFocused } from "@react-navigation/native";
 import DeleteTaskDialog from "../Tasks/DeleteTaskDialg"
 import RejectTaskDialog from '../Tasks/RejectTask'
+import Dialog from "react-native-dialog";
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group
     const [members, setMembers] = useState();
     const [tasks, setTasks] = useState();
-    const [isVisible, setIsVisible] = useState(false);
     const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
     const [isRejectDialogVisible, setIsRejectDialogVisible] = useState(false);
     const [isSwitchChecked, setIsSwitchChecked] = useState(false);
@@ -21,6 +21,7 @@ export default function GroupPage({ route, navigation }) {
     const [currentTask, setCurrentTask] = useState();
     const [me, setMe] = useState();
     const isFocused = useIsFocused();
+    const refRBSheet = useRef();
 
     useEffect(() => {
         const GroupMembers = async () => {
@@ -47,10 +48,6 @@ export default function GroupPage({ route, navigation }) {
         members && tasks && me && setIsLoading(false)
     }, [members && tasks && me])
 
-    useEffect(() => {
-        console.log(isSwitchChecked)
-    }, [isSwitchChecked])
-
     const UpdateGrouptasks = async () => {
         let response = await GetGroupTasks(group.id);
         console.log(response)
@@ -58,7 +55,6 @@ export default function GroupPage({ route, navigation }) {
     }
 
     const handleDelete = async () => {
-        setIsVisible(false)
         const idJson = {
             "taskId": currentTask.id
         }
@@ -88,25 +84,19 @@ export default function GroupPage({ route, navigation }) {
     }
 
     const handleEdit = () => {
-        navigation.navigate('Create Task',{isedit:true ,task:currentTask})
-        
+        navigation.navigate('Create Task', { isEdit: true, task: currentTask })
         //navigation but the page will be ready only at the next time
     }
     const handleReject = () => {
-
-        setIsVisible(false)
         // const idJson = {
         //     "taskId": currentTask.id
         // }
         // setIsLoading(true)
         // let response = await TasksServices.DeleteTask(group.id, idJson);
         // handleBottomSheetRequsts(response)
-
-        
     }
 
     const handleBottomSheetRequsts = (response) => {
-        setIsVisible(false)
         if (response.status > 300) {
             //snackBar
         }
@@ -115,9 +105,22 @@ export default function GroupPage({ route, navigation }) {
             UpdateGrouptasks()
         }
     }
+    useEffect(() => {
+        console.log(isDeleteDialogVisible, 'momor')
+        // setIsLoading(isLoading)
+    }, [isDeleteDialogVisible])
 
+    const handleA = () => {
+        setIsDeleteDialogVisible(true)
+        refRBSheet.current.close()
+    }
+    const handleB = () => {
+        setIsRejectDialogVisible(true)
+        refRBSheet.current.close()
+    }
     return (
         <View style={{ display: 'flex', flexDirection: 'column' }}>
+            {console.log("grouppage")}
             {!isLoading &&
                 <HeaderRNE
                     centerComponent={{ text: group.name + " - " + members.map(member => (member.display_name)), style: styles.heading }}
@@ -138,7 +141,7 @@ export default function GroupPage({ route, navigation }) {
                         (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
                         <Card containerStyle={{ width: 175, backgroundColor: task.done == true ? "#b0ffa473" : "white" }} key={i}>
                             <Card.Title style={{ display: "flex", flexDirection: "column" }}>
-                                {<Icon name="menu" onPress={() => { setIsVisible(true), setCurrentTask(task) }} />}
+                                {<Icon name="menu" onPress={() => { setCurrentTask(task), refRBSheet.current.open() }} />}
                                 <Text>
                                     {task.title}
                                 </Text>
@@ -163,22 +166,27 @@ export default function GroupPage({ route, navigation }) {
                 </View>
 
             </ScrollView>
-            {isVisible && <BottomSheetGroups handleAssign={handleAssign} setIsDeleteDialogVisible={setIsDeleteDialogVisible}
-                handleDone={handleDone} handleEdit={handleEdit} setIsRejectDialogVisible={setIsRejectDialogVisible} setIsVisible={setIsVisible} />}
+
+            <BottomSheetGroups handleA={handleA} handleB={handleB}
+                refRBSheet={refRBSheet} handleAssign={handleAssign}
+                handleDone={handleDone} handleEdit={handleEdit} />
 
             <FAB
                 icon={{ name: 'add', color: 'white' }}
-                color="#00aced" style={{ bottom: 200, right: 30, position: 'absolute', zIndex: 200 }}
+                color="#00aced" style={{ bottom: 50, right: 30, position: "absolute" , zIndex: 200 }}
                 onPress={() => { navigation.navigate('Create Task', group) }}
             />
 
             {isDeleteDialogVisible &&
                 <DeleteTaskDialog isVisible={isDeleteDialogVisible}
-                    setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete} />}
+                    setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete}/>
+            }
 
             {isRejectDialogVisible &&
                 <RejectTaskDialog task={currentTask} isVisible={isRejectDialogVisible}
-                    setIsVisible={setIsRejectDialogVisible} handleDelete={handleReject} />}
+                    setIsVisible={setIsRejectDialogVisible} handleReject={handleReject}
+                    me={me} groupID={group.id} />
+            }
         </View>
     )
 }

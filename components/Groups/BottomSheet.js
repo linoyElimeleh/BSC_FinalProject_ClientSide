@@ -3,11 +3,7 @@ import { View , TouchableOpacity,StyleSheet,Text} from 'react-native';
 import { Icon, BottomSheet, ListItem } from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-export default function BottomSheetGroups({ route, navigation, handleAssign, setIsDeleteDialogVisible, handleDone, handleEdit, setIsRejectDialogVisible,setIsVisible}) {
-    const refRBSheet = useRef();
-    useEffect(()=>{
-        refRBSheet.current.open()
-    })
+export default function BottomSheetGroups({handleA,handleB,handleAssign, setIsDeleteDialogVisible, handleDone, handleEdit, setIsRejectDialogVisible,refRBSheet}) {
     
     return (
         <View>
@@ -34,22 +30,21 @@ export default function BottomSheetGroups({ route, navigation, handleAssign, set
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.panelTitle}>Task Actions</Text>
                     </View>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleDone(),setIsVisible(false)}} >
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleDone()}} >
                         <Text style={styles.panelButtonTitle}>Done!</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleAssign(),setIsVisible(false)}}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleAssign()}}>
                         <Text style={styles.panelButtonTitle}>Assign to me</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleEdit(),setIsVisible(false)}}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleEdit()}}>
                         <Text style={styles.panelButtonTitle}>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>{setIsDeleteDialogVisible(true),refRBSheet.current.close()}}>
-                        <Text style={styles.panelButtonTitle}> Delete</Text>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleA()}}>
+                        <Text style={styles.panelButtonTitle}>Delete</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>{setIsRejectDialogVisible(true),refRBSheet.current.close()}}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleB()}}>
                         <Text style={styles.panelButtonTitle}>Reject</Text>
                     </TouchableOpacity>
-
                 </View>
             </RBSheet>
 
