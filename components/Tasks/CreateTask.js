@@ -76,6 +76,22 @@ export default function CreateTask({ navigation, route }) {
     const [snooze, setSnooze] = useState(null);
     const [showEnds, setShowEnds] = useState(false);
 
+
+    useEffect(()=>{
+       if (route.params?.isEdit){
+          const task=route.params.task
+           setTitle(task.title)
+           setDescription(task.description)
+           //setCategories(task.category_id)
+           setTaskOwner(task.owner_id)
+           setUrgent(task.urgent)
+           //setFromDate(task.due_date)
+           //setTime(task.time)//no time
+           setRepeat(task.repeat)
+           setSnooze(task.snooze_interval)
+           setScore(task.score)
+       }
+    })
     const onSetFromDate = (event, selectedDate) => {
         if (selectedDate != null) {
             const currentDate = selectedDate;
@@ -173,18 +189,21 @@ export default function CreateTask({ navigation, route }) {
                 <Input
                     leftIcon={{ type: "font-awesome", name: "tasks" }}
                     placeholder="Title"
-                    onChangeText={(value) => setTitle(value)}
+                    value={title}
+                    onChangeText={value => setTitle(value)}
                 />
                 <Input
                     leftIcon={{ type: "font-awesome", name: "list-alt" }}
                     placeholder="Enter your description here"
-                    onChangeText={(value) => setDescription(value)}
+                    value={description}
+                    onChangeText={value => setDescription(value)}
                 />
                 <View style={styles.list}>
                     <RNPickerSelect
                         onValueChange={(value) => setCategory(value)}
                         items={categories}
                         placeholder={{}}
+                        value={categories}
                     >
                         <ListItem bottomDivider>
                             <ListItem.Content>
