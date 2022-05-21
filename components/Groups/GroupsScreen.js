@@ -6,7 +6,7 @@ import groupScreenStyles from "./groupScreenStyles";
 
 export default function GroupsScreen({navigation}){
     const handlePress=(group)=>{
-        navigation.navigate("Group",{name:group.name,group})
+        navigation.navigate("Group",{id: group.group_id, name:group.name,image:group.image,group})
     }
     
     return(

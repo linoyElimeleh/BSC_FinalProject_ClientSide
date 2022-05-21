@@ -37,8 +37,12 @@ export default function Home() {
             <Stack.Screen
                 name="Group"
                 component={GroupPage}
-                //options={({ route }) => ({ title: route.params.name })}
-                options={({route})=> ({headerTitle: () => <GroupTitle groupName={route.params.name}/>})}
+                options={({route})=> ({
+                    headerTitle: () => <GroupTitle groupId={route.params.id} groupName={route.params.name} groupImage={route.params.image}/>,
+                    headerBackTitleVisible: false,
+                })}
+
+
             />
 
             <Stack.Screen

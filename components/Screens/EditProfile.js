@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {GetMeDetails} from '../../services/userService';
 import {useIsFocused} from '@react-navigation/native';
 import {PhotoPickerWithMenu} from "../App";
-import {formatDate} from "../../utils/dateUtils";
+import {createImageFormData, formatDate} from "../../utils/dateUtils";
 import {editProfile} from "../../services/userService";
 import {uploadImage} from "../../services/ImageUploadService";
 
@@ -38,13 +38,7 @@ export default function EditProfile({navigation}) {
 
     const handleSubmit = async () =>{
         setIsLoading(true);
-        const form = new FormData();
-        form.append('file', {
-            uri: image,
-            type: 'image/jpeg/jpg',
-            name: 'test.jpg',
-            data: imageBase64
-        })
+        const form = createImageFormData(image, imageBase64)
         const imageRes = await uploadImage(form);
         const imagePath = imageRes.path;
         const response = await editProfile(userName, imagePath, birthDate)

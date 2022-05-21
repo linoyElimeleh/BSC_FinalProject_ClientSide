@@ -5,6 +5,8 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {groupService} from '../../services';
 import * as ImagePicker from "expo-image-picker";
 import {PhotoPickerWithMenu} from "../App";
+import {uploadImage} from "../../services/ImageUploadService";
+import {createImageFormData} from "../../utils/dateUtils";
 
 export default function AddGroup({navigation}) {
     const {theme} = useTheme();
@@ -20,15 +22,16 @@ export default function AddGroup({navigation}) {
         groupName ? setIsDisable(false) : setIsDisable(true)
     }, [groupName])
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setIsLoading(true);
-        const group = {groupName, description, image};
-        const promiseGroup = groupService.createGroup(group);
-        promiseGroup.then(result => {
-            navigation.navigate('Group Created', result);
-            setIsLoading(false);
-        })
-    }
+        const form = createImageFormData(image, imageBase64)
+        const imageRes = await uploadImage(form);
+        const imagePath = imageRes.path;
+        const group = {groupName, description, image: imagePath};
+        const result = await groupService.createGroup(group);
+        navigation.navigate('Group Created', result);
+        setIsLoading(false);
+    };
 
     return (
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}

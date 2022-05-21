@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PhotoPickerWithMenu } from "../App";
 import {uploadImage} from "../../services/ImageUploadService";
+import {createImageFormData} from "../../utils/dateUtils";
 
 export default function SignUp({ navigation, route }) {
     const { theme } = useTheme();
@@ -43,13 +44,7 @@ export default function SignUp({ navigation, route }) {
 
     const HandleSubmit = async () => {
         setIsLoading(true);
-        const form = new FormData();
-        form.append('file', {
-            uri: image,
-            type: 'image/jpeg/jpg',
-            name: 'test.jpg',
-            data: imageBase64
-        })
+        const form = createImageFormData(image, imageBase64)
         const imageRes = await uploadImage(form);
         const imagePath = imageRes.path;
         const registerRequest = {
