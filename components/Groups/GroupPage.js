@@ -11,6 +11,9 @@ import RejectTaskDialog from '../Tasks/RejectTask'
 import Dialog from "react-native-dialog";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import getCategories from "../../services/categoriesService"
+import placeholder from '../../utils/images/userPlaceholder.jpg'
+import styles from './styles';
+import {categoryIdToImage} from "../categoriesMapper"
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group;
@@ -30,31 +33,28 @@ export default function GroupPage({ route, navigation }) {
     const colors = { 1: "#B4FF9F", 2: "#F9FFA4", 3: "#FFD59E", 0: "#FFA1A1" }
 
     useEffect(() => {
+        console.log("hi")
         const GroupMembers = async () => {
             let response = await GetGroupMembers(groupId);
             setMembers(response);
         };
         const Grouptasks = async () => {
             let response = await GetGroupTasks(groupId);
+            console.log(response)
             setTasks(response);
         };
         const MeDetails = async () => {
             let response = await GetMeDetails();
             setMe(response);
         };
-        const categories = async () => {
-            let response = await getCategories();
-            console.log(response)
-        };
         GroupMembers();
         Grouptasks();
         MeDetails();
-
     }, [isFocused]);
 
-    useEffect(()=> {
+    useEffect(() => {
         //navigation.setOptions({title: route.params.name + members?.map((member) => member.display_name)})
-    },[members])
+    }, [members])
 
     useEffect(() => {
         members && tasks && me && setIsLoading(false);
@@ -118,17 +118,17 @@ export default function GroupPage({ route, navigation }) {
         }
     }
 
-    const handleA = () => {
+    const openDeleteDialog = () => {
         setIsDeleteDialogVisible(true)
         refRBSheet.current.close()
     }
-    const handleB = () => {
+    const openRejectDialog = () => {
         setIsRejectDialogVisible(true)
         refRBSheet.current.close()
     }
     return (
         <View style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-            
+
             <View style={{ display: "flex", flexDirection: "row", margin: 4 }}>
                 <Switch
                     style={{ marginLeft: 5 }}
@@ -138,7 +138,7 @@ export default function GroupPage({ route, navigation }) {
                 <Text style={{ marginTop: "2%", fontWeight: "500", fontSize: 17 }}>Only mine</Text>
             </View>
             <ScrollView contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}>
-               
+
                 {!isLoading && tasks.map((task, i) => (
                     (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
                     <Card containerStyle={{
@@ -164,9 +164,9 @@ export default function GroupPage({ route, navigation }) {
                             <Avatar
                                 size={64}
                                 rounded
-                                source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }}
+                                source={members.find(member => member.id == task.user_id)?.image ? { uri: me.image } : placeholder}
                             >
-                                <Avatar.Accessory size={24} source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }} />
+                                <Avatar.Accessory size={24} backgroundColor={"white"} source={categoryIdToImage[task.category_id]} />
                             </Avatar>
                         </View>
 
@@ -175,7 +175,7 @@ export default function GroupPage({ route, navigation }) {
 
             </ScrollView>
 
-            <BottomSheetGroups handleA={handleA} handleB={handleB}
+            <BottomSheetGroups openDeleteDialog={openDeleteDialog} openRejectDialog={openRejectDialog}
                 refRBSheet={refRBSheet} handleAssign={handleAssign}
                 handleDone={handleDone} handleEdit={handleEdit} />
 
