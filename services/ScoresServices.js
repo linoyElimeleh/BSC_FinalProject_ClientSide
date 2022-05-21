@@ -30,7 +30,6 @@ const UsersScoresByGroupID = async (groupId) => {
     }
 };
 
-
 export default {
     UserTotalScore,
     UsersScoresByGroupID

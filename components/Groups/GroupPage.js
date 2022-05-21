@@ -8,7 +8,7 @@ import BottomSheetGroups from './BottomSheet';
 import { useIsFocused } from "@react-navigation/native";
 import DeleteTaskDialog from "../Tasks/DeleteTaskDialg"
 import RejectTaskDialog from '../Tasks/RejectTask'
-import Dialog from "react-native-dialog";
+//import Dialog from "react-native-dialog";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import getCategories from "../../services/categoriesService"
 
@@ -128,17 +128,26 @@ export default function GroupPage({ route, navigation }) {
     }
     return (
         <View style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-            
-            <View style={{ display: "flex", flexDirection: "row", margin: 4 }}>
-                <Switch
-                    style={{ marginLeft: 5 }}
-                    value={isSwitchChecked}
-                    onValueChange={(value) => setIsSwitchChecked(value)}
+            <View style={{ display: "flex", flexDirection: "row", margin: 4, justifyContent: "space-between"}}>
+                <View style={{ display: "flex", flexDirection: "row", margin: 4}}>
+                    <Switch
+                        style={{ marginLeft: 5 }}
+                        value={isSwitchChecked}
+                        onValueChange={(value) => setIsSwitchChecked(value)}
+                    />
+                    <Text style={{ marginTop: "3%", fontWeight: "500", fontSize: 17 }}>Only mine</Text>
+                </View>
+                <FAB
+                    style={{ width: "110%"}}
+                    size="small"
+                    overlayColor="#454545"
+                    color="#6db5ed"
+                    icon={{ name: "trophy" , type:"font-awesome", color: "#fff" }}
+                    onPress={()=>navigation.navigate("GroupLeaderboard",{id: groupId, name:group.name,image:group.image})}
                 />
-                <Text style={{ marginTop: "2%", fontWeight: "500", fontSize: 17 }}>Only mine</Text>
             </View>
             <ScrollView contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}>
-               
+
                 {!isLoading && tasks.map((task, i) => (
                     (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
                     <Card containerStyle={{
@@ -146,7 +155,7 @@ export default function GroupPage({ route, navigation }) {
                         backgroundColor: colors[i % 4],
                         width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%"
                     }}
-                        key={i}>
+                          key={i}>
                         <Card.Title style={{ display: "flex", flexDirection: "row", paddingRight: "20%", flexWrap: "wrap" }}>
                             <View style={{ display: "flex", flexDirection: "row" }}>
                                 {!task.done && <Icon name="more-vert" onPress={() => { setCurrentTask(task), refRBSheet.current.open() }} />}
@@ -176,8 +185,8 @@ export default function GroupPage({ route, navigation }) {
             </ScrollView>
 
             <BottomSheetGroups handleA={handleA} handleB={handleB}
-                refRBSheet={refRBSheet} handleAssign={handleAssign}
-                handleDone={handleDone} handleEdit={handleEdit} />
+                               refRBSheet={refRBSheet} handleAssign={handleAssign}
+                               handleDone={handleDone} handleEdit={handleEdit} />
 
             <FAB
                 icon={{ name: 'add', color: 'white' }}
@@ -185,7 +194,7 @@ export default function GroupPage({ route, navigation }) {
                 onPress={() => { navigation.navigate('Create Task', group) }}
             />
 
-            {isDeleteDialogVisible &&
+            {/*{isDeleteDialogVisible &&
                 <DeleteTaskDialog isVisible={isDeleteDialogVisible}
                     setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete} />
             }
@@ -194,7 +203,7 @@ export default function GroupPage({ route, navigation }) {
                 <RejectTaskDialog task={currentTask} isVisible={isRejectDialogVisible}
                     setIsVisible={setIsRejectDialogVisible} handleReject={handleReject}
                     me={me} groupID={groupId} />
-            }
+            }*/}
         </View>
     );
 }

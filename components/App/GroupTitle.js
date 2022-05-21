@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react'
-import { View, Image } from 'react-native'
-import { Text } from 'react-native-elements'
+import {View, Image, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
+import { Text} from 'react-native-elements'
 import tw from 'tailwind-react-native-classnames'
 import placeholder from '../../utils/images/groupPlaceholder.jpg'
 import {GetGroupMembers} from "../../services/groupsService";
 import {useIsFocused} from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const GroupTitle = ({groupId, groupName,groupImage}) => {
+
+const GroupTitle = ({groupId, groupName,groupImage, navigation}) => {
 
     const isFocused = useIsFocused();
     const [members, setMembers] = useState();
@@ -17,29 +19,31 @@ const GroupTitle = ({groupId, groupName,groupImage}) => {
         setMembers(membersString);
     },[isFocused]);
 
-return (
+    const handlePress = () => {
+        console.log('hey')
+        navigation.navigate("GroupLeaderboard",{id: groupId, name:groupName,image:groupImage})
+    }
 
-    <View style={[tw`flex flex-row justify-between items-center h-16 p-2`,{
-        position: "absolute"
-    }]}>
-        <Image
-            style={[tw`rounded-full -ml-2`,{
-                width: 43,
-                height: 43,
-                marginBottom: 2
-            }]}
-            source={groupImage? {uri: groupImage} : placeholder }/>
-        <View style={[tw`flex flex-col`]}>
-            <Text numberOfLines={1}  style={[tw`px-5 font-bold text-white`]}>
-                {groupName}
-            </Text>
-            <Text numberOfLines={1}  style={[tw`px-5 text-white`]}>
-                {members}
-            </Text>
+    return (
+        <View style={[tw`flex flex-row justify-around items-center h-16 p-2`,{
+            position: "absolute"
+        }]}>
+            <Image
+                style={[tw`rounded-full -ml-2`,{
+                    width: 43,
+                    height: 43,
+                    marginBottom: 2
+                }]}
+                source={groupImage? {uri: groupImage} : placeholder }/>
+            <View style={[tw`flex flex-col`]}>
+                <Text numberOfLines={1}  style={[tw`px-5 font-bold text-white`]}>
+                    {groupName}
+                </Text>
+                <Text numberOfLines={1}  style={[tw`px-5 text-white`]}>
+                    {members}
+                </Text>
+            </View>
         </View>
-
-    </View>
-)
+    )
 }
-
 export default GroupTitle
