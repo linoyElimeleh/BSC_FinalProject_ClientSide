@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useFocusEffect } from 'react';
-import { StyleSheet, View, ScrollView,Pressable,ActivityIndicator,TextInput} from 'react-native';
-import { Text, Card, Icon, Avatar, Switch, FAB, Header as HeaderRNE,Button,Divider,ListItem,HeaderProps} from 'react-native-elements';
+import { StyleSheet, View, ScrollView, Pressable, ActivityIndicator, TextInput } from 'react-native';
+import { Text, Card, Icon, Avatar, Switch, FAB, Header as HeaderRNE, Button, Divider, ListItem, HeaderProps } from 'react-native-elements';
 import { GetGroupMembers, GetGroupTasks } from '../../services/groupsService'
 import { GetMeDetails } from '../../services/userService'
 import { TasksServices } from '../../services'
@@ -9,7 +9,8 @@ import { useIsFocused } from "@react-navigation/native";
 import DeleteTaskDialog from "../Tasks/DeleteTaskDialg"
 import RejectTaskDialog from '../Tasks/RejectTask'
 import Dialog from "react-native-dialog";
-
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import getCategories from "../../services/categoriesService"
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group;
@@ -24,6 +25,9 @@ export default function GroupPage({ route, navigation }) {
     const isFocused = useIsFocused();
     const refRBSheet = useRef();
 
+    // const colors = { 1: "#9ADCFF", 2: "#FFF89A", 3: "#FFB2A6", 0: "#FF8AAE" }
+    const colors = { 1: "#B4FF9F", 2: "#F9FFA4", 3: "#FFD59E", 0: "#FFA1A1" }
+
     useEffect(() => {
         const GroupMembers = async () => {
             let response = await GetGroupMembers(group.id);
@@ -37,16 +41,21 @@ export default function GroupPage({ route, navigation }) {
             let response = await GetMeDetails();
             setMe(response);
         };
+        const categories = async () => {
+            let response = await getCategories();
+            console.log(response)
+        };
         GroupMembers();
         Grouptasks();
         MeDetails();
+
     }, [isFocused]);
 
     useEffect(() => {
         members && tasks && me && setIsLoading(false);
     }, [members && tasks && me]);
 
-    useEffect(() => {}, [isSwitchChecked]);
+    useEffect(() => { }, [isSwitchChecked]);
 
     const UpdateGrouptasks = async () => {
         let response = await GetGroupTasks(group.id);
@@ -113,63 +122,51 @@ export default function GroupPage({ route, navigation }) {
         refRBSheet.current.close()
     }
     return (
-        <View style={{ display: "flex", flexDirection: "column" }}>
-            {!isLoading && (
-                <HeaderRNE
-                    centerComponent={{
-                        text:
-                            group.name +
-                            " - " +
-                            members?.map((member) => member.display_name),
-                        style: styles.heading,
-                    }}
-                />
-            )}
-            <View
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    marginTop: "3%",
-                }}
-            >
+        <View style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+            
+            <View style={{ display: "flex", flexDirection: "row", margin: 4 }}>
                 <Switch
+                    style={{ marginLeft: 5 }}
                     value={isSwitchChecked}
                     onValueChange={(value) => setIsSwitchChecked(value)}
                 />
-                <Text style={{ marginTop: "1.5%" }}>Only My Tasks</Text>
+                <Text style={{ marginTop: "2%", fontWeight: "500", fontSize: 17 }}>Only mine</Text>
             </View>
-
-            <ScrollView>
-
-                <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", paddingBottom: 160 }}>
-
-                    {!isLoading && tasks.map((task, i) => (
-                        (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
-                        <Card containerStyle={{ width: 175, backgroundColor: task.done == true ? "#b0ffa473" : "white" }} key={i}>
-                            <Card.Title style={{ display: "flex", flexDirection: "column" }}>
-                                {<Icon name="menu" onPress={() => { setCurrentTask(task), refRBSheet.current.open() }} />}
-                                <Text>
+            <ScrollView contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}>
+               
+                {!isLoading && tasks.map((task, i) => (
+                    (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
+                    <Card containerStyle={{
+                        borderRadius: 25, width: 175,
+                        backgroundColor: colors[i % 4],
+                        width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%"
+                    }}
+                        key={i}>
+                        <Card.Title style={{ display: "flex", flexDirection: "row", paddingRight: "20%", flexWrap: "wrap" }}>
+                            <View style={{ display: "flex", flexDirection: "row" }}>
+                                {!task.done && <Icon name="more-vert" onPress={() => { setCurrentTask(task), refRBSheet.current.open() }} />}
+                                <Text style={{ marginTop: 5, fontWeight: "bold", fontSize: 16, color: task.done ? "grey" : "black" }}>
                                     {task.title}
                                 </Text>
-                            </Card.Title>
-                            <Card.Divider />
-                            <Text style={{ marginBottom: 10 }} >
-                                {task.description}
-                            </Text>
-                            <View>
-                                <Avatar
-                                    size={64}
-                                    rounded
-                                    source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }}
-                                >
-                                    <Avatar.Accessory size={24} source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }} />
-                                </Avatar>
+                                {task.done && <FontAwesome name="check" color={"green"} size={"25px"} />}
                             </View>
+                        </Card.Title>
+                        <Card.Divider />
+                        <Text style={{ marginBottom: 10, color: task.done ? "grey" : "black", display: "flex", }} >
+                            {task.description}
+                        </Text>
+                        <View>
+                            <Avatar
+                                size={64}
+                                rounded
+                                source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }}
+                            >
+                                <Avatar.Accessory size={24} source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }} />
+                            </Avatar>
+                        </View>
 
-                        </Card>
-                    ))}
-
-                </View>
+                    </Card>
+                ))}
 
             </ScrollView>
 
@@ -179,13 +176,13 @@ export default function GroupPage({ route, navigation }) {
 
             <FAB
                 icon={{ name: 'add', color: 'white' }}
-                color="#00aced" style={{ bottom: 50, right: 30, position: "absolute" , zIndex: 200 }}
+                color="#00aced" style={{ bottom: 50, right: 30, position: "absolute", zIndex: 200 }}
                 onPress={() => { navigation.navigate('Create Task', group) }}
             />
 
             {isDeleteDialogVisible &&
                 <DeleteTaskDialog isVisible={isDeleteDialogVisible}
-                    setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete}/>
+                    setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete} />
             }
 
             {isRejectDialogVisible &&
@@ -196,51 +193,3 @@ export default function GroupPage({ route, navigation }) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    subHeader: {
-        backgroundColor: "#2089dc",
-        color: "white",
-        textAlign: "center",
-        paddingVertical: 5,
-        marginBottom: 10,
-    },
-    horizontal: {
-        marginBottom: 10,
-    },
-    horizontalText: {
-        textAlign: "center",
-        fontSize: 16,
-        marginVertical: 10,
-    },
-    vertical: {
-        marginBottom: 10,
-        display: "flex",
-        flexDirection: "row-reverse",
-    },
-    headerContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#397af8",
-        marginBottom: 20,
-        width: "100%",
-        paddingVertical: 15,
-    },
-    heading: {
-        color: "white",
-        fontSize: 22,
-        fontWeight: "bold",
-        top: -30,
-        paddingBottom: -20,
-    },
-    headerRight: {
-        display: "flex",
-        flexDirection: "row",
-        marginTop: 5,
-    },
-    subheaderText: {
-        color: "white",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-});
