@@ -11,7 +11,6 @@ const getUserGroups = async () => {
     }
 };
 
-
 export const GetMeDetails = async () => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/users/me`,
@@ -26,6 +25,32 @@ export const GetMeDetails = async () => {
     }
 };
 
+export const editProfile = async (displayName,image, birthDate) => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/users/updateProfile`,
+            {
+                method: 'PUT',
+                body: JSON.stringify({displayName, image, birthDate})
+            });
+        return response;
+    } catch (error) {
+        console.error(error);
+        return (error)
+    }
+};
+
+const getUserGroupsExtended = async () => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/users/me/groupsCurrentTask`);
+        const groups = await response.json();
+        return groups;
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 export default {
-    getUserGroups
+    getUserGroups,
+    getUserGroupsExtended
 };

@@ -6,12 +6,12 @@ import {getData} from "../../utils/asyncStorageUtils";
 
 export default function WelcomePage({navigation}) {
     const { theme } = useTheme();
-    // useEffect(async ()=>{
-    //     const loggedInUser = await getData("Access Token");
-    //     if(loggedInUser){
-    //         navigation.navigate('Tabs');
-    //     }
-    // })
+     useEffect(async ()=>{
+         const loggedInUser = await getData("Access Token");
+         if(loggedInUser){
+             navigation.navigate('Tabs');
+         }
+     })
 
     return (
         <View style={styles.container}>

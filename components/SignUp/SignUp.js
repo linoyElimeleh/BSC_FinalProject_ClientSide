@@ -5,6 +5,8 @@ import { RegisterUser } from "../../services/AuthServices";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PhotoPickerWithMenu } from "../App";
+import {uploadImage} from "../../services/ImageUploadService";
+import {createImageFormData} from "../../utils/dateUtils";
 
 export default function SignUp({ navigation, route }) {
     const { theme } = useTheme();
@@ -42,15 +44,18 @@ export default function SignUp({ navigation, route }) {
 
     const HandleSubmit = async () => {
         setIsLoading(true);
-        const regisretRequest = {
+        const form = createImageFormData(image, imageBase64)
+        const imageRes = await uploadImage(form);
+        const imagePath = imageRes.path;
+        const registerRequest = {
             email: email,
             password: password,
             display_name: name,
             birth_date: date,
-            image: "https://some-image.com",
+            image: imagePath
         };
         const token = pushToken ? { notification_token: pushToken } : {};
-        let response = await RegisterUser({...regisretRequest, ...token});
+        let response = await RegisterUser({...registerRequest, ...token});
         setIsLoading(false);
         if (response.error) {
             setErrorMessage(response.error);

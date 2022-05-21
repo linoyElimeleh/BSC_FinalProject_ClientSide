@@ -5,7 +5,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {GetMeDetails} from '../../services/userService';
 import {useIsFocused} from '@react-navigation/native';
 import {PhotoPickerWithMenu} from "../App";
-import {formatDate} from "../../utils/dateUtils";
+import {createImageFormData, formatDate} from "../../utils/dateUtils";
+import {editProfile} from "../../services/userService";
+import {uploadImage} from "../../services/ImageUploadService";
 
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
@@ -15,12 +17,14 @@ export default function EditProfile({navigation}) {
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [birthDate, setBirthDate] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const isFocused = useIsFocused();
 
     useEffect(async () => {
         let response = await GetMeDetails();
         setUserName(response.display_name);
         setEmail(response.email);
+        setImage(response.image)
         const date = new Date(response.birth_date);
         const formattedDate = formatDate(date);
         setBirthDate(formattedDate);
@@ -32,9 +36,16 @@ export default function EditProfile({navigation}) {
         return !(userNameChanged || image != null)
     }
 
-    const handleSubmit = () =>{
-        //TODO: make here the server request
-        //TODO: navigate back to profile
+    const handleSubmit = async () =>{
+        setIsLoading(true);
+        const form = createImageFormData(image, imageBase64)
+        const imageRes = await uploadImage(form);
+        const imagePath = imageRes.path;
+        const response = await editProfile(userName, imagePath, birthDate)
+        setIsLoading(false);
+        if(response.ok){
+            navigation.navigate('Profile');
+        }
     }
 
     return (
@@ -72,16 +83,16 @@ export default function EditProfile({navigation}) {
                     disabled={true}
                 />
                 <Button
-                    title={'Edit'}
+                    title={'Save'}
                     containerStyle={styles.buttonStyle}
                     disabled={checkChange()}
                     onPress={handleSubmit}
-                    //loading={isLoading}
+                    loading={isLoading}
                 />
             </View>
         </View>
     )
-    }
+}
 
 const styles = StyleSheet.create({
     changePasswordText: {

@@ -1,6 +1,6 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {Text, Dialog, useTheme, ListItem, Image, Avatar} from 'react-native-elements';
+import {Text, Dialog, useTheme, ListItem, Avatar, Image} from 'react-native-elements';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {removeData} from "../../utils/asyncStorageUtils";
 import {GetMeDetails} from "../../services/userService";
@@ -9,6 +9,7 @@ import {useIsFocused} from "@react-navigation/native";
 export default function Profile({navigation}) {
     const { theme } = useTheme();
     const [dialogOpen,setDialogOpen] = useState(false);
+    const [imageUri, setImageUri] = useState(null);
     const [userName,setUserName] = useState("");
     const isFocused = useIsFocused();
 
@@ -26,6 +27,7 @@ export default function Profile({navigation}) {
 
     useEffect(async ()=>{
         let response = await GetMeDetails();
+        setImageUri(response.image)
         setUserName(response.display_name);
     },[isFocused]);
 
@@ -53,6 +55,12 @@ export default function Profile({navigation}) {
                 </Dialog.Actions>
             </Dialog>
             <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
+                {imageUri ?
+                    <Image
+                        PlaceholderContent={<ActivityIndicator/>}
+                        style={{width: 100, height: 100, borderRadius:50}}
+                        source={{uri: imageUri}}/>
+                    :
                     <Avatar
                         size={64}
                         rounded
@@ -60,6 +68,7 @@ export default function Profile({navigation}) {
                         containerStyle={{backgroundColor: 'orange'}}
                     >
                     </Avatar>
+                }
                 <Text>{userName}</Text>
             </View>
             {

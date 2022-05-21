@@ -15,6 +15,13 @@ export default StyleSheet.create({
         alignSelf: "center",
         margin: 30
     },
+    miniLogo:{
+        flex: 1,
+        height: 80,
+        width: 1,
+        alignSelf: "center",
+        margin: 2,
+    },
     input: {
         height: 48,
         borderRadius: 5,

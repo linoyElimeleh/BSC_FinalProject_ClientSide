@@ -14,6 +14,7 @@ import getCategories from "../../services/categoriesService"
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group;
+    const groupId = group.group_id;
     const [members, setMembers] = useState();
     const [tasks, setTasks] = useState();
     const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
@@ -30,11 +31,11 @@ export default function GroupPage({ route, navigation }) {
 
     useEffect(() => {
         const GroupMembers = async () => {
-            let response = await GetGroupMembers(group.id);
+            let response = await GetGroupMembers(groupId);
             setMembers(response);
         };
         const Grouptasks = async () => {
-            let response = await GetGroupTasks(group.id);
+            let response = await GetGroupTasks(groupId);
             setTasks(response);
         };
         const MeDetails = async () => {
@@ -51,6 +52,10 @@ export default function GroupPage({ route, navigation }) {
 
     }, [isFocused]);
 
+    useEffect(()=> {
+        //navigation.setOptions({title: route.params.name + members?.map((member) => member.display_name)})
+    },[members])
+
     useEffect(() => {
         members && tasks && me && setIsLoading(false);
     }, [members && tasks && me]);
@@ -58,7 +63,7 @@ export default function GroupPage({ route, navigation }) {
     useEffect(() => { }, [isSwitchChecked]);
 
     const UpdateGrouptasks = async () => {
-        let response = await GetGroupTasks(group.id);
+        let response = await GetGroupTasks(groupId);
         setTasks(response);
     };
 
@@ -67,7 +72,7 @@ export default function GroupPage({ route, navigation }) {
             "taskId": currentTask.id
         }
         setIsLoading(true)
-        let response = await TasksServices.DeleteTask(group.id, idJson);
+        let response = await TasksServices.DeleteTask(groupId, idJson);
         handleBottomSheetRequsts(response);
     };
 
@@ -77,7 +82,7 @@ export default function GroupPage({ route, navigation }) {
             "userId": me.id
         }
         setIsLoading(true)
-        let response = await TasksServices.AssignTask(group.id, bodyJson);
+        let response = await TasksServices.AssignTask(groupId, bodyJson);
         handleBottomSheetRequsts(response);
     };
 
@@ -87,7 +92,7 @@ export default function GroupPage({ route, navigation }) {
             "status": true
         }
         setIsLoading(true)
-        let response = await TasksServices.SetStatusTask(group.id, bodyJson);
+        let response = await TasksServices.SetStatusTask(groupId, bodyJson);
         handleBottomSheetRequsts(response);
     };
 
@@ -100,7 +105,7 @@ export default function GroupPage({ route, navigation }) {
         //     "taskId": currentTask.id
         // }
         // setIsLoading(true)
-        // let response = await TasksServices.DeleteTask(group.id, idJson);
+        // let response = await TasksServices.DeleteTask(groupId, idJson);
         // handleBottomSheetRequsts(response)
     }
 
@@ -137,7 +142,7 @@ export default function GroupPage({ route, navigation }) {
                 {!isLoading && tasks.map((task, i) => (
                     (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
                     <Card containerStyle={{
-                        borderRadius: 25, width: 175,
+                        borderRadius: 25,
                         backgroundColor: colors[i % 4],
                         width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%"
                     }}
@@ -188,7 +193,7 @@ export default function GroupPage({ route, navigation }) {
             {isRejectDialogVisible &&
                 <RejectTaskDialog task={currentTask} isVisible={isRejectDialogVisible}
                     setIsVisible={setIsRejectDialogVisible} handleReject={handleReject}
-                    me={me} groupID={group.id} />
+                    me={me} groupID={groupId} />
             }
         </View>
     );

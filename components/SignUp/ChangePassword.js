@@ -1,10 +1,8 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import { StyleSheet, View, Pressable, ActivityIndicator } from 'react-native';
 import {Button, Text, Dialog, useTheme, Avatar, Input} from 'react-native-elements';
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import {removeData} from "../../utils/asyncStorageUtils";
-import {GetMeDetails} from "../../services/userService";
 import {useIsFocused} from "@react-navigation/native";
+import {changePassword} from "../../services/AuthServices";
 
 
 export default function ChangePassword({navigation}) {
@@ -20,9 +18,9 @@ export default function ChangePassword({navigation}) {
             setDisabled(false) : setDisabled(true)
     }, [currentPassword, newPassword, confPassword]);
 
-    const handleSubmit = () =>{
-        //TODO: make here the server request
-        //TODO: navigate back to profile
+    const handleSubmit = async () =>{
+        let response = await changePassword(currentPassword,newPassword);
+        navigation.navigate('Profile');
     }
 
 
