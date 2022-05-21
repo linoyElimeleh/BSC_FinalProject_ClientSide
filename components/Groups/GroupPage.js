@@ -142,7 +142,7 @@ export default function GroupPage({ route, navigation }) {
                 {!isLoading && tasks.map((task, i) => (
                     (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
                     <Card containerStyle={{
-                        borderRadius: 25, width: 175,
+                        borderRadius: 25,
                         backgroundColor: colors[i % 4],
                         width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%"
                     }}
@@ -185,16 +185,16 @@ export default function GroupPage({ route, navigation }) {
                 onPress={() => { navigation.navigate('Create Task', group) }}
             />
 
-           {/* {isDeleteDialogVisible &&
+            {isDeleteDialogVisible &&
                 <DeleteTaskDialog isVisible={isDeleteDialogVisible}
                     setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete} />
             }
-*/}
-            {/*{isRejectDialogVisible &&
+
+            {isRejectDialogVisible &&
                 <RejectTaskDialog task={currentTask} isVisible={isRejectDialogVisible}
                     setIsVisible={setIsRejectDialogVisible} handleReject={handleReject}
                     me={me} groupID={groupId} />
-            }*/}
+            }
         </View>
     );
 }

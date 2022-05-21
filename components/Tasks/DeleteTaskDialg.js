@@ -1,4 +1,3 @@
-/*
 import React, { useState } from 'react';
 // import { Dialog } from '@rneui/themed';
 import { View, Text, StyleSheet } from 'react-native';
@@ -26,4 +25,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-});*/
+});

@@ -21,7 +21,7 @@ export default function JoinGroup({navigation}) {
         const promiseGroup = groupService.joinGroup(inviteCode);
         promiseGroup.then(result =>{
             setIsLoading(false);
-            navigation.navigate('Groups');
+            navigation.navigate('GroupsList');
         })
     }
 

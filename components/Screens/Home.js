@@ -63,7 +63,8 @@ export default function Home() {
                 options={({navigation}) =>
                     (
                         {
-                            headerLeft: () => (<HeaderBackButton onPress={()=> navigation.navigate('Groups')}/>)
+                            headerLeft: () => (<HeaderBackButton onPress={()=> navigation.navigate('GroupsList')}/>),
+                            gestureEnabled: false
                         }
                     )
                 }

@@ -102,6 +102,7 @@ export default function App() {
             headerLeft: () => {},
             headerBackVisible: false,
             headerShown: false,
+            gestureEnabled: false
           })}
         />
       </Stack.Navigator>

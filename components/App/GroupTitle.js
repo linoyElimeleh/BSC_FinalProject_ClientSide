@@ -29,7 +29,7 @@ return (
                 marginBottom: 2
             }]}
             source={groupImage? {uri: groupImage} : placeholder }/>
-        <View style={[tw`flex flex-column`]}>
+        <View style={[tw`flex flex-col`]}>
             <Text numberOfLines={1}  style={[tw`px-5 font-bold text-white`]}>
                 {groupName}
             </Text>
