@@ -13,7 +13,6 @@ const originalRequest = {};
 const unregister = fetchIntercept.register({
     request: async function (url, config) {
         const accessToken = await getData("Access Token");
-        //TODO: add accessToken to auth headers
         const headers = {
             'Authorization': "Bearer " + accessToken,
             'Accept': 'application/json',

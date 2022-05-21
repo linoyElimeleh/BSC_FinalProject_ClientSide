@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
-  Pressable,
-  ActivityIndicator,
-  TextInput,
 } from "react-native";
 import { Button, Text, Image, useTheme, Input } from "react-native-elements";
 import { Login } from "../../services/AuthServices";

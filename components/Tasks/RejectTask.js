@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState } from 'react';
 import Dialog from "react-native-dialog";
 import { View, Text, StyleSheet } from 'react-native';
@@ -54,7 +55,7 @@ export default function RejectTaskDialog({ task, setIsVisible, handleReject, me,
                     </Dialog.Description>
                     <Dialog.Button label="Cancel" onPress={() => setIsVisible(false)} />
                     <Dialog.Button label="Reject" onPress={() => setIsVisible(false)} />
-                    {/* <Dialog.Button label="Reject" onPress={() => { handleReject(), setIsVisible(false) }} /> */}
+                    {/!* <Dialog.Button label="Reject" onPress={() => { handleReject(), setIsVisible(false) }} /> *!/}
                 </Dialog.Container>
             }
         </View>
@@ -67,4 +68,4 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
     },
-  });
+  });*/

@@ -51,7 +51,7 @@ export default function GroupsList({handlePress}) {
                                 {group.name}
                             </ListItem.Title>
                             <ListItem.Subtitle>{group.group_description}</ListItem.Subtitle>
-                            <ListItem.Subtitle>your score: {group.current_user_score}</ListItem.Subtitle>
+                            <ListItem.Subtitle>your score: {group.current_user_score ? group.current_user_score : 0}</ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem>
                 ))}

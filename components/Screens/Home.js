@@ -1,5 +1,6 @@
 import React from 'react';
 import {AddGroup, GroupCreated, GroupPage, GroupsScreen, JoinGroup} from "../Groups";
+import GroupTitle from '../App/GroupTitle'
 import CreateTask from "../Tasks/CreateTask";
 import {HeaderBackButton} from "@react-navigation/elements";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -17,7 +18,7 @@ export default function Home() {
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },
-            }}
+             }}
         >
             <Stack.Screen
                 name="GroupsList"
@@ -36,7 +37,8 @@ export default function Home() {
             <Stack.Screen
                 name="Group"
                 component={GroupPage}
-                options={({ route }) => ({ title: route.params.name })}
+                //options={({ route }) => ({ title: route.params.name })}
+                options={({route})=> ({headerTitle: () => <GroupTitle groupName={route.params.name}/>})}
             />
 
             <Stack.Screen

@@ -8,11 +8,12 @@ import BottomSheetGroups from './BottomSheet';
 import { useIsFocused } from "@react-navigation/native";
 import DeleteTaskDialog from "../Tasks/DeleteTaskDialg"
 import RejectTaskDialog from '../Tasks/RejectTask'
-import Dialog from "react-native-dialog";
+//import Dialog from "react-native-dialog";
 
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group;
+    const groupId = group.group_id;
     const [members, setMembers] = useState();
     const [tasks, setTasks] = useState();
     const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
@@ -26,11 +27,11 @@ export default function GroupPage({ route, navigation }) {
 
     useEffect(() => {
         const GroupMembers = async () => {
-            let response = await GetGroupMembers(group.id);
+            let response = await GetGroupMembers(groupId);
             setMembers(response);
         };
         const Grouptasks = async () => {
-            let response = await GetGroupTasks(group.id);
+            let response = await GetGroupTasks(groupId);
             setTasks(response);
         };
         const MeDetails = async () => {
@@ -42,6 +43,10 @@ export default function GroupPage({ route, navigation }) {
         MeDetails();
     }, [isFocused]);
 
+    useEffect(()=> {
+        //navigation.setOptions({title: route.params.name + members?.map((member) => member.display_name)})
+    },[members])
+
     useEffect(() => {
         members && tasks && me && setIsLoading(false);
     }, [members && tasks && me]);
@@ -49,7 +54,7 @@ export default function GroupPage({ route, navigation }) {
     useEffect(() => {}, [isSwitchChecked]);
 
     const UpdateGrouptasks = async () => {
-        let response = await GetGroupTasks(group.id);
+        let response = await GetGroupTasks(groupId);
         setTasks(response);
     };
 
@@ -58,7 +63,7 @@ export default function GroupPage({ route, navigation }) {
             "taskId": currentTask.id
         }
         setIsLoading(true)
-        let response = await TasksServices.DeleteTask(group.id, idJson);
+        let response = await TasksServices.DeleteTask(groupId, idJson);
         handleBottomSheetRequsts(response);
     };
 
@@ -68,7 +73,7 @@ export default function GroupPage({ route, navigation }) {
             "userId": me.id
         }
         setIsLoading(true)
-        let response = await TasksServices.AssignTask(group.id, bodyJson);
+        let response = await TasksServices.AssignTask(groupId, bodyJson);
         handleBottomSheetRequsts(response);
     };
 
@@ -78,7 +83,7 @@ export default function GroupPage({ route, navigation }) {
             "status": true
         }
         setIsLoading(true)
-        let response = await TasksServices.SetStatusTask(group.id, bodyJson);
+        let response = await TasksServices.SetStatusTask(groupId, bodyJson);
         handleBottomSheetRequsts(response);
     };
 
@@ -91,7 +96,7 @@ export default function GroupPage({ route, navigation }) {
         //     "taskId": currentTask.id
         // }
         // setIsLoading(true)
-        // let response = await TasksServices.DeleteTask(group.id, idJson);
+        // let response = await TasksServices.DeleteTask(groupId, idJson);
         // handleBottomSheetRequsts(response)
     }
 
@@ -114,17 +119,7 @@ export default function GroupPage({ route, navigation }) {
     }
     return (
         <View style={{ display: "flex", flexDirection: "column" }}>
-            {!isLoading && (
-                <HeaderRNE
-                    centerComponent={{
-                        text:
-                            group.name +
-                            " - " +
-                            members?.map((member) => member.display_name),
-                        style: styles.heading,
-                    }}
-                />
-            )}
+
             <View
                 style={{
                     display: "flex",
@@ -183,16 +178,16 @@ export default function GroupPage({ route, navigation }) {
                 onPress={() => { navigation.navigate('Create Task', group) }}
             />
 
-            {isDeleteDialogVisible &&
+           {/* {isDeleteDialogVisible &&
                 <DeleteTaskDialog isVisible={isDeleteDialogVisible}
                     setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete}/>
             }
-
-            {isRejectDialogVisible &&
+*/}
+            {/*{isRejectDialogVisible &&
                 <RejectTaskDialog task={currentTask} isVisible={isRejectDialogVisible}
                     setIsVisible={setIsRejectDialogVisible} handleReject={handleReject}
-                    me={me} groupID={group.id} />
-            }
+                    me={me} groupID={groupId} />
+            }*/}
         </View>
     );
 }

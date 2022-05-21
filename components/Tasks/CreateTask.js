@@ -55,6 +55,7 @@ const DISPLAY_VALUES = Platform.select({
 
 export default function CreateTask({ navigation, route }) {
     const group = route.params;
+    const groupId = group.group_id;
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [taskOwner, setTaskOwner] = useState(null);
@@ -123,7 +124,7 @@ export default function CreateTask({ navigation, route }) {
 
     useEffect(() => {
         if (isFocused) {
-            const membersPromise = groupService.getGroupMembers(group.id);
+            const membersPromise = groupService.getGroupMembers(groupId);
 
             membersPromise.then((members) => {
                 const notAssigned = [{ label: "not assigned", value: null }];
@@ -171,7 +172,7 @@ export default function CreateTask({ navigation, route }) {
             score,
             urgent,
         };
-        const promiseGroup = taskService.createTask(task, group.id);
+        const promiseGroup = taskService.createTask(task, groupId);
 
         promiseGroup.then((result) => {
             navigation.navigate("Group", { group });

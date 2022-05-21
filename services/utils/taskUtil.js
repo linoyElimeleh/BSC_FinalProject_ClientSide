@@ -2,7 +2,7 @@ const createTask = (task) => {
     const taskBody = {
         task: {
             title: task.title,
-            description: task.title,
+            description: task.description,
             category_id: task.category,
             due_date: task.dueDate,
             done: false,

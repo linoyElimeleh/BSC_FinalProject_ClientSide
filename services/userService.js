@@ -25,12 +25,12 @@ export const GetMeDetails = async () => {
     }
 };
 
-export const editProfile = async (displayName,image, email) => {
+export const editProfile = async (displayName,image, birthDate) => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/users/updateProfile`,
             {
                 method: 'PUT',
-                body: JSON.stringify({displayName, image, email})
+                body: JSON.stringify({displayName, image, birthDate})
             });
         return response;
     } catch (error) {
