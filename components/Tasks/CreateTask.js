@@ -138,6 +138,7 @@ export default function CreateTask({ navigation, route }) {
             const categoriesPromise = categoriesService.getCategories();
 
             categoriesPromise.then((categories) => {
+                console.log(categories)
                 const names = categories.map(({ title, id }) => ({
                     label: title,
                     value: id,
@@ -204,7 +205,7 @@ export default function CreateTask({ navigation, route }) {
                         onValueChange={(value) => setCategory(value)}
                         items={categories}
                         placeholder={{}}
-                        value={categories}
+                        value={category}
                     >
                         <ListItem bottomDivider>
                             <ListItem.Content>

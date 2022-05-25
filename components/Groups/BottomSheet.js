@@ -3,7 +3,7 @@ import { View , TouchableOpacity,StyleSheet,Text} from 'react-native';
 import { Icon, BottomSheet, ListItem } from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-export default function BottomSheetGroups({handleA,handleB,handleAssign, setIsDeleteDialogVisible, handleDone, handleEdit, setIsRejectDialogVisible,refRBSheet}) {
+export default function BottomSheetGroups({openDeleteDialog,openRejectDialog,handleAssign, setIsDeleteDialogVisible, handleDone, handleEdit, setIsRejectDialogVisible,refRBSheet}) {
     
     return (
         <View>
@@ -39,10 +39,10 @@ export default function BottomSheetGroups({handleA,handleB,handleAssign, setIsDe
                     <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleEdit()}}>
                         <Text style={styles.panelButtonTitle}>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleA()}}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),openDeleteDialog()}}>
                         <Text style={styles.panelButtonTitle}>Delete</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleB()}}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),openRejectDialog()}}>
                         <Text style={styles.panelButtonTitle}>Reject</Text>
                     </TouchableOpacity>
                 </View>
