@@ -150,7 +150,8 @@ export default function GroupPage({ route, navigation }) {
                         <Card.Title style={{ display: "flex", flexDirection: "row", paddingRight: "20%", flexWrap: "wrap" }}>
                             <View style={{ display: "flex", flexDirection: "row" }}>
                                 {!task.done && <Icon name="more-vert" onPress={() => { setCurrentTask(task), refRBSheet.current.open() }} />}
-                                <Text style={{ marginTop: 5, fontWeight: "bold", fontSize: 16, color: task.done ? "grey" : "black" }}>
+                                <Text style={{ marginTop: 5, fontWeight: "bold", fontSize: 16, color: task.done ? "grey" : "black",
+                            textDecorationLine: task.done&& "line-through" }}>
                                     {task.title}
                                 </Text>
                                 {task.done && <FontAwesome name="check" color={"green"} size={"25px"} />}
