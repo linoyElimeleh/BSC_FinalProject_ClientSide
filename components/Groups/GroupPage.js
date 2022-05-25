@@ -167,7 +167,7 @@ export default function GroupPage({ route, navigation }) {
                                 rounded
                                 source={members.find(member => member.id == task.user_id)?.image ? { uri: me.image } : placeholder}
                             >
-                                <Avatar.Accessory size={24} backgroundColor={"white"} source={categoryIdToImage[task.category_id]} />
+                                <Avatar.Accessory size={30} backgroundColor={"white"} source={categoryIdToImage[task.category_id]} padding={15} />
                             </Avatar>
                         </View>
 

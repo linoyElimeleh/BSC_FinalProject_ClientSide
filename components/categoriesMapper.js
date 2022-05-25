@@ -1,5 +1,5 @@
-import cleaning from '../utils/images/cleaning.png'
-import family from '../utils/images/family.png'
+import cleaning from '../utils/images/cleaning2.png'
+import family from '../utils/images/img_family2.png'
 import finance from '../utils/images/finance.png'
 import food from '../utils/images/food.png'
 import pet from '../utils/images/pet.png'
