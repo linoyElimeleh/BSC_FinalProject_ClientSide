@@ -3,7 +3,7 @@ import { View , TouchableOpacity,StyleSheet,Text} from 'react-native';
 import { Icon, BottomSheet, ListItem } from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-export default function BottomSheetGroups({openDeleteDialog,openRejectDialog,handleAssign, setIsDeleteDialogVisible, handleDone, handleEdit, setIsRejectDialogVisible,refRBSheet}) {
+export default function BottomSheetGroups({openDeleteDialog,openRejectDialog,handleAssign, handleDone, handleEdit,refRBSheet,userId}) {
     
     return (
         <View>
@@ -33,9 +33,9 @@ export default function BottomSheetGroups({openDeleteDialog,openRejectDialog,han
                     <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleDone()}} >
                         <Text style={styles.panelButtonTitle}>Done!</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleAssign()}}>
+                    {!userId&&<TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleAssign()}}>
                         <Text style={styles.panelButtonTitle}>Assign to me</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                     <TouchableOpacity style={styles.panelButton} onPress={()=>{refRBSheet.current.close(),handleEdit()}}>
                         <Text style={styles.panelButtonTitle}>Edit</Text>
                     </TouchableOpacity>
