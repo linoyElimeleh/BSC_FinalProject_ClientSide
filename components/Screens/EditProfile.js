@@ -41,7 +41,7 @@ export default function EditProfile({navigation}) {
         const form = createImageFormData(image, imageBase64)
         const imageRes = await uploadImage(form);
         const imagePath = imageRes.path;
-        const response = await editProfile(userName, imagePath, birthDate)
+        const response = await editProfile(userName, imagePath? imagePath:image , birthDate)
         setIsLoading(false);
         if(response.ok){
             navigation.navigate('Profile');
