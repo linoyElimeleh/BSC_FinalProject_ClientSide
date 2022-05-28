@@ -1,10 +1,11 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {Text, Dialog, useTheme, ListItem, Avatar, Image} from 'react-native-elements';
+import {Text, useTheme, ListItem, Avatar, Image} from 'react-native-elements';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {removeData} from "../../utils/asyncStorageUtils";
 import {GetMeDetails} from "../../services/userService";
 import {useIsFocused} from "@react-navigation/native";
+import Dialog from "react-native-dialog";
 
 export default function Profile({navigation}) {
     const { theme } = useTheme();
@@ -44,16 +45,12 @@ export default function Profile({navigation}) {
 
     return (
         <View>
-            <Dialog
-                isVisible={dialogOpen}
-                onBackdropPress={()=>setDialogOpen(!dialogOpen)}>
+            <Dialog.Container visible={dialogOpen}>
                 <Dialog.Title title="Logout"/>
-                <Text>Are you sure you want to log out?</Text>
-                <Dialog.Actions>
-                    <Dialog.Button title="LOGOUT" onPress={logout}/>
-                    <Dialog.Button title="cancel" onPress={() => setDialogOpen(false)}/>
-                </Dialog.Actions>
-            </Dialog>
+                <Dialog.Description>Are you sure you want to log out?</Dialog.Description>
+                <Dialog.Button label="LOGOUT" onPress={logout} />
+                <Dialog.Button label="cancel" onPress={() => setDialogOpen(false)} />
+            </Dialog.Container>
             <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
                 {imageUri ?
                     <Image

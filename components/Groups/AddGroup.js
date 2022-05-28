@@ -19,8 +19,8 @@ export default function AddGroup({navigation}) {
     const [imageBase64, setImageBase64] = useState(null);
 
     useEffect(() => {
-        groupName ? setIsDisable(false) : setIsDisable(true)
-    }, [groupName])
+        groupName&&image ? setIsDisable(false) : setIsDisable(true)
+    }, [groupName,image])
 
     const handleSubmit = async () => {
         setIsLoading(true);

@@ -36,16 +36,6 @@ export default function JoinGroup({navigation}) {
                 >
                     Join Group
                 </Text>
-                <View style={{display: "flex", alignItems: "center", margin: '5%'}}>
-                    <Avatar
-                        size={64}
-                        rounded
-                        icon={{type: 'font-awesome', name: 'users'}}
-                        containerStyle={{backgroundColor: 'orange'}}
-                    >
-                        <Avatar.Accessory size={24}/>
-                    </Avatar>
-                </View>
                 <Input
                     containerStyle={{width: LineWidth}}
                     placeholder='Invite Code'

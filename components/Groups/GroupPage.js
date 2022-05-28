@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef, useFocusEffect } from 'react';
-import { StyleSheet, View, ScrollView, Pressable, ActivityIndicator, TextInput } from 'react-native';
-import { Text, Card, Icon, Avatar, Switch, FAB, Header as HeaderRNE, Button, Divider, ListItem, HeaderProps } from 'react-native-elements';
+import React, { useEffect, useState, useRef} from 'react';
+import { View, ScrollView } from 'react-native';
+import { Text, Card, Icon, Avatar, Switch, FAB, Header as HeaderRNE } from 'react-native-elements';
 import { GetGroupMembers, GetGroupTasks } from '../../services/groupsService'
 import { GetMeDetails } from '../../services/userService'
 import { TasksServices } from '../../services'
@@ -8,9 +8,9 @@ import BottomSheetGroups from './BottomSheet';
 import { useIsFocused } from "@react-navigation/native";
 import DeleteTaskDialog from "../Tasks/DeleteTaskDialg"
 import RejectTaskDialog from '../Tasks/RejectTask'
-//import Dialog from "react-native-dialog";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import getCategories from "../../services/categoriesService"
+import placeholder from '../../utils/images/userPlaceholder.jpg'
+import { categoryIdToImage } from "../categoriesMapper"
 
 export default function GroupPage({ route, navigation }) {
     const group = route.params.group;
@@ -26,12 +26,12 @@ export default function GroupPage({ route, navigation }) {
     const isFocused = useIsFocused();
     const refRBSheet = useRef();
 
-    // const colors = { 1: "#9ADCFF", 2: "#FFF89A", 3: "#FFB2A6", 0: "#FF8AAE" }
     const colors = { 1: "#B4FF9F", 2: "#F9FFA4", 3: "#FFD59E", 0: "#FFA1A1" }
 
     useEffect(() => {
         const GroupMembers = async () => {
             let response = await GetGroupMembers(groupId);
+            console.log(response)
             setMembers(response);
         };
         const Grouptasks = async () => {
@@ -42,19 +42,14 @@ export default function GroupPage({ route, navigation }) {
             let response = await GetMeDetails();
             setMe(response);
         };
-        const categories = async () => {
-            let response = await getCategories();
-            console.log(response)
-        };
         GroupMembers();
         Grouptasks();
         MeDetails();
-
     }, [isFocused]);
 
-    useEffect(()=> {
-        //navigation.setOptions({title: route.params.name + members?.map((member) => member.display_name)})
-    },[members])
+    useEffect(() => {
+        console.log(currentTask)
+    }, [currentTask])
 
     useEffect(() => {
         members && tasks && me && setIsLoading(false);
@@ -98,7 +93,7 @@ export default function GroupPage({ route, navigation }) {
 
     const handleEdit = () => {
         navigation.navigate('Create Task', { isEdit: true, task: currentTask })
-        //navigation but the page will be ready only at the next time
+       //its not works
     };
     const handleReject = () => {
         // const idJson = {
@@ -111,18 +106,19 @@ export default function GroupPage({ route, navigation }) {
 
     const handleBottomSheetRequsts = (response) => {
         if (response.status > 300) {
-            //snackBar
+            console.log("something get worng")
+            //we can add snackBar
         } else {
             setIsLoading(false);
             UpdateGrouptasks();
         }
     }
 
-    const handleA = () => {
+    const openDeleteDialog = () => {
         setIsDeleteDialogVisible(true)
         refRBSheet.current.close()
     }
-    const handleB = () => {
+    const openRejectDialog = () => {
         setIsRejectDialogVisible(true)
         refRBSheet.current.close()
     }
@@ -148,46 +144,52 @@ export default function GroupPage({ route, navigation }) {
             </View>
             <ScrollView contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}>
 
-                {!isLoading && tasks.map((task, i) => (
-                    (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
-                    <Card containerStyle={{
-                        borderRadius: 25,
-                        backgroundColor: colors[i % 4],
-                        width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%"
-                    }}
-                          key={i}>
-                        <Card.Title style={{ display: "flex", flexDirection: "row", paddingRight: "20%", flexWrap: "wrap" }}>
-                            <View style={{ display: "flex", flexDirection: "row" }}>
-                                {!task.done && <Icon name="more-vert" onPress={() => { setCurrentTask(task), refRBSheet.current.open() }} />}
-                                <Text style={{ marginTop: 5, fontWeight: "bold", fontSize: 16, color: task.done ? "grey" : "black" }}>
-                                    {task.title}
-                                </Text>
-                                {task.done && <FontAwesome name="check" color={"green"} size={"25px"} />}
+                {!isLoading &&
+                    tasks.length ? tasks.map((task, i) => (
+                        (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
+                        <Card containerStyle={{
+                            borderRadius: 25,
+                            backgroundColor: colors[i % 4],
+                            width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%"
+                        }}
+                            key={i}>
+                            <Card.Title style={{ display: "flex", flexDirection: "row", paddingRight: "20%", flexWrap: "wrap" }}>
+                                <View style={{ display: "flex", flexDirection: "row" }}>
+                                    {!task.done && <Icon name="more-vert" onPress={() => { setCurrentTask(task), refRBSheet.current.open() }} />}
+                                    <Text style={{
+                                        marginTop: 5, fontWeight: "bold", fontSize: 16, color: task.done ? "grey" : "black",
+                                        textDecorationLine: task.done && "line-through"
+                                    }}>
+                                        {task.title}
+                                    </Text>
+                                    {task.done && <FontAwesome name="check" color={"green"} size={"25px"} />}
+                                </View>
+                            </Card.Title>
+                            <Card.Divider />
+                            <Text style={{ marginBottom: 10, color: task.done ? "grey" : "black", display: "flex", }} >
+                                {task.description}
+                            </Text>
+                            <View>
+                                <Avatar
+                                    size={64}
+                                    rounded
+                                    source={members.find(member => member.id == task.user_id)?.image ? { uri: me.image } : placeholder}
+                                >
+                                    <Avatar.Accessory size={30} backgroundColor={"white"} source={categoryIdToImage[task.category_id]} padding={15} />
+                                </Avatar>
                             </View>
-                        </Card.Title>
-                        <Card.Divider />
-                        <Text style={{ marginBottom: 10, color: task.done ? "grey" : "black", display: "flex", }} >
-                            {task.description}
-                        </Text>
-                        <View>
-                            <Avatar
-                                size={64}
-                                rounded
-                                source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }}
-                            >
-                                <Avatar.Accessory size={24} source={{ uri: 'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg' }} />
-                            </Avatar>
-                        </View>
 
-                    </Card>
-                ))}
-
+                        </Card>
+                    )) :
+                    <View style={{display:"flex",alignItems:"center",width:"100%"}}>
+                        <Text style={{ marginTop: 100, fontSize: 25 }}>No Tasks Yet</Text>
+                        <Text style={{ marginTop: 10, fontSize: 15}}>create some new tasks by the plus</Text>
+                    </View>}
             </ScrollView>
 
-            <BottomSheetGroups handleA={handleA} handleB={handleB}
-                               refRBSheet={refRBSheet} handleAssign={handleAssign}
-                               handleDone={handleDone} handleEdit={handleEdit} />
-
+            <BottomSheetGroups openDeleteDialog={openDeleteDialog} openRejectDialog={openRejectDialog}
+                refRBSheet={refRBSheet} handleAssign={handleAssign}
+                handleDone={handleDone} handleEdit={handleEdit} userId={currentTask ? currentTask.user_id : null} />
             <FAB
                 icon={{ name: 'add', color: 'white' }}
                 color="#00aced" style={{ bottom: 50, right: 30, position: "absolute", zIndex: 200 }}
