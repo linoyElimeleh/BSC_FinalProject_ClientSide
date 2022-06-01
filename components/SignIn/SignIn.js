@@ -34,7 +34,7 @@ export default function SignIn({ navigation, route }) {
     try {
       await AsyncStorage.setItem(key, value);
     } catch (e) {
-      console.log("AsyncStorage set error: " + error.message);
+      console.log("AsyncStorage set error: " + e.message);
     }
   };
 
@@ -51,8 +51,8 @@ export default function SignIn({ navigation, route }) {
       setErrorMessage(response.error);
     } else {
       setErrorMessage("");
-      await storeData("Access Token", response.accessToken);
-      await storeData("Refresh Access Token", response.refreshToken);
+      response?.accessToken && await storeData("Access Token", response.accessToken);
+      response?.refreshToken && await storeData("Refresh Access Token", response.refreshToken);
       navigation.navigate("Tabs");
     }
   };

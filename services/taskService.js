@@ -1,22 +1,19 @@
 import {configData} from '../settings'
 import taskUtil from "./utils/taskUtil";
 
-export const createTask = async (task, groupId) => {
+export const handleTaskAction = async (task, groupId, action) => {
     const taskBody = taskUtil.createTask(task);
+    const method = action === 'create' ? 'POST' : 'PUT';
     try {
         const response = await fetch(`${configData.SERVER_URL}/groups/${groupId}/task`,
             {
-                method: 'POST',
+                method,
                 body: JSON.stringify(taskBody)
             });
-        const json = await response.json();
+        const json = JSON.stringify(response);
         return json
     } catch (error) {
-        console.error(error);
-        return (error)
+        console.error(JSON.stringify(error));
+        return error
     }
-};
-
-export default {
-    createTask
 };

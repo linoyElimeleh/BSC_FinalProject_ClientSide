@@ -15,7 +15,7 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends.",
-          "cameraPermission" :  "The app accesses your photos to let you share them with your friends."
+          "cameraPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
     ],
@@ -36,6 +36,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
-  }
+    },
+    "sdkVersion": "44.0.0"
+  },
+  "name": "todo-bom-app"
 }
