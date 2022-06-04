@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { View, ScrollView } from "react-native";
 import {
   Text,
@@ -11,7 +11,7 @@ import {
 } from "react-native-elements";
 import { GetGroupMembers, GetGroupTasks } from "../../services/groupsService";
 import { GetMeDetails } from "../../services/userService";
-import { TasksServices } from "../../services";
+import { DeleteTask, AssignTask, SetStatusTask, RejectTask } from "../../services/TasksServices";
 import BottomSheetGroups from "./BottomSheet";
 import { useIsFocused } from "@react-navigation/native";
 import DeleteTaskDialog from "../Tasks/DeleteTaskDialg";
@@ -42,7 +42,7 @@ export default function GroupPage({ route, navigation }) {
         let response = await GetGroupMembers(groupId);
         setMembers(response);
       } catch (error) {
-        console.error(JSON.stringify(error));
+        // console.error(JSON.stringify(error));
       }
     };
     const MeDetails = async () => {
@@ -50,7 +50,7 @@ export default function GroupPage({ route, navigation }) {
         let response = await GetMeDetails();
         setMe(response);
       } catch (e) {
-        console.error(JSON.stringify(error));
+        // console.error(JSON.stringify(error));
       }
     };
     GroupMembers();
@@ -63,7 +63,7 @@ export default function GroupPage({ route, navigation }) {
         let response = await GetGroupTasks(groupId);
         setTasks(response);
       } catch (error) {
-        console.error(JSON.stringify(error));
+        // console.error(JSON.stringify(error));
       }
     };
     Grouptasks();
@@ -82,8 +82,6 @@ export default function GroupPage({ route, navigation }) {
     members && tasks && me && setIsLoading(false);
   }, [members && tasks && me]);
 
-  useEffect(() => console.log(members),[members])
-
   useEffect(() => {}, [isSwitchChecked]);
 
   const UpdateGrouptasks = async () => {
@@ -91,13 +89,16 @@ export default function GroupPage({ route, navigation }) {
     setTasks(response);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     const idJson = {
-      taskId: currentTask.id
+      task: {
+        taskId: currentTask.id,
+      },
     };
     setIsLoading(true);
-    let response = await TasksServices.DeleteTask(groupId, idJson);
-    handleBottomSheetRequsts(response);
+    DeleteTask(groupId, idJson).then(response => {
+        handleBottomSheetRequsts(response);
+    });
   };
 
   const handleAssign = async () => {
@@ -106,7 +107,7 @@ export default function GroupPage({ route, navigation }) {
       userId: me.id,
     };
     setIsLoading(true);
-    let response = await TasksServices.AssignTask(groupId, bodyJson);
+    let response = await AssignTask(groupId, bodyJson);
     handleBottomSheetRequsts(response);
   };
 
@@ -116,21 +117,13 @@ export default function GroupPage({ route, navigation }) {
       status: true,
     };
     setIsLoading(true);
-    let response = await TasksServices.SetStatusTask(groupId, bodyJson);
+    let response = await SetStatusTask(groupId, bodyJson);
     handleBottomSheetRequsts(response);
   };
 
   const handleEdit = () => {
     navigation.navigate("Create Task", { isEdit: true, task: currentTask });
     //its not works
-  };
-  const handleReject = () => {
-    // const idJson = {
-    //     "taskId": currentTask.id
-    // }
-    // setIsLoading(true)
-    // let response = await TasksServices.DeleteTask(groupId, idJson);
-    // handleBottomSheetRequsts(response)
   };
 
   const handleBottomSheetRequsts = (response) => {
@@ -142,6 +135,12 @@ export default function GroupPage({ route, navigation }) {
       UpdateGrouptasks();
     }
   };
+
+  const handleReject = useCallback(async (task) => {
+    setIsLoading(true)
+    let response = await RejectTask(groupId, task);
+    handleBottomSheetRequsts(response)
+  }, [handleBottomSheetRequsts, groupId]);
 
   const openDeleteDialog = () => {
     setIsDeleteDialogVisible(true);
@@ -233,7 +232,9 @@ export default function GroupPage({ route, navigation }) {
                       size={64}
                       rounded
                       source={
-                        members && members.find && members.find((member) => member.id == task.user_id)
+                        members &&
+                        members.find &&
+                        members.find((member) => member.id == task.user_id)
                           ?.image
                           ? { uri: me.image }
                           : placeholder

@@ -1,22 +1,21 @@
 import {configData} from '../settings'
 
-const DeleteTask = async (groupId,idJson) => {
+export const DeleteTask = async (groupId,idJson) => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/groups/${groupId}/task`,
             {
                 method: 'DELETE',
                 body: JSON.stringify(idJson)
             });
-        const json = await response.json();
-        return json
+        return response
     } catch (error) {
-        console.error(error);
+        console.error(JSON.stringify(error));
         return (error)
     }
 };
 
 
-const AssignTask = async (groupID,taskUserJson) => {
+export const AssignTask = async (groupID, taskUserJson) => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/groups/${groupID}/task/assign`,
             {
@@ -31,12 +30,12 @@ const AssignTask = async (groupID,taskUserJson) => {
 };
 
 
-const SetStatusTask = async (groupID,statusJson) => {
+export const SetStatusTask = async (groupID,statusJson) => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/groups/${groupID}/task/set_status`,
             {
                 method: 'PUT',
-                body: JSON.stringify(statusJson)
+                body: JSON.stringify({task: statusJson})
             });
            return response.status
     } catch (error) {
@@ -45,8 +44,17 @@ const SetStatusTask = async (groupID,statusJson) => {
     }
 };
 
-export default {
-    DeleteTask,
-    AssignTask,
-    SetStatusTask
-};
+
+export const RejectTask = async (groupId, task) => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/groups/${groupId}/task/reject`,
+            {
+                method: 'PUT',
+                body: JSON.stringify({ task })
+            });
+        return response;
+    } catch (error) {
+        console.error(JSON.stringify(error));
+        return (error)
+    }
+}
