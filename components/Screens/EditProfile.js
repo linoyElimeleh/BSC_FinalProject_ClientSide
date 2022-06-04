@@ -41,7 +41,7 @@ export default function EditProfile({navigation}) {
         const form = createImageFormData(image, imageBase64)
         const imageRes = await uploadImage(form);
         const imagePath = imageRes.path;
-        const response = await editProfile(userName, imagePath? imagePath:image , birthDate)
+        const response = await editProfile(userName, imagePath? imagePath:imagePath , birthDate)
         setIsLoading(false);
         if(response.ok){
             navigation.navigate('Profile');
@@ -58,7 +58,7 @@ export default function EditProfile({navigation}) {
                     My Profile
                 </Text>
                 <PhotoPickerWithMenu
-                    avatarIcon='person'
+                    avatarIcon='home'
                     image={image}
                     setImageBase64={setImageBase64}
                     setImage={setImage}/>

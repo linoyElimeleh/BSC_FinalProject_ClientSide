@@ -99,7 +99,12 @@ export default function PhotoPickerWithMenu({image, setImage, setImageBase64, av
                         rounded
                         icon={{name: avatarIcon, type: 'material'}}
                         containerStyle={{backgroundColor: 'orange'}}
-                        onPress={() => refRBSheet.current.open()}
+                        onPress={() =>
+                        {
+                            console.log('pressed')
+                            refRBSheet.current.open()
+                        }
+                        }
                     >
                         <Avatar.Accessory size={24}/>
                     </Avatar>
