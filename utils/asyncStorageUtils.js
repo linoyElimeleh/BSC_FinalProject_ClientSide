@@ -7,7 +7,7 @@ export const getData = async (key) => {
             return value;
         }
     } catch (e) {
-        console.log("AsyncStorage get error: " + error.message);
+        console.log("AsyncStorage get error: " + e.message);
     }
 };
 
@@ -15,7 +15,7 @@ export const storeData = async (key, value) => {
     try {
         await AsyncStorage.setItem(key, value);
     } catch (e) {
-        console.log("AsyncStorage set error: " + error.message);
+        console.log("AsyncStorage set error: " + e.message);
     }
 };
 
@@ -24,7 +24,7 @@ export const removeData = async (key) => {
         await AsyncStorage.removeItem(key);
         return true;
     } catch (e) {
-        console.log("AsyncStorage remove error: " + error.message);
+        console.log("AsyncStorage remove error: " + e.message);
         return false;
     }
 };

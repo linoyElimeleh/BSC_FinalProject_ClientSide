@@ -1,6 +1,7 @@
 const createTask = (task) => {
     const taskBody = {
         task: {
+            id: task.id,
             title: task.title,
             description: task.description,
             category_id: task.category,

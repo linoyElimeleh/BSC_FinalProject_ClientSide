@@ -33,7 +33,7 @@ export const GetGroupTasks = async (id) => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/groups/${id}/tasks`,
             {
-                method: 'GET',
+                method: 'GET'
             });
         const json = await response.json();
         return json

@@ -2,7 +2,6 @@ import userService  from "./userService";
 import TasksServices  from "./TasksServices";
 import groupService from './groupsService';
 import categoriesService from "./categoriesService";
-import taskService from "./taskService";
 import ScoreServices from "./ScoresServices";
 import fetchIntercept from 'fetch-intercept';
 import {RefreshToken} from "./AuthServices";
@@ -31,9 +30,11 @@ const unregister = fetchIntercept.register({
             const {url, config} = originalRequest;
             const refreshToken = await getData("Refresh Access Token");
             const refreshResponse = await RefreshToken(refreshToken);
-            await storeData("Access Token", refreshResponse.accessToken)
-            await storeData("Refresh Access Token", response.refreshToken);
-            config.headers["Authorization"] = "Bearer " + refreshResponse.accessToken;
+            response?.accessToken && await storeData("Access Token", refreshResponse?.accessToken)
+            response?.refreshToken && await storeData("Refresh Access Token", response?.refreshToken);
+            if (config && config.headers) {
+                config.headers["Authorization"] = "Bearer " + refreshResponse?.accessToken;
+            }
             return fetch(url, config);
         }
         return response;
@@ -50,6 +51,5 @@ export {
     groupService,
     TasksServices,
     categoriesService,
-    taskService,
     ScoreServices
 };

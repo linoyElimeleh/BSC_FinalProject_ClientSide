@@ -31,7 +31,7 @@ export default function GroupsList({handlePress}) {
         <View style={styles.list}>
             <ScrollView>
                 <ActivityIndicator animating={isLoading} style={styles.activityIndicatorWrapper}/>
-                {groups.map((group, i) => (
+                {groups?.map((group, i) => (
                     <ListItem key={i} bottomDivider onPress={()=>handlePress(group)}>
                             <Image
                                 source={group.image? {uri: group.image} : placeholder}
