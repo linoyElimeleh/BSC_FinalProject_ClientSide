@@ -1,8 +1,6 @@
 import {configData} from '../settings'
-import taskUtil from "./utils/taskUtil";
 
-
-const UserTotalScore = async (userId) => {
+export const UserTotalScore = async (userId) => {
     // console.log("here")
     try {
         // console.log(1)
@@ -16,7 +14,7 @@ const UserTotalScore = async (userId) => {
     }
 };
 
-const UsersScoresByGroupID = async (groupId) => {
+export const UsersScoresByGroupID = async (groupId) => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/scores/${groupId}/usersScores`,
             {
@@ -28,9 +26,4 @@ const UsersScoresByGroupID = async (groupId) => {
         console.error(error);
         return (error)
     }
-};
-
-export default {
-    UserTotalScore,
-    UsersScoresByGroupID
 };

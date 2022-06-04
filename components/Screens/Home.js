@@ -45,7 +45,7 @@ export default function Home() {
                 name="GroupLeaderboard"
                 component={Goals}
                 options={({route})=> ({
-                    headerTitle: () => <GroupTitle groupId={route.params.id} groupName={route.params.name} groupImage={route.params.image} />,
+                    headerTitle: () => <GroupTitle groupId={route.params.groupId} groupName={route.params.name} groupImage={route.params.image} />,
                     headerBackTitleVisible: false,
                 })}
             />

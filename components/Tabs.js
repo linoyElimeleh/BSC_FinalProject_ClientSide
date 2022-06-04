@@ -28,15 +28,6 @@ export default function Tabs() {
                 }}
             />
             <Tab.Screen
-                name="Goals"
-                component={Goals}
-                options={{
-                    tabBarIcon:({color,size}) =>(
-                        <FontAwesome name="trophy" color={color} size={size}/>
-                    )
-                }}
-            />
-            <Tab.Screen
                 name="Me"
                 component={ProfileStack}
                 options={{

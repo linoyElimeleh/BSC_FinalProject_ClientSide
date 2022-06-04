@@ -7,6 +7,16 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
+import gold from '../../utils/images/1.png'
+import silver from '../../utils/images/2.png'
+import bronze from '../../utils/images/3.png'
+import {Avatar} from "react-native-elements";
+
+const images = [
+    gold,
+    silver,
+    bronze
+]
 
 const oddRowColor = "white";
 const evenRowColor = "#f2f5f7";
@@ -22,24 +32,40 @@ export default class Leaderboard extends Component {
         const evenColor = this.props.evenRowColor || evenRowColor;
         const oddColor = this.props.oddRowColor || oddRowColor;
         const rowColor = index % 2 === 0 ? evenColor : oddColor;
-
         const rowJSx = (
             <View style={[styles.row, { backgroundColor: rowColor }]}>
                 <View style={styles.left}>
-                    <Text
-                        style={[
-                            styles.rank,
-                            this.props.rankStyle,
-                            index < 9 ? styles.singleDidget : styles.doubleDidget
-                        ]}
-                    >
-                        {parseInt(index) + 1}
-                    </Text>
-                    {this.props.icon && (
+                    {index < 3 &&
+                        <Image
+                            source={images[index]}
+                            style={[styles.avatar, this.props.avatarStyle]}
+                        />
+                    }
+                    {index >=3 &&
+                        <Text
+                            style={[
+                                styles.rank,
+                                this.props.rankStyle,
+                                index < 9 ? styles.singleDidget : styles.doubleDidget
+                            ]}
+                        >
+                            {parseInt(index) + 1}
+                        </Text>
+                    }
+                    {this.props.icon && item[this.props.icon] && (
                         <Image
                             source={{ uri: item[this.props.icon] }}
                             style={[styles.avatar, this.props.avatarStyle]}
                         />
+                    )}
+                    {this.props.icon && !item[this.props.icon] && (
+                        <Avatar
+                            size="small"
+                            rounded
+                            icon={{name: 'person', type: 'material'}}
+                            containerStyle={styles.placeholderAvatar}
+                        >
+                        </Avatar>
                     )}
                     <Text style={[styles.label, this.props.labelStyle]} numberOfLines={1}>
                         {item[this.props.labelBy]}
@@ -139,7 +165,15 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         borderRadius: 30 / 2,
-        marginRight: 10
+        marginRight: 10,
+
+    },
+    placeholderAvatar: {
+        height: 30,
+        width: 30,
+        borderRadius: 30 / 2,
+        marginRight: 10,
+        backgroundColor: 'orange'
     }
 });
 
