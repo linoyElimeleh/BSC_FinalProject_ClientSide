@@ -211,8 +211,8 @@ export default function GroupPage({ route, navigation }) {
                       {task.done && (
                         <FontAwesome
                           name="check"
-                          color={"green"}
-                          size={"25px"}
+                          color="green"
+                          size={25}
                         />
                       )}
                     </View>
