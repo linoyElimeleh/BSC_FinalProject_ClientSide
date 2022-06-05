@@ -11,7 +11,7 @@ const createTask = (task) => {
             end_repeat: task.endDate,
             urgent: task.urgent,
             snooze_interval: task.snooze,
-            score: task.score,
+            level: task.level,
         },
         userId: task.taskOwner,
     };
