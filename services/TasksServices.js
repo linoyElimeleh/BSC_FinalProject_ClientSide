@@ -18,7 +18,7 @@ const DeleteTask = async (groupId,idJson) => {
 
 const AssignTask = async (groupID,taskUserJson) => {
     try {
-        const response = await fetch(`${configData.SERVER_URL}/groups/${groupID}/task/assign`,
+        const response = await fetch(`${configData.SERVER_URL}/tasks/${groupID}/task/assign`,
             {
                 method: 'PUT',
                 body: JSON.stringify(taskUserJson)
@@ -33,7 +33,7 @@ const AssignTask = async (groupID,taskUserJson) => {
 
 const SetStatusTask = async (groupID,statusJson) => {
     try {
-        const response = await fetch(`${configData.SERVER_URL}/groups/${groupID}/task/set_status`,
+        const response = await fetch(`${configData.SERVER_URL}/tasks/${groupID}/task/set_status`,
             {
                 method: 'PUT',
                 body: JSON.stringify(statusJson)

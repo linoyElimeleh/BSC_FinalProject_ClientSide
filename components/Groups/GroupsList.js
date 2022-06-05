@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {ScrollView, View, ActivityIndicator, Image} from 'react-native'
+import {ScrollView, View, ActivityIndicator, Image, FlatList} from 'react-native'
 import {ListItem} from 'react-native-elements';
 import { useIsFocused } from "@react-navigation/native";
 import styles from './styles';

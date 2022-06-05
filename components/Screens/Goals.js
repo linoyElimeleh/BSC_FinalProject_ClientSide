@@ -43,7 +43,14 @@ export default function Goals({route}) {
         return (
             <View colors={[, '#6db5ed', '#1695b7']}
                   style={{ backgroundColor: '#2089dc', padding: 15, paddingTop: 35, alignItems: 'center' }}>
-
+                {noScores &&
+                    <View>
+                        <Text style={{ color: 'white', fontSize: 25, flex: 1, textAlign: 'center' }}>
+                            There are no tasks!
+                            Go on and create some
+                        </Text>
+                    </View>
+                }
                 {!noScores &&
                     <View style={{
                         flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
@@ -58,14 +65,6 @@ export default function Goals({route}) {
                         }
                         <Text style={{ color: 'white', fontSize: 25, flex: 1, textAlign: 'center', marginLeft: 40 }}>
                             You have {userScore} pts
-                        </Text>
-                    </View>
-                }
-                {noScores &&
-                    <View>
-                        <Text style={{ color: 'white', fontSize: 25, flex: 1, textAlign: 'center' }}>
-                            There are no tasks!
-                            Go on and create some
                         </Text>
                     </View>
                 }

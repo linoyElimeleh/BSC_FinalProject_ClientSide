@@ -115,8 +115,10 @@ export default function GroupPage({ route, navigation }) {
 
   const handleDone = async () => {
     const bodyJson = {
-      taskId: currentTask.id,
-      status: true,
+      task:{
+        taskId: currentTask.id,
+        status: true,
+      }
     };
     setIsLoading(true);
     let response = await TasksServices.SetStatusTask(groupId, bodyJson);

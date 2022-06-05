@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 const GroupTitle = ({groupId, groupName,groupImage, navigation}) => {
-    console.log(groupName + '...' + groupId)
     const isFocused = useIsFocused();
     const [members, setMembers] = useState();
     useEffect(async () => {
