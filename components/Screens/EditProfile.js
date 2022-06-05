@@ -58,7 +58,7 @@ export default function EditProfile({navigation}) {
                     My Profile
                 </Text>
                 <PhotoPickerWithMenu
-                    avatarIcon='home'
+                    avatarIcon='person'
                     image={image}
                     setImageBase64={setImageBase64}
                     setImage={setImage}/>

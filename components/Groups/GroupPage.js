@@ -20,9 +20,6 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import placeholder from "../../utils/images/userPlaceholder.jpg";
 import { categoryIdToImage } from "../categoriesMapper";
 
-
-
-
 export default function GroupPage({ route, navigation }) {
   const group = route.params.group;
   const groupId = group.group_id;
@@ -162,7 +159,6 @@ export default function GroupPage({ route, navigation }) {
   }
   return (
       <View style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-
         <View style={{ display: "flex", flexDirection: "row", margin: 4, justifyContent: "space-between" }}>
           <View style={{ display: "flex", flexDirection: "row", margin: 4}}>
             <Switch
@@ -175,7 +171,6 @@ export default function GroupPage({ route, navigation }) {
           <FontAwesome color="#2089dc" size={30} name="trophy" onPress={navigateToGoalsPage}/>
         </View>
         <ScrollView contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}>
-
           {!isLoading &&
           tasks.length ? tasks.map((task, i) => (
                   (isSwitchChecked && (Number(task.user_id) == Number(me.id)) || !isSwitchChecked) &&
