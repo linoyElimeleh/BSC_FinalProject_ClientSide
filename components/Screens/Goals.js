@@ -6,6 +6,8 @@ import { useIsFocused } from "@react-navigation/native";
 import {GetMeDetails} from "../../services/userService";
 import {UsersScoresByGroupID} from "../../services/ScoresServices";
 import trophy from '../../utils/images/trophy.png'
+import trophy2 from '../../utils/images/trophy2.png'
+import trophy3 from '../../utils/images/trophy3.png'
 
 export default function Goals({route}) {
     const groupId = route.params.groupId;
@@ -20,7 +22,6 @@ export default function Goals({route}) {
         let meResponse = await GetMeDetails();
         setUser(meResponse);
         let usersScoreResponse = await UsersScoresByGroupID(groupId);
-        console.log(usersScoreResponse);
         const members = usersScoreResponse.members
         setData(members);
         if(members.length == 0){
@@ -44,7 +45,7 @@ export default function Goals({route}) {
             <View colors={[, '#6db5ed', '#1695b7']}
                   style={{ backgroundColor: '#2089dc', padding: 15, paddingTop: 35, alignItems: 'center' }}>
                 {noScores &&
-                    <View>
+                    <View style={{ backgroundColor: '#ffffff' }}>
                         <Text style={{ color: 'white', fontSize: 25, flex: 1, textAlign: 'center' }}>
                             There are no tasks!
                             Go on and create some
@@ -62,6 +63,14 @@ export default function Goals({route}) {
                         {userRank === 1 &&
                             <Image style={{height:60, width:60, resizeMode: 'contain'}}
                                    source={trophy}/>
+                        }
+                        {userRank === 2 &&
+                            <Image style={{height:50, width:50, resizeMode: 'contain'}}
+                                   source={trophy2}/>
+                        }
+                        {userRank === 3 &&
+                            <Image style={{height:50, width:50, resizeMode: 'contain'}}
+                                   source={trophy3}/>
                         }
                         <Text style={{ color: 'white', fontSize: 25, flex: 1, textAlign: 'center', marginLeft: 40 }}>
                             You have {userScore} pts

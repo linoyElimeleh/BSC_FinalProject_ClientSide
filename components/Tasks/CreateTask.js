@@ -420,7 +420,7 @@ export default function CreateTask({ navigation, route }) {
             </ListItem>
           </RNPickerSelect>
         </View>
-        <View >
+        <View>
           <RNPickerSelect
               onValueChange={(value) => {
                 setScore(value)
@@ -434,11 +434,11 @@ export default function CreateTask({ navigation, route }) {
               <ListItem.Content>
                 <ListItem.Title>
                   {<Icon name="repeat" size={20} />}
-                  Repeat
+                  Level
                 </ListItem.Title>
                 <ListItem.Subtitle right>
                   {
-                    levels.find((repeatType) => repeatType.value === repeat)
+                    levels.find((level) => level.value === score)
                         ?.label
                   }
                 </ListItem.Subtitle>

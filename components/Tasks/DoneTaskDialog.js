@@ -1,24 +1,22 @@
 import React, { useCallback, useState } from 'react';
-// import { Dialog } from '@rneui/themed';
 import { View, Text, StyleSheet } from 'react-native';
 import Dialog from "react-native-dialog";
 
-export default function DeleteTaskDialog({setIsVisible, handleDelete }) {
+export default function DoneTaskDialog({ setIsVisible, handleOkPress, points }) {
 
-  const onDelete = useCallback(() => {
-    handleDelete();
+  const onOkClick = useCallback(() => {
+    handleOkPress();
     setIsVisible(false);
-  }, [setIsVisible, handleDelete]);
+  }, [setIsVisible, handleOkPress]);
 
   return (
     <View style={styles.container}>
       <Dialog.Container visible={true}>
-        <Dialog.Title>Task Delete</Dialog.Title>
+        <Dialog.Title>Done Task!</Dialog.Title>
         <Dialog.Description>
-          Do you want to delete this task? You cannot undo this action.
+          You have earned {points} pts!
         </Dialog.Description>
-        <Dialog.Button label="Cancel" onPress={() => setIsVisible(false)} />
-        <Dialog.Button label="Delete" onPress={onDelete} />
+        <Dialog.Button label="OK" onPress={onOkClick} />
       </Dialog.Container>
     </View>
   )

@@ -19,6 +19,7 @@ import RejectTaskDialog from "../Tasks/RejectTask";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import placeholder from "../../utils/images/userPlaceholder.jpg";
 import { categoryIdToImage } from "../categoriesMapper";
+import DoneTaskDialog from "../Tasks/DoneTaskDialog";
 
 export default function GroupPage({ route, navigation }) {
   const group = route.params.group;
@@ -27,6 +28,7 @@ export default function GroupPage({ route, navigation }) {
   const [tasks, setTasks] = useState();
   const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
   const [isRejectDialogVisible, setIsRejectDialogVisible] = useState(false);
+  const [isDoneDialogVisible, setIsDoneDialogVisible] = useState(false);
   const [isSwitchChecked, setIsSwitchChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentTask, setCurrentTask] = useState();
@@ -148,6 +150,11 @@ export default function GroupPage({ route, navigation }) {
     navigation.navigate('GroupLeaderboard',{groupId: groupId, name:group.name,image:group.image,group})
   }
 
+  const openDoneDialog = () => {
+    setIsDoneDialogVisible(true)
+    refRBSheet.current.close()
+  }
+
   const openDeleteDialog = () => {
     setIsDeleteDialogVisible(true)
     refRBSheet.current.close()
@@ -218,7 +225,7 @@ export default function GroupPage({ route, navigation }) {
             openRejectDialog={openRejectDialog}
             refRBSheet={refRBSheet}
             handleAssign={handleAssign}
-            handleDone={handleDone}
+            handleDone={openDoneDialog}
             handleEdit={handleEdit}
             userId={currentTask ? currentTask.user_id : null}
         />
@@ -234,6 +241,10 @@ export default function GroupPage({ route, navigation }) {
         {isDeleteDialogVisible &&
             <DeleteTaskDialog isVisible={isDeleteDialogVisible}
                               setIsVisible={setIsDeleteDialogVisible} handleDelete={handleDelete} />
+        }
+
+        {isDoneDialogVisible &&
+            <DoneTaskDialog setIsVisible={setIsDoneDialogVisible} handleOkPress={handleDone} points={currentTask.score}/>
         }
 
         {isRejectDialogVisible &&
