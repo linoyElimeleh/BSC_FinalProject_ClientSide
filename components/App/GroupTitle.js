@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import {View, Image, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
+import {View, Image} from 'react-native'
 import { Text} from 'react-native-elements'
 import tw from 'tailwind-react-native-classnames'
 import placeholder from '../../utils/images/groupPlaceholder.jpg'
 import {GetGroupMembers} from "../../services/groupsService";
 import {useIsFocused} from "@react-navigation/native";
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 const GroupTitle = ({groupId, groupName,groupImage, navigation}) => {
@@ -17,11 +16,6 @@ const GroupTitle = ({groupId, groupName,groupImage, navigation}) => {
         let membersString = membersNames?.join(', ');
         setMembers(membersString);
     },[isFocused]);
-
-    const handlePress = () => {
-        console.log('hey')
-        navigation.navigate("GroupLeaderboard",{id: groupId, name:groupName,image:groupImage})
-    }
 
     return (
         <View style={[tw`flex flex-row justify-around items-center h-16 p-2`,{
