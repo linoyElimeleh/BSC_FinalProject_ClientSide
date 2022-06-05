@@ -35,7 +35,7 @@ export const SetStatusTask = async (groupID,statusJson) => {
         const response = await fetch(`${configData.SERVER_URL}/groups/${groupID}/task/set_status`,
             {
                 method: 'PUT',
-                body: JSON.stringify({task: statusJson})
+                body: JSON.stringify(statusJson)
             });
            return response.status
     } catch (error) {
