@@ -12,7 +12,6 @@ export default function DeleteTaskDialog({ isVisible, setIsVisible, handleDelete
 
   return (
     <View style={styles.container}>
-      {/* {console.log("delete dialog "+isVisible)} */}
       <Dialog.Container visible={true}>
         <Dialog.Title>Task Delete</Dialog.Title>
         <Dialog.Description>

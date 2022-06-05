@@ -10,6 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@babel/plugin-proposal-optional-chaining": "^7.17.12",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-async-storage/async-storage": "~1.15.0",
@@ -24,7 +25,8 @@
     "@rneui/themed": "^4.0.0-rc.2",
     "eslint": "^8.13.0",
     "expo": "~44.0.0",
-    "expo-dev-client": "^0.9.6",
+    "expo-cli": "^5.4.8",
+    "expo-dev-client": "~0.8.5",
     "expo-device": "^4.1.1",
     "expo-image-picker": "~12.0.1",
     "expo-notifications": "^0.14.1",
@@ -32,6 +34,7 @@
     "expo-status-bar": "~1.2.0",
     "expo-task-manager": "^10.1.1",
     "fetch-intercept": "^2.4.0",
+    "g": "^2.0.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",

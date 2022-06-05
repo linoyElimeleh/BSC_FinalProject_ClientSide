@@ -4,10 +4,10 @@ import GroupTitle from '../App/GroupTitle'
 import CreateTask from "../Tasks/CreateTask";
 import {HeaderBackButton} from "@react-navigation/elements";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Goals from "./Goals";
 
 const Stack = createNativeStackNavigator();
 export default function Home() {
-
     return (
         <Stack.Navigator
             screenOptions={{
@@ -32,19 +32,23 @@ export default function Home() {
                         }
                     )
                 }
-
             />
             <Stack.Screen
                 name="Group"
                 component={GroupPage}
-                options={({route})=> ({
-                    headerTitle: () => <GroupTitle groupId={route.params.id} groupName={route.params.name} groupImage={route.params.image}/>,
+                options={({route,navigation})=> ({
+                    headerTitle: () => <GroupTitle groupId={route.params.id} groupName={route.params.name} groupImage={route.params.image} navigation={navigation}/>,
                     headerBackTitleVisible: false,
                 })}
-
-
             />
-
+            <Stack.Screen
+                name="GroupLeaderboard"
+                component={Goals}
+                options={({route})=> ({
+                    headerTitle: () => <GroupTitle groupId={route.params.groupId} groupName={route.params.name} groupImage={route.params.image} />,
+                    headerBackTitleVisible: false,
+                })}
+            />
             <Stack.Screen
                 name="Create Group"
                 component={AddGroup}

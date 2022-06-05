@@ -32,6 +32,12 @@ const repeatData = [
   { label: "Monthly", value: 3 },
 ];
 
+const levels = [
+  { label: "EASY", value: 50 },
+  { label: "MEDIUM", value: 100 },
+  { label: "HARD", value: 200 },
+];
+
 const IOS_DISPLAY = Object.freeze({
   default: "default",
   spinner: "spinner",
@@ -63,6 +69,7 @@ export default function CreateTask({ navigation, route }) {
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [score, setScore] = useState(0);
+  const [level, setLevel] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   const [fromDate, setFromDate] = useState(new Date());
@@ -183,7 +190,7 @@ export default function CreateTask({ navigation, route }) {
       endDate,
       repeat,
       snooze,
-      score,
+      level,
       urgent,
     };
     handleTaskAction(
@@ -413,14 +420,33 @@ export default function CreateTask({ navigation, route }) {
             </ListItem>
           </RNPickerSelect>
         </View>
-        <View style={{ width: "50%" }}>
-          <Input
-            leftIcon={{ type: "font-awesome", name: "gamepad" }}
-            placeholder="score (1 to 100)"
-            onChangeText={onUpdateScore}
-          />
+        <View >
+          <RNPickerSelect
+              onValueChange={(value) => {
+                setScore(value)
+                const label = levels.find((level) => level.value == value)
+                    ?.label
+                setLevel(label);
+              }}
+              items={levels}
+          >
+            <ListItem bottomDivider>
+              <ListItem.Content>
+                <ListItem.Title>
+                  {<Icon name="repeat" size={20} />}
+                  Repeat
+                </ListItem.Title>
+                <ListItem.Subtitle right>
+                  {
+                    levels.find((repeatType) => repeatType.value === repeat)
+                        ?.label
+                  }
+                </ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+          </RNPickerSelect>
         </View>
-        <Text style={{ marginRight: 5 }}>Rejection points: {score * 0.25}</Text>
+        <Text style={{ marginRight: 5 }}>Rejection points: {score * 1.5}</Text>
         <View style={{ alignItems: "center", marginTop: "10%" }}>
           <Button
             title={"Create Task"}
