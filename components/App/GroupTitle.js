@@ -32,9 +32,9 @@ const GroupTitle = ({groupId, groupName,groupImage, navigation}) => {
                 <Text numberOfLines={1}  style={[tw`px-5 font-bold text-white`]}>
                     {groupName}
                 </Text>
-                <Text numberOfLines={1}  style={[tw`px-5 text-white`]}>
-                    {members}
-                </Text>
+                    <Text numberOfLines={1} ellipsizeMode="tail" style={[tw`px-5 text-white flex`,{width:200}]}>
+                        {members}
+                    </Text>
             </View>
         </View>
     )
