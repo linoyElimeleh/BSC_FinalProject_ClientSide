@@ -11,6 +11,7 @@ export default function BottomSheetGroups({
   handleEdit,
   refRBSheet,
   userId,
+  meId,
 }) {
   return (
     <View>
@@ -26,7 +27,7 @@ export default function BottomSheetGroups({
             backgroundColor: "transparent",
           },
         }}
-        height={450}
+       height={400}
       >
         <View style={styles.header}>
           <View style={styles.panelHeader}>
@@ -37,7 +38,7 @@ export default function BottomSheetGroups({
           <View style={{ alignItems: "center" }}>
             <Text style={styles.panelTitle}>Task Actions</Text>
           </View>
-          <TouchableOpacity
+          {userId==meId && (<TouchableOpacity
             style={styles.panelButton}
             onPress={() => {
               refRBSheet.current.close();
@@ -45,7 +46,7 @@ export default function BottomSheetGroups({
             }}
           >
             <Text style={styles.panelButtonTitle}>Done!</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>)}
           {!userId && (
             <TouchableOpacity
               style={styles.panelButton}
@@ -75,7 +76,7 @@ export default function BottomSheetGroups({
           >
             <Text style={styles.panelButtonTitle}>Delete</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {userId==meId&&(<TouchableOpacity
             style={styles.panelButton}
             onPress={() => {
               refRBSheet.current.close();
@@ -83,7 +84,7 @@ export default function BottomSheetGroups({
             }}
           >
             <Text style={styles.panelButtonTitle}>Reject</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>)}
         </View>
       </RBSheet>
     </View>
