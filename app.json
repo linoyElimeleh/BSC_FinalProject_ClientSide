@@ -4,7 +4,10 @@
     "slug": "app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/todo2.png",
+    "notification": {
+      "icon": "./assets/todo2.png"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
