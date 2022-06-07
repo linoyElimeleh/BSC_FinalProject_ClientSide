@@ -38,9 +38,12 @@ export default function EditProfile({navigation}) {
 
     const handleSubmit = async () =>{
         setIsLoading(true);
-        const form = createImageFormData(image, imageBase64)
-        const imageRes = await uploadImage(form);
-        const imagePath = imageRes.path;
+        let imagePath;
+        if(image != ""){
+            const form = createImageFormData(image, imageBase64)
+            const imageRes = await uploadImage(form);
+            imagePath = imageRes.path;
+        }
         const response = await editProfile(userName, imagePath? imagePath:imagePath , birthDate)
         setIsLoading(false);
         if(response.ok){

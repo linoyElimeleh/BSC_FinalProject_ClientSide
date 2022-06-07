@@ -128,7 +128,7 @@ export default function GroupPage({ route, navigation }) {
     };
 
     const handleEdit = () => {
-        navigation.navigate("Create Task", { isEdit: true, task: currentTask });
+        navigation.navigate("Task", { isEdit: true, task: currentTask });
     };
 
     const handleBottomSheetRequsts = (response) => {
@@ -307,7 +307,7 @@ export default function GroupPage({ route, navigation }) {
         color="#00aced"
         style={{ bottom: 50, right: 30, position: "absolute", zIndex: 200 }}
         onPress={() => {
-          navigation.navigate("Create Task", group);
+          navigation.navigate("Task", group);
         }}
       />
 

@@ -58,7 +58,7 @@ export default function Home() {
                 component={JoinGroup}
             />
             <Stack.Screen
-                name="Create Task"
+                name="Task"
                 component={CreateTask}
             />
             <Stack.Screen
