@@ -157,7 +157,6 @@ export default function CreateTask({ navigation, route }) {
       const categoriesPromise = categoriesService.getCategories();
 
       categoriesPromise.then((categories) => {
-        // console.log(categories)
         const names = categories?.map(({ title, id }) => ({
           label: title,
           value: id,
@@ -449,7 +448,7 @@ export default function CreateTask({ navigation, route }) {
         <Text style={{ marginRight: 5 }}>Rejection points: {score * 1.5}</Text>
         <View style={{ alignItems: "center", marginTop: "10%" }}>
           <Button
-            title={"Create Task"}
+            title={route.params?.isEdit? "Edit Task":"Create Task" }
             containerStyle={{
               width: 200,
               marginHorizontal: 50,
