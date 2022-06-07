@@ -11,6 +11,7 @@ import {uploadImage} from "../../services/ImageUploadService";
 
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
+    const [imagePath, setImagePath] = useState(null);
     const [image, setImage] = useState(null);
     const [imageBase64, setImageBase64] = useState(null);
     const [initialUserName, setInitialUserName] = useState("");
@@ -24,7 +25,7 @@ export default function EditProfile({navigation}) {
         let response = await GetMeDetails();
         setUserName(response.display_name);
         setEmail(response.email);
-        setImage(response.image)
+        setImagePath(response.image)
         const date = new Date(response.birth_date);
         const formattedDate = formatDate(date);
         setBirthDate(formattedDate);
@@ -38,11 +39,10 @@ export default function EditProfile({navigation}) {
 
     const handleSubmit = async () =>{
         setIsLoading(true);
-        let imagePath;
-        if(image != ""){
+        if(image != "" && image){
             const form = createImageFormData(image, imageBase64)
             const imageRes = await uploadImage(form);
-            imagePath = imageRes.path;
+            setImagePath(imageRes.path);
         }
         const response = await editProfile(userName, imagePath? imagePath:imagePath , birthDate)
         setIsLoading(false);
@@ -62,7 +62,7 @@ export default function EditProfile({navigation}) {
                 </Text>
                 <PhotoPickerWithMenu
                     avatarIcon='person'
-                    image={image}
+                    image={imagePath}
                     setImageBase64={setImageBase64}
                     setImage={setImage}/>
                 <Input
