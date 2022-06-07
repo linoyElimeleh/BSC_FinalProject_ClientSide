@@ -277,6 +277,16 @@ export default function GroupPage({ route, navigation }) {
                       />
                     </Avatar>
                   </View>
+                  <Text style={{
+                                marginTop: 5,
+                                marginLeft: "60%",
+                                fontSize: 16,
+                            }}>{task.score} pt</Text>
+                            <Text style={{
+                                marginTop: 5,
+                                marginLeft: "60%",
+                                fontSize: 16,
+                            }}>{String(task.due_date).substring(5, 10).split("-").reverse().join(".")}</Text>
                 </Card>
               )
           )
