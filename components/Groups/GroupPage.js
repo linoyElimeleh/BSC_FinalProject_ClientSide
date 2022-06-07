@@ -46,8 +46,8 @@ export default function GroupPage({ route, navigation }) {
     useEffect(() => {
         const GroupMembers = async () => {
             try {
-                let response = await GetGroupMembers(groupId);
-                setMembers(response);
+                let response = groupId && await GetGroupMembers(groupId);
+                response && setMembers(response);
             } catch (error) {
                 // console.error(JSON.stringify(error));
             }
@@ -263,9 +263,9 @@ export default function GroupPage({ route, navigation }) {
                     <Avatar
                       size={64}
                       rounded
-                      source={members.find(member => 
+                      source={members && members.find && members.find(member => 
                         member.id == task.user_id)?.image ? 
-                        { uri: members.find(member => member.id == task.user_id)?.image } :
+                        { uri: members && members.find && members.find(member => member.id == task.user_id)?.image } :
                          placeholder}
                       
                     >

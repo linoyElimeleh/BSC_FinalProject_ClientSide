@@ -11,7 +11,7 @@ const GroupTitle = ({groupId, groupName,groupImage, navigation}) => {
     const isFocused = useIsFocused();
     const [members, setMembers] = useState();
     useEffect(async () => {
-        let response = await GetGroupMembers(groupId);
+        let response = groupId && await GetGroupMembers(groupId);
         let membersNames = response && response.map && response.map(({display_name}) => (display_name))
         let membersString = membersNames?.join(', ');
         setMembers(membersString);
