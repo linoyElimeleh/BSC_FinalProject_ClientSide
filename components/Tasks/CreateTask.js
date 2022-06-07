@@ -144,7 +144,7 @@ export default function CreateTask({ navigation, route }) {
 
   useEffect(() => {
     if (isFocused) {
-      const membersPromise = groupId && groupService.getGroupMembers(groupId);
+      const membersPromise = groupService.getGroupMembers(groupId);
 
       membersPromise?.then((members) => {
         const notAssigned = [{ label: "Not assigned", value: -1 }];

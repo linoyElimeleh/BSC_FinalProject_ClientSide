@@ -46,7 +46,7 @@ export default function GroupPage({ route, navigation }) {
     useEffect(() => {
         const GroupMembers = async () => {
             try {
-                let response = groupId && await GetGroupMembers(groupId);
+                let response = await GetGroupMembers(groupId);
                 response && setMembers(response);
             } catch (error) {
                 // console.error(JSON.stringify(error));

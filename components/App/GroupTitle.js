@@ -6,12 +6,11 @@ import placeholder from '../../utils/images/groupPlaceholder.jpg'
 import {GetGroupMembers} from "../../services/groupsService";
 import {useIsFocused} from "@react-navigation/native";
 
-
 const GroupTitle = ({groupId, groupName,groupImage, navigation}) => {
     const isFocused = useIsFocused();
     const [members, setMembers] = useState();
     useEffect(async () => {
-        let response = groupId && await GetGroupMembers(groupId);
+        let response = await GetGroupMembers(groupId);
         let membersNames = response && response.map && response.map(({display_name}) => (display_name))
         let membersString = membersNames?.join(', ');
         setMembers(membersString);
