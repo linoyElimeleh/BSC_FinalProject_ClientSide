@@ -428,9 +428,9 @@ export default function CreateTask({ navigation, route }) {
           <RNPickerSelect
               onValueChange={(value) => {
                 setScore(value)
-                const label = levels.find((level) => level.value == value)
+                const label = levels.find((level) => level.value === value)
                     ?.label
-                setLevel(label);
+                setLevel(value);
               }}
               items={levels}
               value={level || levels[0]}
