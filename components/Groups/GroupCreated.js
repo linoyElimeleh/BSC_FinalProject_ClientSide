@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Clipboard } from 'react-native'
-import { Image, Text, Input, Button, useTheme, Avatar } from 'react-native-elements';
+import { Irmage, Text, Input, Button, useTheme, Avatar } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/FontAwesome';
 

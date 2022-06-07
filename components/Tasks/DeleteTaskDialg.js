@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Dialog from "react-native-dialog";
 
-export default function DeleteTaskDialog({ isVisible, setIsVisible, handleDelete }) {
+export default function DeleteTaskDialog({setIsVisible, handleDelete }) {
 
   const onDelete = useCallback(() => {
     handleDelete();
@@ -12,7 +12,6 @@ export default function DeleteTaskDialog({ isVisible, setIsVisible, handleDelete
 
   return (
     <View style={styles.container}>
-      {/* {console.log("delete dialog "+isVisible)} */}
       <Dialog.Container visible={true}>
         <Dialog.Title>Task Delete</Dialog.Title>
         <Dialog.Description>

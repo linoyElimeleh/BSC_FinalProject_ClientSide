@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Dialog from "react-native-dialog";
 import { View, Text, StyleSheet } from 'react-native';
 import { UserTotalScore, UsersScoresByGroupID } from '../../services/ScoresServices'
@@ -45,6 +45,12 @@ export default function RejectTaskDialog({ task, setIsVisible, handleReject, me,
         }
     }, [userPoints, arrayOfMemberPoints])
 
+    const onReject = useCallback(async () => {
+        await handleReject(task);
+        setIsVisible(false);
+      },
+      [handleReject]);
+    
     return (
         <View style={styles.container}>
             {finish &&
@@ -52,13 +58,13 @@ export default function RejectTaskDialog({ task, setIsVisible, handleReject, me,
 
                     <Dialog.Title>Reject Task</Dialog.Title>
                     <Dialog.Description>
-                        now you have {userPoints} points and your current rating is {userPosition} ,
+                        now you have {userPoints} points and your current position is {userPosition} ,
                         after the reject you will be in the {userPositionAfterReject} position
                         with {userPoints - task.score / 4} points.
                         Are you sure you want to reject the task?
                     </Dialog.Description>
+                    <Dialog.Button label="Reject" onPress={onReject}/>
                     <Dialog.Button label="Cancel" onPress={() => setIsVisible(false)}/>
-                    <Dialog.Button label="Reject" onPress={() => setIsVisible(false)}/>
                 </Dialog.Container>
             }
         </View>

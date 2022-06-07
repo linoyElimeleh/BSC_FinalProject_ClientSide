@@ -44,9 +44,12 @@ export default function SignUp({ navigation, route }) {
 
     const HandleSubmit = async () => {
         setIsLoading(true);
-        const form = createImageFormData(image, imageBase64)
-        const imageRes = await uploadImage(form);
-        const imagePath = imageRes.path;
+        let imagePath;
+        if(image != ""){
+            const form = createImageFormData(image, imageBase64)
+            const imageRes = await uploadImage(form);
+            imagePath = imageRes.path;
+        }
         const registerRequest = {
             email: email,
             password: password,

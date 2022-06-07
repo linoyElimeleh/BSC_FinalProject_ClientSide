@@ -33,7 +33,6 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: "white",
     primary: "#FFFFFF",
     background: "#FFFFFF",
   },
