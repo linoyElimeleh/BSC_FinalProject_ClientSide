@@ -12,10 +12,10 @@ import {
 import { GetGroupMembers, GetGroupTasks } from "../../services/groupsService";
 import { GetMeDetails } from "../../services/userService";
 import {
-  DeleteTask,
-  AssignTask,
-  SetStatusTask,
-  RejectTask,
+    DeleteTask,
+    AssignTask,
+    SetStatusTask,
+    RejectTask,
 } from "../../services/TasksServices";
 import BottomSheetGroups from "./BottomSheet";
 import { useIsFocused } from "@react-navigation/native";
@@ -27,19 +27,19 @@ import { categoryIdToImage } from "../categoriesMapper";
 import DoneTaskDialog from "../Tasks/DoneTaskDialog";
 
 export default function GroupPage({ route, navigation }) {
-  const group = route.params.group;
-  const groupId = group.group_id;
-  const [members, setMembers] = useState([]);
-  const [tasks, setTasks] = useState();
-  const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
-  const [isRejectDialogVisible, setIsRejectDialogVisible] = useState(false);
-  const [isDoneDialogVisible, setIsDoneDialogVisible] = useState(false);
-  const [isSwitchChecked, setIsSwitchChecked] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentTask, setCurrentTask] = useState();
-  const [me, setMe] = useState();
-  const isFocused = useIsFocused();
-  const refRBSheet = useRef();
+    const group = route.params.group;
+    const groupId = group.group_id;
+    const [members, setMembers] = useState([]);
+    const [tasks, setTasks] = useState();
+    const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
+    const [isRejectDialogVisible, setIsRejectDialogVisible] = useState(false);
+    const [isDoneDialogVisible, setIsDoneDialogVisible] = useState(false);
+    const [isSwitchChecked, setIsSwitchChecked] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [currentTask, setCurrentTask] = useState();
+    const [me, setMe] = useState();
+    const isFocused = useIsFocused();
+    const refRBSheet = useRef();
 
     const colors = { 1: "#B4FF9F", 2: "#F9FFA4", 3: "#FFD59E", 0: "#FFA1A1" };
 
@@ -129,7 +129,7 @@ export default function GroupPage({ route, navigation }) {
 
     const handleEdit = () => {
         navigation.navigate("Create Task", { isEdit: true, task: currentTask });
-      };
+    };
 
     const handleBottomSheetRequsts = (response) => {
         if (response.status > 300) {
@@ -140,38 +140,38 @@ export default function GroupPage({ route, navigation }) {
         }
     };
 
-  const handleReject = useCallback(
-    async (task) => {
-      setIsLoading(true);
-      let response = await RejectTask(groupId, task);
-      handleBottomSheetRequsts(response);
-    },
-    [handleBottomSheetRequsts, groupId]
-  );
+    const handleReject = useCallback(
+        async (task) => {
+            setIsLoading(true);
+            let response = await RejectTask(groupId, task);
+            handleBottomSheetRequsts(response);
+        },
+        [handleBottomSheetRequsts, groupId]
+    );
 
-  const navigateToGoalsPage = () => {
-    navigation.navigate("GroupLeaderboard", {
-      groupId: groupId,
-      name: group.name,
-      image: group.image,
-      group,
-    });
-  };
+    const navigateToGoalsPage = () => {
+        navigation.navigate("GroupLeaderboard", {
+            groupId: groupId,
+            name: group.name,
+            image: group.image,
+            group,
+        });
+    };
 
-  const openDoneDialog = () => {
-    setIsDoneDialogVisible(true);
-    refRBSheet.current.close();
-  };
+    const openDoneDialog = () => {
+        setIsDoneDialogVisible(true);
+        refRBSheet.current.close();
+    };
 
-  const openDeleteDialog = () => {
-    setIsDeleteDialogVisible(true);
-    refRBSheet.current.close();
-  };
-  const openRejectDialog = () => {
-    setIsRejectDialogVisible(true);
-    refRBSheet.current.close();
-  };
-  return (
+    const openDeleteDialog = () => {
+        setIsDeleteDialogVisible(true);
+        refRBSheet.current.close();
+    };
+    const openRejectDialog = () => {
+        setIsRejectDialogVisible(true);
+        refRBSheet.current.close();
+    };
+    return (
     <View style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <View
         style={{
@@ -263,14 +263,11 @@ export default function GroupPage({ route, navigation }) {
                     <Avatar
                       size={64}
                       rounded
-                      source={
-                        members &&
-                        members.find &&
-                        members.find((member) => member.id == task.user_id)
-                          ?.image
-                          ? { uri: me.image }
-                          : placeholder
-                      }
+                      source={members.find(member => 
+                        member.id == task.user_id)?.image ? 
+                        { uri: members.find(member => member.id == task.user_id)?.image } :
+                         placeholder}
+                      
                     >
                       <Avatar.Accessory
                         size={30}
@@ -314,32 +311,38 @@ export default function GroupPage({ route, navigation }) {
         }}
       />
 
-      {isDeleteDialogVisible && (
-        <DeleteTaskDialog
-          isVisible={isDeleteDialogVisible}
-          setIsVisible={setIsDeleteDialogVisible}
-          handleDelete={handleDelete}
-        />
-      )}
+      {
+        isDeleteDialogVisible && (
+            <DeleteTaskDialog
+                isVisible={isDeleteDialogVisible}
+                setIsVisible={setIsDeleteDialogVisible}
+                handleDelete={handleDelete}
+            />
+        )
+    }
 
-      {isDoneDialogVisible && (
-        <DoneTaskDialog
-          setIsVisible={setIsDoneDialogVisible}
-          handleOkPress={handleDone}
-          points={currentTask.score}
-        />
-      )}
+    {
+        isDoneDialogVisible && (
+            <DoneTaskDialog
+                setIsVisible={setIsDoneDialogVisible}
+                handleOkPress={handleDone}
+                points={currentTask.score}
+            />
+        )
+    }
 
-      {isRejectDialogVisible && (
-        <RejectTaskDialog
-          task={currentTask}
-          isVisible={isRejectDialogVisible}
-          setIsVisible={setIsRejectDialogVisible}
-          handleReject={handleReject}
-          me={me}
-          groupID={groupId}
-        />
-      )}
-    </View>
+    {
+        isRejectDialogVisible && (
+            <RejectTaskDialog
+                task={currentTask}
+                isVisible={isRejectDialogVisible}
+                setIsVisible={setIsRejectDialogVisible}
+                handleReject={handleReject}
+                me={me}
+                groupID={groupId}
+            />
+        )
+    }
+    </View >
   );
 }
