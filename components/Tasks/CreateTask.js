@@ -183,6 +183,7 @@ export default function CreateTask({ navigation, route }) {
     const dueDate = new Date(dueDateTimestamp).toLocaleString("en-US");
 
     const endDate = toDate.toLocaleString("en-US");
+    const lvl = levels.find(lvl => lvl.value === level);
     const task = {
       id: group?.task?.id ?? null,
       title,
@@ -193,9 +194,10 @@ export default function CreateTask({ navigation, route }) {
       endDate,
       repeat,
       snooze: snooze !== -1 ? snooze : null,
-      level,
+      level: lvl ? lvl.label : "EASY",
       urgent
     };
+
     handleTaskAction(
       task,
       groupId,
@@ -427,10 +429,9 @@ export default function CreateTask({ navigation, route }) {
         <View>
           <RNPickerSelect
               onValueChange={(value) => {
-                setScore(value)
-                const label = levels.find((level) => level.value === value)
-                    ?.label
-                setLevel(value);
+                setScore(value);
+                const selectedLevel = levels.find(level => level.value === value);
+                setLevel(selectedLevel.value);
               }}
               items={levels}
               value={level || levels[0]}

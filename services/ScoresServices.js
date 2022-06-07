@@ -14,6 +14,16 @@ export const UserTotalScore = async (userId) => {
     }
 };
 
+export const UserScoreByGroup = async (groupId) => {
+    try {
+        const response = await fetch(`${configData.SERVER_URL}/groups/${groupId}/user/score`);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        return (error)
+    }
+};
+
 export const UsersScoresByGroupID = async (groupId) => {
     try {
         const response = await fetch(`${configData.SERVER_URL}/scores/${groupId}/usersScores`,
