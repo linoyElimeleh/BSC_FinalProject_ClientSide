@@ -73,7 +73,7 @@ export default function Goals({route}) {
                                    source={trophy3}/>
                         }
                         <Text style={{ color: 'white', fontSize: 25, flex: 1, textAlign: 'center', marginLeft: 40 }}>
-                            You have {userScore} pts
+                            You have {userScore} points!
                         </Text>
                     </View>
                 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { View, StyleSheet, Platform, SafeAreaView } from "react-native";
 import {
   Text,
@@ -14,15 +14,16 @@ import { groupService, categoriesService } from "../../services";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
 import { handleTaskAction } from "../../services/taskService";
+
 const snoozeData = [
-  { label: "no snooze", value: -1 },
-  { label: "4m", value: 4 },
-  { label: "5m", value: 5 },
-  { label: "6m", value: 6 },
-  { label: "7m", value: 7 },
-  { label: "8m", value: 8 },
-  { label: "9m", value: 9 },
-  { label: "10m", value: 10 },
+  { label: "No snooze", value: -1 },
+  { label: "4 minutes", value: 4 },
+  { label: "5 minutes", value: 5 },
+  { label: "6 minutes", value: 6 },
+  { label: "7 minutes", value: 7 },
+  { label: "8 minutes", value: 8 },
+  { label: "9 minutes", value: 9 },
+  { label: "10 minutes", value: 10 },
 ];
 
 const repeatData = [
@@ -33,9 +34,9 @@ const repeatData = [
 ];
 
 const levels = [
-  { label: "EASY", value: 50 },
-  { label: "MEDIUM", value: 100 },
-  { label: "HARD", value: 200 },
+  { label: "Easy", value: 50 },
+  { label: "Medium", value: 100 },
+  { label: "Hard", value: 200 },
 ];
 
 const IOS_DISPLAY = Object.freeze({
@@ -64,7 +65,7 @@ export default function CreateTask({ navigation, route }) {
   const groupId = group?.task?.group_id || group?.group_id;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [taskOwner, setTaskOwner] = useState(null);
+  const [taskOwner, setTaskOwner] = useState(-1);
   const [category, setCategory] = useState(null);
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -78,24 +79,25 @@ export default function CreateTask({ navigation, route }) {
   const [timeExpanded, setTimeExpanded] = useState(false);
   const [dateExpanded, setDateExpanded] = useState(false);
   const [endsExpanded, setEndsExpanded] = useState(false);
-  const [display, setDisplay] = useState(DISPLAY_VALUES[1]);
   const [urgent, setUrgent] = useState(false);
   const [repeat, setRepeat] = useState(-1);
-  const [snooze, setSnooze] = useState(null);
+  const [snooze, setSnooze] = useState(-1);
   const [showEnds, setShowEnds] = useState(false);
+  const display = useMemo(() => DISPLAY_VALUES[1], []);
+  const isEdit = useMemo(() => route.params?.isEdit, []);
 
   useEffect(() => {
-    if (route.params?.isEdit) {
+    if (isEdit) {
       const task = route.params.task;
       setTitle(task.title);
       setDescription(task.description);
       //setCategories(task.category_id)
-      setTaskOwner(task.owner_id);
+      setTaskOwner(task.user_id);
       setUrgent(task.urgent);
-      //setFromDate(task.due_date)
-      //setTime(task.time)//no time
+      // setFromDate(new Date(task.due_date));
+      // setTime(new Date(task.time))//no time
       setRepeat(task.repeat);
-      setSnooze(task.snooze_interval);
+      setSnooze(task.snooze_interval || -1);
       setScore(task.score);
     }
     return () => {
@@ -114,8 +116,7 @@ export default function CreateTask({ navigation, route }) {
 
   const onSetFromDate = (event, selectedDate) => {
     if (selectedDate != null) {
-      const currentDate = selectedDate;
-      setFromDate(currentDate);
+      setFromDate(selectedDate);
     }
   };
 
@@ -146,7 +147,7 @@ export default function CreateTask({ navigation, route }) {
       const membersPromise = groupService.getGroupMembers(groupId);
 
       membersPromise.then((members) => {
-        const notAssigned = [{ label: "not assigned", value: -1 }];
+        const notAssigned = [{ label: "Not assigned", value: -1 }];
         const names = members?.map(({ display_name, id }) => ({
           label: display_name,
           value: id,
@@ -170,6 +171,10 @@ export default function CreateTask({ navigation, route }) {
     setScore(value);
   };
 
+  const handleAssigneeChange = (value) => {
+    setTaskOwner(value !== -1 ? value : null)
+  }
+
   const handleSubmit = () => {
     setIsLoading(true);
     const dueDateTimestamp = new Date(
@@ -178,7 +183,6 @@ export default function CreateTask({ navigation, route }) {
     const dueDate = new Date(dueDateTimestamp).toLocaleString("en-US");
 
     const endDate = toDate.toLocaleString("en-US");
-
     const task = {
       id: group?.task?.id ?? null,
       title,
@@ -188,9 +192,9 @@ export default function CreateTask({ navigation, route }) {
       dueDate,
       endDate,
       repeat,
-      snooze,
+      snooze: snooze !== -1 ? snooze : null,
       level,
-      urgent,
+      urgent
     };
     handleTaskAction(
       task,
@@ -245,8 +249,9 @@ export default function CreateTask({ navigation, route }) {
             </ListItem>
           </RNPickerSelect>
           <RNPickerSelect
-            onValueChange={(value) => setTaskOwner(value !== -1 ? value : null)}
+            onValueChange={handleAssigneeChange}
             items={users}
+            value={taskOwner || -1}
             // placeholder={{}}
           >
             <ListItem bottomDivider>
@@ -399,9 +404,9 @@ export default function CreateTask({ navigation, route }) {
             </ListItem.Accordion>
           )}
           <RNPickerSelect
-            onValueChange={(value) => setSnooze(value !== -1 ? value : null)}
+            onValueChange={(value) => setSnooze(value)}
             items={snoozeData}
-            // placeholder={{}}
+            value={snooze || -1}
           >
             <ListItem bottomDivider>
               <ListItem.Content>
@@ -428,11 +433,12 @@ export default function CreateTask({ navigation, route }) {
                 setLevel(label);
               }}
               items={levels}
+              value={level || levels[0]}
           >
             <ListItem bottomDivider>
               <ListItem.Content>
                 <ListItem.Title>
-                  {<Icon name="repeat" size={20} />}
+                  {<Icon name="stairs" size={20} />}
                   Level
                 </ListItem.Title>
                 <ListItem.Subtitle right>
@@ -448,7 +454,7 @@ export default function CreateTask({ navigation, route }) {
         <Text style={{ marginRight: 5 }}>Rejection points: {score * 1.5}</Text>
         <View style={{ alignItems: "center", marginTop: "10%" }}>
           <Button
-            title={route.params?.isEdit? "Edit Task":"Create Task" }
+            title={`${isEdit ? 'Edit' : 'Create' } Task`}
             containerStyle={{
               width: 200,
               marginHorizontal: 50,
