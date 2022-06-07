@@ -132,12 +132,10 @@ export default function GroupPage({ route, navigation }) {
     };
 
     const handleBottomSheetRequsts = (response) => {
-        if (response.status > 300) {
-        }
-        else {
-            setIsLoading(false);
-            UpdateGrouptasks();
-        }
+
+        setIsLoading(false);
+        UpdateGrouptasks();
+
     };
 
     const handleReject = useCallback(
@@ -172,187 +170,187 @@ export default function GroupPage({ route, navigation }) {
         refRBSheet.current.close();
     };
     return (
-    <View style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          margin: 4,
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={{ display: "flex", flexDirection: "row", margin: 4 }}>
-          <Switch
-            style={{ marginLeft: 5 }}
-            value={isSwitchChecked}
-            onValueChange={(value) => setIsSwitchChecked(value)}
-          />
-          <Text style={{ marginTop: "2%", fontWeight: "500", fontSize: 17 }}>
-            Only mine
-          </Text>
-        </View>
-        <FontAwesome
-          color="#2089dc"
-          size={30}
-          name="trophy"
-          onPress={navigateToGoalsPage}
-        />
-      </View>
-      <ScrollView
-        contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}
-      >
-        {!isLoading && tasks.length ? (
-          tasks.map(
-            (task, i) =>
-              ((isSwitchChecked && Number(task.user_id) == Number(me.id)) ||
-                !isSwitchChecked) && (
-                <Card
-                  containerStyle={{
-                    borderRadius: 25,
-                    backgroundColor: colors[i % 4],
-                    width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%",
-                  }}
-                  key={i}
-                >
-                  <Card.Title
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      paddingRight: "20%",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <View style={{ display: "flex", flexDirection: "row" }}>
-                      {!task.done && (
-                        <Icon
-                          name="more-vert"
-                          onPress={() => {
-                            setCurrentTask(task), refRBSheet.current.open();
-                          }}
-                        />
-                      )}
-                      <Text
-                        style={{
-                          marginTop: 5,
-                          fontWeight: "bold",
-                          fontSize: 16,
-                          color: task.done ? "grey" : "black",
-                          textDecorationLine: task.done
-                            ? "line-through"
-                            : "none",
-                        }}
-                      >
-                        {task.title}
-                      </Text>
-                      {task.done && (
-                        <FontAwesome name="check" color="green" size={25} />
-                      )}
-                    </View>
-                  </Card.Title>
-                  <Card.Divider />
-                  <Text
-                    style={{
-                      marginBottom: 10,
-                      color: task.done ? "grey" : "black",
-                      display: "flex",
-                    }}
-                  >
-                    {task.description}
-                  </Text>
-                  <View>
-                    <Avatar
-                      size={64}
-                      rounded
-                      source={members && members.find && members.find(member => 
-                        member.id == task.user_id)?.image ? 
-                        { uri: members && members.find && members.find(member => member.id == task.user_id)?.image } :
-                         placeholder}
-                      
+        <View style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+            <View
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    margin: 4,
+                    justifyContent: "space-between",
+                }}
+            >
+                <View style={{ display: "flex", flexDirection: "row", margin: 4 }}>
+                    <Switch
+                        style={{ marginLeft: 5 }}
+                        value={isSwitchChecked}
+                        onValueChange={(value) => setIsSwitchChecked(value)}
+                    />
+                    <Text style={{ marginTop: "2%", fontWeight: "500", fontSize: 17 }}>
+                        Only mine
+                    </Text>
+                </View>
+                <FontAwesome
+                    color="#2089dc"
+                    size={30}
+                    name="trophy"
+                    onPress={navigateToGoalsPage}
+                />
+            </View>
+            <ScrollView
+                contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}
+            >
+                {!isLoading && tasks.length ? (
+                    tasks.map(
+                        (task, i) =>
+                            ((isSwitchChecked && Number(task.user_id) == Number(me.id)) ||
+                                !isSwitchChecked) && (
+                                <Card
+                                    containerStyle={{
+                                        borderRadius: 25,
+                                        backgroundColor: colors[i % 4],
+                                        width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%",
+                                    }}
+                                    key={i}
+                                >
+                                    <Card.Title
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            paddingRight: "20%",
+                                            flexWrap: "wrap",
+                                        }}
+                                    >
+                                        <View style={{ display: "flex", flexDirection: "row" }}>
+                                            {!task.done && (
+                                                <Icon
+                                                    name="more-vert"
+                                                    onPress={() => {
+                                                        setCurrentTask(task), refRBSheet.current.open();
+                                                    }}
+                                                />
+                                            )}
+                                            <Text
+                                                style={{
+                                                    marginTop: 5,
+                                                    fontWeight: "bold",
+                                                    fontSize: 16,
+                                                    color: task.done ? "grey" : "black",
+                                                    textDecorationLine: task.done
+                                                        ? "line-through"
+                                                        : "none",
+                                                }}
+                                            >
+                                                {task.title}
+                                            </Text>
+                                            {task.done && (
+                                                <FontAwesome name="check" color="green" size={25} />
+                                            )}
+                                        </View>
+                                    </Card.Title>
+                                    <Card.Divider />
+                                    <Text
+                                        style={{
+                                            marginBottom: 10,
+                                            color: task.done ? "grey" : "black",
+                                            display: "flex",
+                                        }}
+                                    >
+                                        {task.description}
+                                    </Text>
+                                    <View>
+                                        <Avatar
+                                            size={64}
+                                            rounded
+                                            source={members && members.find && members.find(member =>
+                                                member.id == task.user_id)?.image ?
+                                                { uri: members && members.find && members.find(member => member.id == task.user_id)?.image } :
+                                                placeholder}
+
+                                        >
+                                            <Avatar.Accessory
+                                                size={30}
+                                                backgroundColor={"white"}
+                                                source={categoryIdToImage[task.category_id]}
+                                                padding={15}
+                                            />
+                                        </Avatar>
+                                    </View>
+                                    <Text style={{
+                                        marginTop: 5,
+                                        marginLeft: "60%",
+                                        fontSize: 16,
+                                    }}>{task.score} pt</Text>
+                                    <Text style={{
+                                        marginTop: 5,
+                                        marginLeft: "60%",
+                                        fontSize: 16,
+                                    }}>{String(task.due_date).substring(5, 10).split("-").reverse().join(".")}</Text>
+                                </Card>
+                            )
+                    )
+                ) : (
+                    <View
+                        style={{ display: "flex", alignItems: "center", width: "100%" }}
                     >
-                      <Avatar.Accessory
-                        size={30}
-                        backgroundColor={"white"}
-                        source={categoryIdToImage[task.category_id]}
-                        padding={15}
-                      />
-                    </Avatar>
-                  </View>
-                  <Text style={{
-                                marginTop: 5,
-                                marginLeft: "60%",
-                                fontSize: 16,
-                            }}>{task.score} pt</Text>
-                            <Text style={{
-                                marginTop: 5,
-                                marginLeft: "60%",
-                                fontSize: 16,
-                            }}>{String(task.due_date).substring(5, 10).split("-").reverse().join(".")}</Text>
-                </Card>
-              )
-          )
-        ) : (
-          <View
-            style={{ display: "flex", alignItems: "center", width: "100%" }}
-          >
-            <Text style={{ marginTop: 100, fontSize: 25 }}>No Tasks Yet</Text>
-            <Text style={{ marginTop: 10, fontSize: 15 }}>
-              create some new tasks by the plus
-            </Text>
-          </View>
-        )}
-      </ScrollView>
+                        <Text style={{ marginTop: 100, fontSize: 25 }}>No Tasks Yet</Text>
+                        <Text style={{ marginTop: 10, fontSize: 15 }}>
+                            create some new tasks by the plus
+                        </Text>
+                    </View>
+                )}
+            </ScrollView>
 
-      <BottomSheetGroups
-        openDeleteDialog={openDeleteDialog}
-        openRejectDialog={openRejectDialog}
-        refRBSheet={refRBSheet}
-        handleAssign={handleAssign}
-        handleDone={openDoneDialog}
-        handleEdit={handleEdit}
-        userId={currentTask ? currentTask.user_id : null}
-        meId={me?.id}
-      />
-      <FAB
-        icon={{ name: "add", color: "white" }}
-        color="#00aced"
-        style={{ bottom: 50, right: 30, position: "absolute", zIndex: 200 }}
-        onPress={() => {
-          navigation.navigate("Task", group);
-        }}
-      />
-
-      {
-        isDeleteDialogVisible && (
-            <DeleteTaskDialog
-                isVisible={isDeleteDialogVisible}
-                setIsVisible={setIsDeleteDialogVisible}
-                handleDelete={handleDelete}
+            <BottomSheetGroups
+                openDeleteDialog={openDeleteDialog}
+                openRejectDialog={openRejectDialog}
+                refRBSheet={refRBSheet}
+                handleAssign={handleAssign}
+                handleDone={openDoneDialog}
+                handleEdit={handleEdit}
+                userId={currentTask ? currentTask.user_id : null}
+                meId={me?.id}
             />
-        )
-    }
-
-    {
-        isDoneDialogVisible && (
-            <DoneTaskDialog
-                setIsVisible={setIsDoneDialogVisible}
-                handleOkPress={handleDone}
-                points={currentTask.score}
+            <FAB
+                icon={{ name: "add", color: "white" }}
+                color="#00aced"
+                style={{ bottom: 50, right: 30, position: "absolute", zIndex: 200 }}
+                onPress={() => {
+                    navigation.navigate("Task", group);
+                }}
             />
-        )
-    }
 
-    {
-        isRejectDialogVisible && (
-            <RejectTaskDialog
-                task={currentTask}
-                isVisible={isRejectDialogVisible}
-                setIsVisible={setIsRejectDialogVisible}
-                handleReject={handleReject}
-                me={me}
-                groupID={groupId}
-            />
-        )
-    }
-    </View >
-  );
+            {
+                isDeleteDialogVisible && (
+                    <DeleteTaskDialog
+                        isVisible={isDeleteDialogVisible}
+                        setIsVisible={setIsDeleteDialogVisible}
+                        handleDelete={handleDelete}
+                    />
+                )
+            }
+
+            {
+                isDoneDialogVisible && (
+                    <DoneTaskDialog
+                        setIsVisible={setIsDoneDialogVisible}
+                        handleOkPress={handleDone}
+                        points={currentTask.score}
+                    />
+                )
+            }
+
+            {
+                isRejectDialogVisible && (
+                    <RejectTaskDialog
+                        task={currentTask}
+                        isVisible={isRejectDialogVisible}
+                        setIsVisible={setIsRejectDialogVisible}
+                        handleReject={handleReject}
+                        me={me}
+                        groupID={groupId}
+                    />
+                )
+            }
+        </View >
+    );
 }
