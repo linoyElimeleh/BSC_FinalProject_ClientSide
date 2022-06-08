@@ -16,7 +16,7 @@ export default function RejectTaskDialog({
   const [userPoints, setUserPoints] = useState(0);
   const rejectPoints = useMemo(() => task.score * 1.5, [task.score]);
 
-  useEffect(async () => {Í
+  useEffect(async () => {
     let response = await UserScoreByGroup(groupID);
     setUserPoints(response?.score);
   }, []);
