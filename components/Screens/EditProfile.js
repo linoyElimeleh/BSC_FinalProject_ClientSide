@@ -12,6 +12,7 @@ import {uploadImage} from "../../services/ImageUploadService";
 export default function EditProfile({navigation}) {
     const {theme} = useTheme();
     const [image, setImage] = useState(null);
+    const [receivedImagePath, setReceivedImagePath] = useState(null);
     const [imageBase64, setImageBase64] = useState(null);
     const [initialUserName, setInitialUserName] = useState("");
     const [userName, setUserName] = useState("");
@@ -25,6 +26,7 @@ export default function EditProfile({navigation}) {
         setUserName(response.display_name);
         setEmail(response.email);
         setImage(response.image)
+        setReceivedImagePath(response.image);
         const date = new Date(response.birth_date);
         const formattedDate = formatDate(date);
         setBirthDate(formattedDate);
@@ -44,7 +46,7 @@ export default function EditProfile({navigation}) {
             const imageRes = await uploadImage(form);
             imagePath = imageRes.path;
         }
-        const response = await editProfile(userName, imagePath? imagePath:imagePath , birthDate)
+        const response = await editProfile(userName, imagePath? imagePath : receivedImagePath , birthDate)
         setIsLoading(false);
         if(response.ok){
             navigation.navigate('Profile');
