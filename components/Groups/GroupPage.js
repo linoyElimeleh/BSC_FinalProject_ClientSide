@@ -304,8 +304,6 @@ export default function GroupPage({ route, navigation }) {
                       .join(".")}
                   </Text>
                 </Card>})
-                
-                
               )
          : (
           <View
