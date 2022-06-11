@@ -431,7 +431,7 @@ export default function CreateTask({ navigation, route }) {
               onValueChange={(value) => {
                 setScore(value);
                 const selectedLevel = levels.find(level => level.value === value);
-                setLevel(selectedLevel.value);
+                setLevel(selectedLevel?.value);
               }}
               items={levels}
               value={level || levels[0]}
