@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/todo2.png",
+    "userInterfaceStyle": "light",
     "notification": {
       "icon": "./assets/todo2.png"
     },

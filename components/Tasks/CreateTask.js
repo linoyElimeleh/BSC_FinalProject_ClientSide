@@ -183,7 +183,7 @@ export default function CreateTask({ navigation, route }) {
       repeat,
       snooze: snooze !== -1 ? snooze : null,
       level: lvl ? lvl.label : "EASY",
-      urgent
+      urgent,
     };
     handleTaskAction(
       task,
@@ -310,7 +310,10 @@ export default function CreateTask({ navigation, route }) {
                 <Icon name="access-time" size={20} />
                 <ListItem.Content>
                   <ListItem.Title>Time</ListItem.Title>
-                  <ListItem.Subtitle>{time.getHours()}:{String(time.getMinutes()).padStart(2, "0")}</ListItem.Subtitle>
+                  <ListItem.Subtitle>
+                    {time.getHours()}:
+                    {String(time.getMinutes()).padStart(2, "0")}
+                  </ListItem.Subtitle>
                 </ListItem.Content>
               </>
             }
