@@ -94,23 +94,11 @@ export default function CreateTask({ navigation, route }) {
       //setCategories(task.category_id)
       setTaskOwner(task.user_id);
       setUrgent(task.urgent);
-      // setFromDate(new Date(task.due_date));
-      // setTime(new Date(task.time))//no time
+      setFromDate(new Date(task.due_date));
+      setTime(new Date(task.due_date));
       setRepeat(task.repeat);
       setSnooze(task.snooze_interval || -1);
       setScore(task.score);
-    }
-    return () => {
-      // setTitle("");
-      // setDescription("");
-      // //setCategories(task.category_id)
-      // setTaskOwner("");
-      // setUrgent(false);
-      // //setFromDate(task.due_date)
-      // //setTime(task.time)//no time
-      // setRepeat(-1);
-      // setSnooze(null);
-      // setScore(0);
     }
   }, []);
 
@@ -172,8 +160,8 @@ export default function CreateTask({ navigation, route }) {
   };
 
   const handleAssigneeChange = (value) => {
-    setTaskOwner(value !== -1 ? value : null)
-  }
+    setTaskOwner(value !== -1 ? value : null);
+  };
 
   const handleSubmit = () => {
     setIsLoading(true);
@@ -181,9 +169,9 @@ export default function CreateTask({ navigation, route }) {
       fromDate.setHours(time.getHours())
     ).setMinutes(time.getMinutes());
     const dueDate = new Date(dueDateTimestamp).toLocaleString("en-US");
-
     const endDate = toDate.toLocaleString("en-US");
-    const lvl = levels.find(lvl => lvl.value === level);
+    const lvl = levels.find((lvl) => lvl.value === level);
+
     const task = {
       id: group?.task?.id ?? null,
       title,
@@ -197,7 +185,6 @@ export default function CreateTask({ navigation, route }) {
       level: lvl ? lvl.label : "EASY",
       urgent
     };
-
     handleTaskAction(
       task,
       groupId,
@@ -323,9 +310,7 @@ export default function CreateTask({ navigation, route }) {
                 <Icon name="access-time" size={20} />
                 <ListItem.Content>
                   <ListItem.Title>Time</ListItem.Title>
-                  <ListItem.Subtitle>
-                    {time.toLocaleTimeString()}
-                  </ListItem.Subtitle>
+                  <ListItem.Subtitle>{time.getHours()}:{String(time.getMinutes()).padStart(2, "0")}</ListItem.Subtitle>
                 </ListItem.Content>
               </>
             }
@@ -428,13 +413,15 @@ export default function CreateTask({ navigation, route }) {
         </View>
         <View>
           <RNPickerSelect
-              onValueChange={(value) => {
-                setScore(value);
-                const selectedLevel = levels.find(level => level.value === value);
-                setLevel(selectedLevel.value);
-              }}
-              items={levels}
-              value={level || levels[0]}
+            onValueChange={(value) => {
+              setScore(value);
+              const selectedLevel = levels.find(
+                (level) => level.value === value
+              );
+              setLevel(selectedLevel.value);
+            }}
+            items={levels}
+            value={level || levels[0]}
           >
             <ListItem bottomDivider>
               <ListItem.Content>
@@ -443,10 +430,7 @@ export default function CreateTask({ navigation, route }) {
                   Level
                 </ListItem.Title>
                 <ListItem.Subtitle right>
-                  {
-                    levels.find((level) => level.value === score)
-                        ?.label
-                  }
+                  {levels.find((level) => level.value === score)?.label}
                 </ListItem.Subtitle>
               </ListItem.Content>
             </ListItem>
@@ -455,7 +439,7 @@ export default function CreateTask({ navigation, route }) {
         <Text style={{ marginRight: 5 }}>Rejection points: {score * 1.5}</Text>
         <View style={{ alignItems: "center", marginTop: "10%" }}>
           <Button
-            title={`${isEdit ? 'Edit' : 'Create' } Task`}
+            title={`${isEdit ? "Edit" : "Create"} Task`}
             containerStyle={{
               width: 200,
               marginHorizontal: 50,
