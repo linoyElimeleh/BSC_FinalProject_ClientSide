@@ -462,6 +462,7 @@ export default function CreateTask({ navigation, route }) {
               marginVertical: 10,
             }}
             onPress={handleSubmit}
+            disabled={title&&level? false:true}
             loading={isLoading}
           />
         </View>
