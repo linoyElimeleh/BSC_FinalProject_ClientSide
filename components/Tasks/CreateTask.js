@@ -416,15 +416,12 @@ export default function CreateTask({ navigation, route }) {
         </View>
         <View>
           <RNPickerSelect
-            onValueChange={(value) => {
-              setScore(value);
-              const selectedLevel = levels.find(
-                (level) => level.value === value
-              );
-              setLevel(selectedLevel.value);
-            }}
-            items={levels}
-            value={level || levels[0]}
+              onValueChange={(value) => {
+                setScore(value);
+                setLevel(value);
+              }}
+              items={levels}
+              value={level || levels[0]}
           >
             <ListItem bottomDivider>
               <ListItem.Content>
@@ -449,6 +446,7 @@ export default function CreateTask({ navigation, route }) {
               marginVertical: 10,
             }}
             onPress={handleSubmit}
+            disabled={title&&level? false:true}
             loading={isLoading}
           />
         </View>

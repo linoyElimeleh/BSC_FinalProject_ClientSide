@@ -37,12 +37,12 @@ export default function RejectTaskDialog({
           you will have only {userPoints - rejectPoints} points left! Proceed on
           your own accord.
         </Dialog.Description>
+        <Dialog.Button label="Cancel" onPress={() => setIsVisible(false)} />
         <Dialog.Button
           label="Reject"
           onPress={onReject}
           disabled={userPoints < rejectPoints}
         />
-        <Dialog.Button label="Cancel" onPress={() => setIsVisible(false)} />
       </Dialog.Container>
     </View>
   );

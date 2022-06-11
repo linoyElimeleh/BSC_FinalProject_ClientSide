@@ -194,12 +194,13 @@ export default function GroupPage({ route, navigation }) {
       <ScrollView
         contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}
       >
-        {!isLoading && tasks.length ? (
-          tasks.map(
-            (task, i) =>
-              ((isSwitchChecked && Number(task.user_id) == Number(me.id)) ||
-                !isSwitchChecked) && (
-                <Card
+
+        {!isLoading? tasks.length ? (
+          tasks.filter(
+            (task) =>
+              (isSwitchChecked && Number(task.user_id) == Number(me.id)) ||
+                !isSwitchChecked).map((task,i)=>
+                {return <Card
                   containerStyle={{
                     borderRadius: 25,
                     backgroundColor: colors[i % 4],
@@ -216,7 +217,7 @@ export default function GroupPage({ route, navigation }) {
                     }}
                   >
                     <View style={{ display: "flex", flexDirection: "row" }}>
-                      {!task.done && (
+                      {!task.done&&task.user_id==me.id && (
                         <Icon
                           name="more-vert"
                           onPress={() => {
@@ -302,10 +303,9 @@ export default function GroupPage({ route, navigation }) {
                       .reverse()
                       .join(".")}
                   </Text>
-                </Card>
+                </Card>})
               )
-          )
-        ) : (
+         : (
           <View
             style={{ display: "flex", alignItems: "center", width: "100%" }}
           >
@@ -314,7 +314,9 @@ export default function GroupPage({ route, navigation }) {
               create some new tasks by the plus
             </Text>
           </View>
-        )}
+        ):
+        <View style={{ marginTop: 100,marginLeft:"35%" }}><FontAwesome name="spinner" size={100}></FontAwesome></View>
+        }
       </ScrollView>
 
       <BottomSheetGroups
