@@ -27,8 +27,14 @@ import { categoryIdToImage } from "../categoriesMapper";
 import DoneTaskDialog from "../Tasks/DoneTaskDialog";
 
 export default function GroupPage({ route, navigation }) {
-  const group = route.params.group;
-  const groupId = group.group_id;
+  // const group = route.params.group;
+  const group = {
+    id: route.params.id,
+    name: route.params.name,
+    image: route.params.image,
+    recentTask: route.params.group,
+  };
+  const groupId = group.id;
   const [members, setMembers] = useState([]);
   const [tasks, setTasks] = useState();
   const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
@@ -125,7 +131,7 @@ export default function GroupPage({ route, navigation }) {
   };
 
   const handleEdit = () => {
-    navigation.navigate("Task", { isEdit: true, task: currentTask });
+    navigation.navigate("Task", { isEdit: true, task: currentTask, group });
   };
 
   const handleBottomSheetRequsts = (response) => {
@@ -164,6 +170,7 @@ export default function GroupPage({ route, navigation }) {
     setIsRejectDialogVisible(true);
     refRBSheet.current.close();
   };
+
   return (
     <View style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <View
@@ -194,129 +201,137 @@ export default function GroupPage({ route, navigation }) {
       <ScrollView
         contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}
       >
-
-        {!isLoading? tasks.length ? (
-          tasks.filter(
-            (task) =>
-              (isSwitchChecked && Number(task.user_id) == Number(me.id)) ||
-                !isSwitchChecked).map((task,i)=>
-                {return <Card
-                  containerStyle={{
-                    borderRadius: 25,
-                    backgroundColor: colors[i % 4],
-                    width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%",
-                  }}
-                  key={i}
-                >
-                  <Card.Title
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      paddingRight: "20%",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <View style={{ display: "flex", flexDirection: "row" }}>
-                      {!task.done&&task.user_id==me.id && (
-                        <Icon
-                          name="more-vert"
-                          onPress={() => {
-                            setCurrentTask(task), refRBSheet.current.open();
-                          }}
-                        />
-                      )}
-                      <Text
-                        style={{
-                          marginTop: 5,
-                          fontWeight: "bold",
-                          fontSize: 16,
-                          color: task.done ? "grey" : "black",
-                          textDecorationLine: task.done
-                            ? "line-through"
-                            : "none",
-                        }}
-                      >
-                        {task.title}
-                      </Text>
-                      {task.done && (
-                        <FontAwesome name="check" color="green" size={25} />
-                      )}
-                    </View>
-                  </Card.Title>
-                  <Card.Divider />
-                  <Text
-                    style={{
-                      marginBottom: 10,
-                      color: task.done ? "grey" : "black",
-                      display: "flex",
-                    }}
-                  >
-                    {task.description}
-                  </Text>
-                  <View>
-                    <Avatar
-                      size={64}
-                      rounded
-                      source={
-                        members &&
-                        members.find &&
-                        members.find((member) => member.id == task.user_id)
-                          ?.image
-                          ? {
-                              uri:
-                                members &&
-                                members.find &&
-                                members.find(
-                                  (member) => member.id == task.user_id
-                                )?.image,
-                            }
-                          : placeholder
-                      }
-                    >
-                      <Avatar.Accessory
-                        size={30}
-                        backgroundColor={"white"}
-                        source={categoryIdToImage[task.category_id]}
-                        padding={15}
-                      />
-                    </Avatar>
-                  </View>
-                  <Text
-                    style={{
-                      marginTop: 5,
-                      marginLeft: "60%",
-                      fontSize: 16,
-                    }}
-                  >
-                    {task.score} pt
-                  </Text>
-                  <Text
-                    style={{
-                      marginTop: 5,
-                      marginLeft: "60%",
-                      fontSize: 16,
-                    }}
-                  >
-                    {String(task.due_date)
-                      .substring(5, 10)
-                      .split("-")
-                      .reverse()
-                      .join(".")}
-                  </Text>
-                </Card>})
+        {!isLoading ? (
+          tasks.length ? (
+            tasks
+              .filter(
+                (task) =>
+                  (isSwitchChecked && Number(task.user_id) == Number(me.id)) ||
+                  !isSwitchChecked
               )
-         : (
-          <View
-            style={{ display: "flex", alignItems: "center", width: "100%" }}
-          >
-            <Text style={{ marginTop: 100, fontSize: 25 }}>No Tasks Yet</Text>
-            <Text style={{ marginTop: 10, fontSize: 15 }}>
-              create some new tasks by the plus
-            </Text>
+              .map((task, i) => {
+                return (
+                  <Card
+                    containerStyle={{
+                      borderRadius: 25,
+                      backgroundColor: colors[i % 4],
+                      width: i % 4 == 0 || i % 4 == 3 ? "48%" : "36%",
+                    }}
+                    key={i}
+                  >
+                    <Card.Title
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        paddingRight: "20%",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <View style={{ display: "flex", flexDirection: "row" }}>
+                        {!task.done && task.user_id == me.id && (
+                          <Icon
+                            name="more-vert"
+                            onPress={() => {
+                              setCurrentTask(task), refRBSheet.current.open();
+                            }}
+                          />
+                        )}
+                        <Text
+                          style={{
+                            marginTop: 5,
+                            fontWeight: "bold",
+                            fontSize: 16,
+                            color: task.done ? "grey" : "black",
+                            textDecorationLine: task.done
+                              ? "line-through"
+                              : "none",
+                          }}
+                        >
+                          {task.title}
+                        </Text>
+                        {task.done && (
+                          <FontAwesome name="check" color="green" size={25} />
+                        )}
+                      </View>
+                    </Card.Title>
+                    <Card.Divider />
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        color: task.done ? "grey" : "black",
+                        display: "flex",
+                      }}
+                    >
+                      {task.description}
+                    </Text>
+                    <View>
+                      <Avatar
+                        size={64}
+                        rounded
+                        source={
+                          members &&
+                          members.find &&
+                          members.find((member) => member.id == task.user_id)
+                            ?.image
+                            ? {
+                                uri:
+                                  members &&
+                                  members.find &&
+                                  members.find(
+                                    (member) => member.id == task.user_id
+                                  )?.image,
+                              }
+                            : placeholder
+                        }
+                      >
+                        <Avatar.Accessory
+                          size={30}
+                          backgroundColor={"white"}
+                          source={categoryIdToImage[task.category_id]}
+                          padding={15}
+                        />
+                      </Avatar>
+                    </View>
+                    <Text
+                      style={{
+                        marginTop: 5,
+                        marginLeft: "60%",
+                        fontSize: 16,
+                      }}
+                    >
+                      {task.score} pt
+                    </Text>
+                    <Text
+                      style={{
+                        marginTop: 5,
+                        marginLeft: "60%",
+                        fontSize: 16,
+                      }}
+                    >
+                      {String(task.due_date)
+                        .substring(5, 10)
+                        .split("-")
+                        .reverse()
+                        .join(".")}
+                    </Text>
+                  </Card>
+                );
+              })
+          ) : (
+            <View
+              style={{ display: "flex", alignItems: "center", width: "100%" }}
+            >
+              <Text style={{ marginTop: 100, fontSize: 25 }}>No Tasks Yet</Text>
+              <Text style={{ marginTop: 10, fontSize: 15 }}>
+                create some new tasks by the plus
+              </Text>
+            </View>
+          )
+        ) : (
+          <View style={{ marginTop: 100, marginLeft: "35%" }}>
+            <FontAwesome name="spinner" size={100}></FontAwesome>
           </View>
-        ):
-        <View style={{ marginTop: 100,marginLeft:"35%" }}><FontAwesome name="spinner" size={100}></FontAwesome></View>
-        }
+        )}
       </ScrollView>
 
       <BottomSheetGroups
@@ -334,7 +349,7 @@ export default function GroupPage({ route, navigation }) {
         color="#00aced"
         style={{ bottom: 50, right: 30, position: "absolute", zIndex: 200 }}
         onPress={() => {
-          navigation.navigate("Task", group);
+          navigation.navigate("Task", {group});
         }}
       />
 

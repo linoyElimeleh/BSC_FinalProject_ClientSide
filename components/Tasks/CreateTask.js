@@ -61,8 +61,8 @@ const DISPLAY_VALUES = Platform.select({
 });
 
 export default function CreateTask({ navigation, route }) {
-  const group = route.params;
-  const groupId = group?.task?.group_id || group?.group_id;
+  const {group} = route.params;
+  const groupId = group?.id || group?.group_id;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [taskOwner, setTaskOwner] = useState(-1);
@@ -99,6 +99,7 @@ export default function CreateTask({ navigation, route }) {
       setRepeat(task.repeat);
       setSnooze(task.snooze_interval || -1);
       setScore(task.score);
+      setLevel(task.score);
     }
   }, []);
 
@@ -136,7 +137,7 @@ export default function CreateTask({ navigation, route }) {
 
       membersPromise?.then((members) => {
         const notAssigned = [{ label: "Not assigned", value: -1 }];
-        const names = members?.map(({ display_name, id }) => ({
+        const names = members && members.map && members.map(({ display_name, id }) => ({
           label: display_name,
           value: id,
         }));
@@ -171,9 +172,8 @@ export default function CreateTask({ navigation, route }) {
     const dueDate = new Date(dueDateTimestamp).toLocaleString("en-US");
     const endDate = toDate.toLocaleString("en-US");
     const lvl = levels.find((lvl) => lvl.value === level);
-
     const task = {
-      id: group?.task?.id ?? null,
+      id: route?.params?.task?.id || null,
       title,
       description,
       taskOwner,
@@ -190,7 +190,7 @@ export default function CreateTask({ navigation, route }) {
       groupId,
       route.params?.isEdit ? "update" : "create"
     ).then((result) => {
-      navigation.navigate("Group", { group });
+      navigation.navigate("Group", { ...group });
       setIsLoading(false);
     });
   };
