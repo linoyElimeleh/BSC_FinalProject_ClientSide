@@ -34,9 +34,9 @@ const repeatData = [
 ];
 
 const levels = [
-  { label: "Easy", value: 50 },
-  { label: "Medium", value: 100 },
-  { label: "Hard", value: 200 },
+  { label: "Easy", value: "easy" },
+  { label: "Medium", value: "medium" },
+  { label: "Hard", value: "hard" },
 ];
 
 const IOS_DISPLAY = Object.freeze({
@@ -99,9 +99,19 @@ export default function CreateTask({ navigation, route }) {
       setRepeat(task.repeat);
       setSnooze(task.snooze_interval || -1);
       setScore(task.score);
-      setLevel(task.score);
+      setLevel(task.level);
     }
   }, []);
+
+  const getLevel = (taskScore) => {
+    if (taskScore >= 150) {
+      return 200;
+    } else if (taskScore < 150 && taskScore >= 100) {
+      return 100;
+    } else {
+      return 50;
+    }
+  }
 
   const onSetFromDate = (event, selectedDate) => {
     if (selectedDate != null) {
@@ -171,7 +181,6 @@ export default function CreateTask({ navigation, route }) {
     ).setMinutes(time.getMinutes());
     const dueDate = new Date(dueDateTimestamp).toLocaleString("en-US");
     const endDate = toDate.toLocaleString("en-US");
-    const lvl = levels.find((lvl) => lvl.value === level);
     const task = {
       id: route?.params?.task?.id || null,
       title,
@@ -182,7 +191,7 @@ export default function CreateTask({ navigation, route }) {
       endDate,
       repeat,
       snooze: snooze !== -1 ? snooze : null,
-      level: lvl ? lvl.label : "EASY",
+      level: level?.value || "easy",
       urgent,
     };
     handleTaskAction(
@@ -417,7 +426,6 @@ export default function CreateTask({ navigation, route }) {
         <View>
           <RNPickerSelect
               onValueChange={(value) => {
-                setScore(value);
                 setLevel(value);
               }}
               items={levels}
@@ -430,13 +438,12 @@ export default function CreateTask({ navigation, route }) {
                   Level
                 </ListItem.Title>
                 <ListItem.Subtitle right>
-                  {levels.find((level) => level.value === score)?.label}
+                  {levels.find((lvl) => lvl.value === level)?.label}
                 </ListItem.Subtitle>
               </ListItem.Content>
             </ListItem>
           </RNPickerSelect>
         </View>
-        <Text style={{ marginRight: 5 }}>Rejection points: {score * 1.5}</Text>
         <View style={{ alignItems: "center", marginTop: "10%" }}>
           <Button
             title={`${isEdit ? "Edit" : "Create"} Task`}

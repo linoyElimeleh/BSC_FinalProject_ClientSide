@@ -292,28 +292,32 @@ export default function GroupPage({ route, navigation }) {
                         />
                       </Avatar>
                     </View>
-                    {/* <Text
-                      style={{
-                        marginTop: 5,
-                        marginLeft: "60%",
-                        fontSize: 16,
-                      }}
-                    >
-                      {task.score} pt
-                    </Text> */}
+                    <View style={{ position: "absolute", bottom: 0, right: 0 }}>
                     <Text
                       style={{
-                        marginTop: 5,
-                        marginLeft: "60%",
-                        fontSize: 16,
+                        // marginTop: 5,
+                        // marginLeft: "60%",
+                        // fontSize: 16,
                       }}
                     >
-                      {String(task.due_date)
-                        .substring(5, 10)
-                        .split("-")
-                        .reverse()
-                        .join(".")}
+                      {task.level}
                     </Text>
+                      <Text
+                        style={
+                          {
+                            // marginTop: 5,
+                            // marginLeft: "60%",
+                            // fontSize: 16,
+                          }
+                        }
+                      >
+                        {String(task.due_date)
+                          .substring(5, 10)
+                          .split("-")
+                          .reverse()
+                          .join(".")}
+                      </Text>
+                    </View>
                   </Card>
                 );
               })
@@ -349,7 +353,7 @@ export default function GroupPage({ route, navigation }) {
         color="#00aced"
         style={{ bottom: 50, right: 30, position: "absolute", zIndex: 200 }}
         onPress={() => {
-          navigation.navigate("Task", {group});
+          navigation.navigate("Task", { group });
         }}
       />
 
