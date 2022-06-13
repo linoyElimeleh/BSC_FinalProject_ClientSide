@@ -26,7 +26,23 @@ export default function RejectTaskDialog({
     setIsVisible(false);
   }, [handleReject]);
 
-  if (!userPoints) return null;
+  if (userPoints < rejectPoints) {
+    return (
+      <View style={styles.container}>
+        <Dialog.Container visible={true}>
+          <Dialog.Title>Oh no, you don't have enough points!</Dialog.Title>
+          <Dialog.Description>
+            You now have {userPoints} points, and you need {rejectPoints} points
+            to reject it.
+          </Dialog.Description>
+          <Dialog.Button
+            label="Okay, got it!"
+            onPress={() => setIsVisible(false)}
+          />
+        </Dialog.Container>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

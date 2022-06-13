@@ -292,7 +292,7 @@ export default function GroupPage({ route, navigation }) {
                         />
                       </Avatar>
                     </View>
-                    <Text
+                    {/* <Text
                       style={{
                         marginTop: 5,
                         marginLeft: "60%",
@@ -300,7 +300,7 @@ export default function GroupPage({ route, navigation }) {
                       }}
                     >
                       {task.score} pt
-                    </Text>
+                    </Text> */}
                     <Text
                       style={{
                         marginTop: 5,
